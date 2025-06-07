@@ -55,6 +55,7 @@
     <link rel="stylesheet" href="{{asset('vendor/fontawesome/css/all.min.css')}}">
     <link rel="stylesheet" href="{{asset('vendor/swiper/swiper-bundle.min.css')}}">
     <link rel="stylesheet" href="{{asset('css/style.css')}}?{{time()}}">
+    
     @stack('css')
 </head>
 

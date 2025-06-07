@@ -11,7 +11,8 @@
         <link rel="stylesheet" href="{{asset('vendor/adminLTE3/css/adminlte.min.css')}}">
         <link rel="stylesheet" href="{{asset('vendor/bootstrap/css/bootstrap.min.css')}}">
         <link rel="stylesheet" href="{{asset('vendor/bootstrap-icons/bootstrap-icons.min.css')}}">
-
+        <link href="{{ asset('vendor/filepond/filepond.min.css') }}" rel="stylesheet" />
+        <link href="{{ asset('vendor/filepond/plugins/filepond-plugin-image-preview.min.css') }}" rel="stylesheet" />
         <link href="{{asset('plugins/summernote/summernote-bs5.min.css')}}" rel="stylesheet">
 
         @stack('css')
@@ -42,7 +43,7 @@
                         <div class="row">
                             <div class="col-12">
                             <!-- Default box -->
-                                @section('content')
+                                @yield('content')
                             <!-- /.card -->
                             </div>
                         </div>
@@ -58,6 +59,11 @@
         <script src="{{asset('/vendor/bootstrap/popper.min.js')}}?{{time()}}"></script>
         <script src="{{asset('/vendor/bootstrap/js/bootstrap.min.js')}}?{{time()}}"></script>
         <script src="{{asset('plugins/summernote/summernote-bs5.min.js')}}"></script>
+        <!-- JS -->
+        <script src="{{ asset('vendor/filepond/filepond.min.js') }}"></script>
+        <script src="{{ asset('vendor/filepond/plugins/filepond-plugin-file-validate-size.min.js') }}"></script>
+        <script src="{{ asset('vendor/filepond/plugins/filepond-plugin-file-validate-type.min.js') }}"></script>
+        <script src="{{ asset('vendor/filepond/plugins/filepond-plugin-image-preview.min.js') }}"></script>
         @stack('js')
     </body>
 </html>

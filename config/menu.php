@@ -44,6 +44,11 @@ return [
         'route' => 'admin.slides.index',
     ],
     [
+        'title' => 'Quản lý giới thiệu',
+        'icon' => 'bi bi-info-circle',
+        'route' => 'admin.intro.index',
+    ],
+    [
         'title' => 'Cấu hình',
         'icon' => 'bi bi-gear',
         'route' => 'admin.settings.index',
