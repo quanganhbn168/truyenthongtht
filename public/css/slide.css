@@ -1,0 +1,81 @@
+.swiper-button-prev, .swiper-button-next{
+  background-color: #391f0f;
+  width: 42px;
+  height: 58px;
+  border-radius: 5px;
+}
+.swiper-button-prev::after,
+.swiper-button-next::after {
+  font-size: 32px;
+  color: #ffffff;
+  font-weight: bold;
+}
+
+/* ==== Tuỳ chỉnh mũi tên trái/phải ==== */
+.categorySlide{
+  padding: .2rem 1.2rem;
+}
+.category .swiper-button-prev,
+.category .swiper-button-next {
+  width: 42px;
+  height: 42px;
+  background-color: #391f0f;
+  border: 2px solid #391f0f;
+  border-radius: 50%;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  z-index: 10;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.category .swiper-button-prev::after,
+.category .swiper-button-next::after {
+  font-size: 20px;
+  color: #ffffff;
+  font-weight: bold;
+}
+
+/* Căn mũi tên về hai phía */
+.category .swiper-button-prev {
+  left: 10px;
+}
+.category .swiper-button-next {
+  right: 10px;
+}
+
+/* ==== Tuỳ chỉnh pagination (dạng kim cương) ==== */
+.category .swiper-pagination {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 20px;
+  position: relative;
+  bottom: 0;
+  z-index: 5;
+}
+
+.swiper-pagination-bullet {
+  width: 14px;
+  height: 14px;
+  border-radius: 3px;
+  background-color: #391f0f;
+  opacity: 1;
+  transform: rotate(45deg); 
+  transition: background-color 0.3s ease;
+  position: relative;
+}
+.swiper-pagination-bullet:before {
+  content: '';
+  position: absolute;
+  width: 7px;
+  height: 7px;
+  border: 1px solid #ffffff;
+  opacity: 1;
+  top: 3px;
+  left: 3px;
+  transition: background-color 0.3s ease;
+}
+
+.swiper-pagination-bullet-active {
+  background-color: #d4992c; 
+}

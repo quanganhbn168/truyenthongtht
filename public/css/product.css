@@ -1,0 +1,102 @@
+/* product.css */
+
+.mainSwiper {
+  --swiper-navigation-color: #fff;
+  --swiper-pagination-color: #fff;
+  margin-bottom: 1rem;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.mainSwiper .swiper-slide img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+.thumbSwiper {
+  margin-top: 0.5rem;
+}
+
+.thumbSwiper .swiper-slide {
+  height: auto;
+  opacity: 0.5;
+  cursor: pointer;
+  border: 2px solid transparent;
+  border-radius: 5px;
+  overflow: hidden;
+  transition: all 0.3s;
+}
+
+.thumbSwiper .swiper-slide-thumb-active {
+  opacity: 1;
+  border-color: #dc3545; /* Bootstrap danger */
+}
+
+.thumbSwiper .swiper-slide img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+/* product.css */
+
+.productDetail {}
+
+.productDetail .section-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.productDetail .section-content {}
+
+.productDetail .section-content .project-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  transition: transform 0.3s;
+  margin-bottom: 30px;
+}
+
+.productDetail .section-content .project-link:hover {
+  transform: translateY(-4px);
+}
+
+.productDetail .section-content .project-box {
+  border: 1px solid #eee;
+  border-radius: 6px;
+  overflow: hidden;
+  background-color: #fff;
+  transition: box-shadow 0.3s;
+  height: 100%;
+}
+
+.productDetail .section-content .project-box:hover {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.productDetail .section-content .project-box .project-img img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.productDetail .section-content .project-box .project-title {
+  padding: 10px;
+  font-size: 1rem;
+  text-align: center;
+  font-weight: 500;
+  color: #333;
+}
+
+/* Responsive tweaks */
+@media (max-width: 767.98px) {
+  .mainSwiper {
+    margin-bottom: 0.5rem;
+  }
+
+  .thumbSwiper .swiper-slide img {
+    max-height: 70px;
+  }
+}

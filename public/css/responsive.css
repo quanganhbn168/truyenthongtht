@@ -1,0 +1,24 @@
+/* ========== 1. Laptop nhỏ / Tablet ngang (1200px) ========== */
+@media (max-width: 1200px) {
+  /* Điều chỉnh padding, font-size lớn, nav đa cột */
+}
+
+/* ========== 2. Tablet (992px) ========== */
+@media (max-width: 992px) {
+  /* Chuyển layout 3 cột thành 2 cột, co slider, ẩn bớt chữ */
+}
+
+/* ========== 3. Tablet dọc / Mobile lớn (768px) ========== */
+@media (max-width: 768px) {
+  /* Menu mobile, giảm khoảng cách, dùng icon thay chữ */
+}
+
+/* ========== 4. Mobile phổ thông (576px) ========== */
+@media (max-width: 576px) {
+  /* Co logo, input full width, ẩn sidebar nếu có */
+}
+
+/* ========== 5. Mobile siêu nhỏ (400px) ========== */
+@media (max-width: 400px) {
+  /* Font nhỏ hơn, nút to hơn cho dễ bấm, co hình ảnh */
+}
