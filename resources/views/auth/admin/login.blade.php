@@ -49,7 +49,7 @@
                     <div class="login-logo">
                         <img src="images/setting/THT-media-logo.png" alt="Logo">
                     </div>
-                    <form method="POST" action="/login">
+                    <form method="POST" action="{{route('login')}}">
                         @csrf
                         <h3 class="text-center mb-4">Đăng nhập</h3>
 

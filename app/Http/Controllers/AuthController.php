@@ -25,7 +25,7 @@ class AuthController extends Controller
 
         if (Auth::attempt($credentials, $request->remember)) {
             $request->session()->regenerate();
-            return redirect()->route('admin/dashboard'); // hoặc route phù hợp
+            return redirect()->route('admin.dashboard'); // hoặc route phù hợp
         }
 
         return back()->withErrors([

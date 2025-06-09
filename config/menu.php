@@ -7,6 +7,12 @@ return [
         'route' => 'admin.dashboard',
     ],
     [
+        'title' => 'Quản lý dịch vụ',
+        'icon' => 'bi bi-briefcase',
+        'route' => 'admin.services.index',
+    ],
+    
+    [
         'title' => 'Quản lý sản phẩm',
         'icon' => 'bi bi-box-seam',
         'submenu' => [

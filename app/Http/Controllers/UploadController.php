@@ -58,4 +58,18 @@ class UploadController extends Controller
             'urls' => collect($uploadedPaths)->map(fn($p) => asset($p)),
         ]);
     }
+
+    public function delete(Request $request)
+    {
+        $path = $request->input('path');
+
+        if (!$path || !Str::startsWith($path, 'storage/')) {
+            return response()->json(['error' => 'Đường dẫn không hợp lệ.'], 400);
+        }
+
+        $this->deleteImage($path);
+
+        return response()->json(['message' => 'Đã xoá ảnh thành công.']);
+    }
+
 }

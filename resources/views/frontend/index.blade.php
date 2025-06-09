@@ -6,95 +6,216 @@
 @endpush
 @section('content')
 @include('partials.frontend.hero')
-{{-- <section id="tab-home" class="tab-home section">
-	<div class="container">
-		<h2 class="section-title">
-			<a href="#">DỰ ÁN THIẾT KẾ - THI CÔNG NỘI THẤT</a>
-		</h2>
-		<ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
-			<li class="nav-item" role="presentation">
-				<a class="nav-link active" id="tab-chung-cu" data-toggle="pill" href="#pane-chung-cu" role="tab" aria-controls="pane-chung-cu" aria-selected="true">
-					<img src="{{asset('images/setting/chung-cu-1.png')}}" alt="Chung cư 1">
-					<span>Chung cư</span>
-				</a>
-			</li>
-			<li class="nav-item" role="presentation">
-				<a class="nav-link" id="tab-nha-pho" data-toggle="pill" href="#pane-nha-pho" role="tab" aria-controls="pane-nha-pho" aria-selected="false">
-					<img src="{{asset('images/setting/nha-pho.png')}}" alt="Nhà phố">
-					<span>Nhà phố</span>
-				</a>
-			</li>
-			<li class="nav-item" role="presentation">
-				<a class="nav-link" id="tab-biet-thu" data-toggle="pill" href="#pane-biet-thu" role="tab" aria-controls="pane-biet-thu" aria-selected="false">
-					<img src="{{asset('images/setting/biet-thu.png')}}" alt="Biệt thự">
-					<span>Biệt thự</span>
-				</a>
-			</li>
-			<li class="nav-item" role="presentation">
-				<a class="nav-link" id="tab-van-phong" data-toggle="pill" href="#pane-van-phong" role="tab" aria-controls="pane-van-phong" aria-selected="false">
-					<img src="{{asset('images/setting/van-phong.png')}}" alt="Văn phòng">
-					<span>Văn Phòng</span>
-				</a>
-			</li>
-			<li class="nav-item" role="presentation">
-				<a class="nav-link" id="tab-phong-ngu" data-toggle="pill" href="#pane-phong-ngu" role="tab" aria-controls="pane-phong-ngu" aria-selected="false">
-					<img src="{{asset('images/setting/phong-ngu.png')}}" alt="Phòng ngủ">
-					<span>Phòng ngủ</span>
-				</a>
-			</li>
-			<li class="nav-item" role="presentation">
-				<a class="nav-link" id="tab-phong-khach" data-toggle="pill" href="#pane-phong-khach" role="tab" aria-controls="pane-phong-khach" aria-selected="false">
-					<img src="{{asset('images/setting/phong-khach.png')}}" alt="Phòng khách">
-					<span>Phòng khách</span>
-				</a>
-			</li>
-		</ul>
 
-		<div class="tab-content" id="pills-tabContent">
-			<div class="tab-pane fade show active" id="pane-chung-cu" role="tabpanel" aria-labelledby="tab-chung-cu">
-				<div class="tab-list">
-					<div class="row">
-						@for ($i = 0; $i < 6; $i++)
-						<div class="col-6 col-lg-4 col-md-6 col-sm-6">
-							<a href="">
-								<div class="tab-item">
-									<div class="box-imge">
-										<img src="{{asset('images/setting/banner-004.jpg')}}" alt="">
-									</div>
-									<div class="box-title">
-										<img src="{{asset('images/setting/THT-media-logo.png')}}" alt="">
-										<p>Dự án A</p>
-									</div>
-								</div>
-							</a>
-						</div>
-						@endfor
-					</div>
-				</div>
-			</div>
-
-			<div class="tab-pane fade" id="pane-nha-pho" role="tabpanel" aria-labelledby="tab-nha-pho">...</div>
-			<div class="tab-pane fade" id="pane-biet-thu" role="tabpanel" aria-labelledby="tab-biet-thu">...</div>
-			<div class="tab-pane fade" id="pane-van-phong" role="tabpanel" aria-labelledby="tab-van-phong">...</div>
-			<div class="tab-pane fade" id="pane-phong-ngu" role="tabpanel" aria-labelledby="tab-phong-ngu">...</div>
-			<div class="tab-pane fade" id="pane-phong-khach" role="tabpanel" aria-labelledby="tab-phong-khach">...</div>
-		</div>
-	</div>
-</section> --}}
 <section class="about section">
 	<div class="container">
 		<div class="row">
 			<div class="col-12 col-md-6 col-sm-12">
 				<div class="about-img">
-					<img src="" alt="">
+					<img src="{{asset('images/setting/tht-img.png')}}" alt="">
 				</div>
 			</div>
 			<div class="col-12 col-md-6 col-sm-12">
-				
+				<div class="about-text">
+                    <h2 class="about-title"><a href="">THT Media</a></h2>
+                    <div class="about-des">
+                        
+                    </div>
+                    <a href="#">Tìm hiểu thêm</a>
+                </div>            
 			</div>
 		</div>
 	</div>
-</section>						
+</section>
+<section class="section product">
+    <div class="container">
+        <h2 class="section-title">
+            <a href="">Sản phẩm</a>
+        </h2>
+
+        {{-- Nav Tabs --}}
+        <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+            @foreach($categories as $key => $category)
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link {{ $key == 0 ? 'active' : '' }}"
+                       id="category-tab-{{ $category->id }}"
+                       data-toggle="pill"
+                       href="#category-pane-{{ $category->id }}"
+                       role="tab"
+                       aria-controls="category-pane-{{ $category->id }}"
+                       aria-selected="{{ $key == 0 ? 'true' : 'false' }}">
+                        <span>{{ $category->name }}</span>
+                    </a>
+                </li>
+            @endforeach
+        </ul>
+
+        {{-- Tab Content --}}
+        <div class="tab-content" id="pills-tabContent">
+            @foreach($categories as $key => $category)
+                <div class="tab-pane fade {{ $key == 0 ? 'show active' : '' }}"
+                     id="category-pane-{{ $category->id }}"
+                     role="tabpanel"
+                     aria-labelledby="category-tab-{{ $category->id }}">
+                    
+                    <div class="tab-list">
+                        <div class="row">
+                            @foreach($category->products as $product)
+                                <div class="col-6 col-sm-6 col-md-6 col-lg-6">
+                                    <a href="{{ route('product.show', $product->slug) }}">
+                                        <div class="tab-item">
+                                            <div class="box-imge">
+                                                <img src="{{ asset($product->image ?? 'images/default-product.jpg') }}" alt="{{ $product->name }}">
+                                            </div>
+                                            <div class="box-title">
+                                                <img src="{{ asset('images/setting/THT-media-logo.png') }}" alt="Logo">
+                                                <p>{{ $product->name }}</p>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+
+                </div>
+            @endforeach
+        </div>
+    </div>
+</section>
+<section id="customer-testimonials" class="section testimonials py-5">
+    <div class="container">
+        <h2 class="section-title text-center mb-5">
+            <a href="#">KHÁCH HÀNG NHẬN XÉT</a>
+        </h2>
+        
+        <div class="row">
+            {{-- Testimonial 1 --}}
+            <div class="col-md-6 mb-4 d-flex">
+                <div class="media">
+                    <img class="mr-3 rounded-circle" src="{{ asset('images/customers/kh-1.jpg') }}" alt="Ms Nguyễn Thị Bích Huyền" width="80" height="80">
+                    <div class="media-body">
+                        <p>Sản phẩm phim quảng cáo của Connect Media luôn sáng tạo, hình ảnh đẹp, nội dung sâu sắc và đặc biệt tiến độ sản xuất cực nhanh. Từ khi tôi đưa đề bài tới khi nhận sản phẩm hoàn thiện chưa đầy 30 ngày.</p>
+                        <strong>Ms Nguyễn Thị Bích Huyền</strong><br>
+                        <small>Trưởng phòng Truyền thông Thương hiệu, Công ty CP Hanel</small>
+                    </div>
+                </div>
+            </div>
+
+            {{-- Testimonial 2 --}}
+            <div class="col-md-6 mb-4 d-flex">
+                <div class="media">
+                    <img class="mr-3 rounded-circle" src="{{ asset('images/customers/kh-2.jpg') }}" alt="Trần Vũ Hoàng" width="80" height="80">
+                    <div class="media-body">
+                        <p>Tôi rất hài lòng khi hợp tác với ConnectMedia. Thời gian chuẩn bị khá ngắn nhưng các bạn đã hoàn thành xuất sắc.</p>
+                        <strong>Trần Vũ Hoàng</strong><br>
+                        <small>TGĐ Công ty CP SAPPHIRE COAST</small>
+                    </div>
+                </div>
+            </div>
+
+            {{-- Testimonial 3 --}}
+            <div class="col-md-6 mb-4 d-flex">
+                <div class="media">
+                    <img class="mr-3 rounded-circle" src="{{ asset('images/customers/kh-3.jpg') }}" alt="Ms Nga" width="80" height="80">
+                    <div class="media-body">
+                        <p>Connect Media đã đồng hành cùng Moaz Bé bé nhiều năm, chúng tôi đã tin tưởng giao cho Connect hơn 20 sản phẩm để làm phim giới thiệu. Connect Media mang lại những sản phẩm phim chất lượng cao với chi phí hợp lý.</p>
+                        <strong>Ms Nga</strong><br>
+                        <small>Marketing Manager – Công ty cổ phần HD – Moaz Bé Bé</small>
+                    </div>
+                </div>
+            </div>
+
+            {{-- Testimonial 4 --}}
+            <div class="col-md-6 mb-4 d-flex">
+                <div class="media">
+                    <img class="mr-3 rounded-circle" src="{{ asset('images/customers/kh-4.jpg') }}" alt="Ms Ngọc Bích" width="80" height="80">
+                    <div class="media-body">
+                        <p>Tôi rất hài lòng với dịch vụ chăm sóc khách hàng của Connect, tư vấn tận tình hỗ trợ chỉnh sửa hậu kỳ và cập nhật thông tin mới tới hơn 12 tháng ngay sau khi phim được nghiệm thu.</p>
+                        <strong>Ms Ngọc Bích</strong><br>
+                        <small>Sales Director – OHSHO Media</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<section id="customer-testimonials" class="section testimonials py-5">
+    <div class="container">
+        <h2 class="section-title text-center mb-5">
+            <a href="#">KHÁCH HÀNG NHẬN XÉT</a>
+        </h2>
+        
+        <div class="row">
+            {{-- Testimonial 1 --}}
+            <div class="col-md-6 mb-4 d-flex">
+                <div class="media">
+                    <img class="mr-3 rounded-circle" src="{{ asset('images/customers/kh-1.jpg') }}" alt="Ms Nguyễn Thị Bích Huyền" width="80" height="80">
+                    <div class="media-body">
+                        <p>Sản phẩm phim quảng cáo của Connect Media luôn sáng tạo, hình ảnh đẹp, nội dung sâu sắc và đặc biệt tiến độ sản xuất cực nhanh. Từ khi tôi đưa đề bài tới khi nhận sản phẩm hoàn thiện chưa đầy 30 ngày.</p>
+                        <strong>Ms Nguyễn Thị Bích Huyền</strong><br>
+                        <small>Trưởng phòng Truyền thông Thương hiệu, Công ty CP Hanel</small>
+                    </div>
+                </div>
+            </div>
+
+            {{-- Testimonial 2 --}}
+            <div class="col-md-6 mb-4 d-flex">
+                <div class="media">
+                    <img class="mr-3 rounded-circle" src="{{ asset('images/customers/kh-2.jpg') }}" alt="Trần Vũ Hoàng" width="80" height="80">
+                    <div class="media-body">
+                        <p>Tôi rất hài lòng khi hợp tác với ConnectMedia. Thời gian chuẩn bị khá ngắn nhưng các bạn đã hoàn thành xuất sắc.</p>
+                        <strong>Trần Vũ Hoàng</strong><br>
+                        <small>TGĐ Công ty CP SAPPHIRE COAST</small>
+                    </div>
+                </div>
+            </div>
+
+            {{-- Testimonial 3 --}}
+            <div class="col-md-6 mb-4 d-flex">
+                <div class="media">
+                    <img class="mr-3 rounded-circle" src="{{ asset('images/customers/kh-3.jpg') }}" alt="Ms Nga" width="80" height="80">
+                    <div class="media-body">
+                        <p>Connect Media đã đồng hành cùng Moaz Bé bé nhiều năm, chúng tôi đã tin tưởng giao cho Connect hơn 20 sản phẩm để làm phim giới thiệu. Connect Media mang lại những sản phẩm phim chất lượng cao với chi phí hợp lý.</p>
+                        <strong>Ms Nga</strong><br>
+                        <small>Marketing Manager – Công ty cổ phần HD – Moaz Bé Bé</small>
+                    </div>
+                </div>
+            </div>
+
+            {{-- Testimonial 4 --}}
+            <div class="col-md-6 mb-4 d-flex">
+                <div class="media">
+                    <img class="mr-3 rounded-circle" src="{{ asset('images/customers/kh-4.jpg') }}" alt="Ms Ngọc Bích" width="80" height="80">
+                    <div class="media-body">
+                        <p>Tôi rất hài lòng với dịch vụ chăm sóc khách hàng của Connect, tư vấn tận tình hỗ trợ chỉnh sửa hậu kỳ và cập nhật thông tin mới tới hơn 12 tháng ngay sau khi phim được nghiệm thu.</p>
+                        <strong>Ms Ngọc Bích</strong><br>
+                        <small>Sales Director – OHSHO Media</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<section id="achievements" class="section achievements">
+    <div class="container">
+        <h2 class="section-title">Thành tựu</h2>
+    </div>
+</section>
+<section id="clients-partners" class="section partners">
+    <div class="container">
+        <h2 class="section-title">Khách hàng & Đối tác</h2>
+        <!-- Nội dung: logo, carousel thương hiệu, lời chứng thực -->
+    </div>
+</section>
+<section class="blog">
+    <div class="container">
+        <h2 class="section-title">
+            <a href="{{route('frontend.posts.allPost')}}">Blog</a>
+        </h2>
+        
+    </div>
+</section>     					
 @endsection
 @push('js')
 <script src="{{asset('vendor/glightbox/js/glightbox.min.js')}}?{{time()}}"></script>

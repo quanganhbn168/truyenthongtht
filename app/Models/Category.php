@@ -28,7 +28,7 @@ class Category extends Model
     {
         static::creating(function ($category) {
             if (empty($category->slug)) {
-                $category->slug = Str::slug($category->name) . '-' . Str::random(5);
+                $category->slug = Str::slug($category->name);
             }
         });
     }
@@ -43,5 +43,10 @@ class Category extends Model
     public function children()
     {
         return $this->hasMany(self::class, 'parent_id');
+    }
+
+    public function products()
+    {
+        return $this->hasMany(Product::class);
     }
 }

@@ -22,6 +22,11 @@ Route::group(['prefix'=>'san-pham'], function(){
     Route::get('/{categories}', [ProductController::class,'productByCate'])->name('frontend.productByCate');
     Route::get('chi-tiet/{product-slug}', [ProductController::class,'show'])->name('frontend.show');
 });
+Route::group(['prefix'=>'danh-muc'], function(){
+    Route::get('/', [PostController::class],'allPost')->name('frontend.posts.allPost');
+    Route::get('/{slug}', [PostController::class],'postByCate')->name('frontend.postByCate');
+    Route::get('chi-tiet/{post-slug}', [PostController::class],'detail')->name('frontend.posts.detail');
+});
 Route::get('gioi-thieu', [IntroController::class,'show'])->name('intro.show');
 Route::get('lien-he',[ContactController::class,'show'])->name('contact.show');
 Route::post('lien-he',[ContactController::class,'store'])->name('contact.store');

@@ -84,8 +84,14 @@ i.icon-facebook{
 i.icon-zalo{
     background: url('../images/setting/zalo.png') 0 0/100% auto no-repeat;
 }
-
 #header {}
+#header.header-home {
+}
+#header.header-default {
+    background-color: #ffffff;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+}
+
 #header .header-wrapper {}
 #header .header-wrapper .header-main {
     width: 80%;
@@ -101,57 +107,49 @@ i.icon-zalo{
     transition: all 0.2s ease;
 }
 
-#header .header-wrapper .header-main .header-search {}
-#header .header-wrapper .header-main .header-search .form-search {
+#header .header-wrapper .main-nav {}
+#header .header-wrapper .main-nav .navbar-nav {}
+#header .header-wrapper .main-nav .navbar-nav .nav-item {}
+#header .header-wrapper .main-nav .navbar-nav .nav-item .nav-link {
+    font-weight: 500;
+    color: var(--theme-color);
+    padding: 8px 12px;
+    transition: all 0.3s;
+}
+#header .header-wrapper .main-nav .navbar-nav .nav-item:hover .nav-link {
+    color: var(--theme-color2);
+}
+
+#header .header-wrapper .header-main .header-search-trigger {}
+#header .header-wrapper .header-main .header-search-trigger .btn-search-toggle {
+    background: none;
+    border: none;
+    font-size: 20px;
+    color: var(--theme-color);
+}
+
+#header .header-wrapper .header-search {
+    width: 100%;
+    background: #ffffff;
+    border-top: 1px solid #ededed;
+}
+#header .header-wrapper .header-search .form-search {
     width: 60%;
     margin: 0 auto;
     border: 1px #ededed solid;
     padding: 1px;
     border-radius: 6px;
 }
-#header .header-wrapper .header-main .header-search .form-search input {
+#header .header-wrapper .header-search .form-search input {
     border: none;
+    flex-grow: 1;
 }
-#header .header-wrapper .header-main .header-search .form-search .btn {
+#header .header-wrapper .header-search .form-search .btn {
     background-color: var(--theme-color);
     color: #ffffff;
     font-weight: 600;
 }
-#header .header-wrapper .header-main .header-search .form-search .btn i {}
 
-#header .header-wrapper .header-main .header-right {}
-#header .header-wrapper .header-main .header-right .nav-icons {
-}
-#header .header-wrapper .header-main .header-right .nav-icons .nav-icon {text-align: center;margin-right: 40px;}
-#header .header-wrapper .header-main .header-right .nav-icons .nav-icon a {
-    display: flex;
-    flex-direction: column;
-    color: #000000;
-    justify-content: center;
-    align-items: center;
-}
-#header .header-wrapper .header-main .header-right .nav-icons .nav-icon a img {
-    height: 50px;
-    width: auto;
-    max-width: 100%;
-}
-
-#header .header-wrapper .header-main .header-right .toggle-menu {}
-#header .header-wrapper .main-nav {}
-#header .header-wrapper .main-nav .navbar-nav {
-}
-#header .header-wrapper .main-nav .navbar-nav .nav-item {
-}
-#header .header-wrapper .main-nav .navbar-nav .nav-item a {
-    border-right: 1px solid #000000;
-    padding-right: 20px;
-    font-weight: 500;
-    color: var(--theme-color);
-    transition: all .3s;
-}
-#header .header-wrapper .main-nav .navbar-nav .nav-item:hover a{
-    color: var(--theme-color2);
-}
 .section{
     padding: 3rem 0;
 }
@@ -269,6 +267,25 @@ i.icon-zalo{
 }
 #video .list-video .video-item:hover a{
     color: var(--theme-color2);
+}
+.testimonials .media {
+    align-items: flex-start;
+}
+.testimonials .media img {
+    object-fit: cover;
+}
+.testimonials p {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: #333;
+}
+.testimonials strong {
+    display: block;
+    margin-top: 10px;
+    color: #000;
+}
+.testimonials small {
+    color: #888;
 }
 
 .section.exp {}
