@@ -29,6 +29,18 @@
                 placeholder="-- Danh mục cha --"
             />
 
+            <x-form.textarea
+                name="description"
+                label="Mô tả"
+                :value="old('description', $category->description)"
+            />
+
+            <x-form.summernote
+                name="content"
+                label="Nội dung"
+                :value="old('content', $category->content)"
+            />
+
             <x-form.filepond
                 name="image"
                 label="Ảnh chính"
@@ -46,13 +58,13 @@
 
             <x-form.switch
                 name="status"
-                label="{{ $category->status == 1 ? 'Hiện' : 'Ẩn'}}"
-                :value="old('status', $category->status)"
+                label="Kích hoạt"
+                :checked="old('status', $category->status)"
             />
         </div>
 
         <div class="card-footer">
-            <button type="submit" name="action" value="save" class="btn btn-primary">Cập nhật</button>
+            <button type="submit" class="btn btn-primary">Cập nhật</button>
             <a href="{{ route('admin.categories.index') }}" class="btn btn-outline-dark">Quay lại</a>
         </div>
     </form>

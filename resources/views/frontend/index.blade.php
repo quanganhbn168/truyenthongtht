@@ -61,7 +61,7 @@
                     <div class="tab-list">
                         <div class="row">
                             @foreach($category->products as $product)
-                                <div class="col-6 col-sm-6 col-md-6 col-lg-6">
+                                <div class="col-6 col-sm-6 col-md-4 col-lg-4">
                                     <a href="{{ route('product.show', $product->slug) }}">
                                         <div class="tab-item">
                                             <div class="box-imge">

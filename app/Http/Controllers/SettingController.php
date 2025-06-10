@@ -12,7 +12,7 @@ class SettingController extends Controller
      */
     public function index()
     {
-        //
+        return view('admin.setting');
     }
 
     /**
@@ -50,10 +50,25 @@ class SettingController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Setting $setting)
+    public function update(Request $request)
     {
-        //
+        $fields = [
+            'site_name',
+            'site_address',
+            'site_phone',
+            'facebook_page',
+            'youtube_channel',
+            'site_logo',
+            'site_favicon',
+        ];
+
+        foreach ($fields as $key) {
+            setting_update($key, $request->input($key));
+        }
+
+        return redirect()->back()->with('success', 'Cập nhật thành công');
     }
+
 
     /**
      * Remove the specified resource from storage.

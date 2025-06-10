@@ -19,6 +19,7 @@ class Product extends Model
         'price',
         'price_discount',
         'description',
+        'content',
         'status',
     ];
 

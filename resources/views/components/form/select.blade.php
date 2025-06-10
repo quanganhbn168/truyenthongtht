@@ -1,5 +1,5 @@
 {{-- resources/views/components/form/select.blade.php --}}
-@props(['name', 'label', 'options' => [], 'value' => '', 'required' => false])
+@props(['name', 'label', 'options' => [], 'value' => '', 'required' => false, 'placeholder'])
 
 @php $selected = old($name, $value); @endphp
 
@@ -13,7 +13,7 @@
             id="{{ $name }}"
             {{ $attributes->merge(['class' => 'form-control' . ($errors->has($name) ? ' is-invalid' : '')]) }}
         >
-            <option value="">-- Chọn --</option>
+            <option value="">{{$placeholder}}</option>
             @foreach($options as $key => $text)
                 <option value="{{ $key }}" @selected($key == $selected)> {{ $text }} </option>
             @endforeach

@@ -25,12 +25,14 @@ Route::middleware(['auth'])->prefix('admin')->as('admin.')->group(function () {
     Route::resource('intro', IntroController::class);
     Route::resource('slides', SlideController::class);
     Route::resource('services',ServiceController::class);
-    Route::resource('settings', SettingController::class);
     Route::resource('contacts', ContactController::class);
     Route::post('/categories/{category}/toggle-status', [CategoryController::class, 'toggleStatus'])
       ->name('categories.toggle-status');
     Route::post('/slides/{slide}/toggle-status', [SlideController::class, 'toggleStatus'])
       ->name('slides.toggle-status');
+    Route::get('settings', [SettingController::class, 'index'])->name('settings.index');
+    Route::post('settings', [SettingController::class, 'update'])->name('settings.update');
+  
 });
 
 Route::post('admin/upload', [UploadController::class,'upload'])->name('admin.upload');

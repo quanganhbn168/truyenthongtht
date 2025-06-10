@@ -12,6 +12,8 @@ class Category extends Model
     protected $fillable = [
         'parent_id',
         'name',
+        'description',
+        'content',
         'slug',
         'image',
         'banner',

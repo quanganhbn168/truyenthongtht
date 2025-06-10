@@ -44,6 +44,8 @@ class CategoryController extends Controller
             'banner' => 'nullable|string',
             'parent_id' => 'nullable|integer|exists:categories,id',
             'status' => 'nullable|boolean',
+            'description' => 'nullable|string',
+            'content' => 'nullable|string',
         ]);
 
         $data['parent_id'] = $data['parent_id'] ?? 0;
@@ -88,6 +90,8 @@ class CategoryController extends Controller
             'banner' => 'nullable|string',
             'parent_id' => 'nullable|integer|exists:categories,id',
             'status' => 'nullable|boolean',
+            'description' => 'nullable|string',
+            'content' => 'nullable|string',
         ]);
 
         $this->categoryService->update($category, $data);

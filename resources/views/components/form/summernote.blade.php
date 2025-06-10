@@ -2,7 +2,7 @@
 
 @php
     $inputValue = old($name, $value);
-    $editorId = Str::slug($name, '_') . '_' . uniqid(); // ID duy nhất
+    $editorId = Str::slug($name, '_') . '_' . uniqid();
 @endphp
 
 <div class="form-group row">
@@ -13,8 +13,8 @@
         <textarea
             name="{{ $name }}"
             id="{{ $editorId }}"
-            class="form-control{{ $errors->has($name) ? ' is-invalid' : '' }}"
-        >{!! $inputValue !!}</textarea>
+            class="form-control d-none{{ $errors->has($name) ? ' is-invalid' : '' }}"
+        ></textarea>
         @error($name)
             <div class="invalid-feedback d-block">{{ $message }}</div>
         @enderror
@@ -24,9 +24,10 @@
 @push('js')
 <script>
     $(function () {
-        $('#{{ $editorId }}').summernote({
+        const content = @json($inputValue); // Giữ HTML raw
+        $('#{{ $editorId }}').removeClass('d-none').summernote({
             height: {{ $height }},
-        });
+        }).summernote('code', content);
     });
 </script>
 @endpush

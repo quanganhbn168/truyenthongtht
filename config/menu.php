@@ -6,23 +6,23 @@ return [
         'icon' => 'bi bi-speedometer',
         'route' => 'admin.dashboard',
     ],
-    [
+  /*  [
         'title' => 'Quản lý dịch vụ',
         'icon' => 'bi bi-briefcase',
         'route' => 'admin.services.index',
-    ],
+    ],*/
     
     [
-        'title' => 'Quản lý sản phẩm',
+        'title' => 'Quản lý dịch vụ',
         'icon' => 'bi bi-box-seam',
         'submenu' => [
             [
-                'title' => 'Danh mục sản phẩm',
+                'title' => 'Danh mục dịch vụ',
                 'route' => 'admin.categories.index',
                 'icon' => 'bi bi-folder2-open',
             ],
             [
-                'title' => 'Sản phẩm',
+                'title' => 'Dịch vụ',
                 'route' => 'admin.products.index',
                 'icon' => 'bi bi-bag',
             ],
@@ -55,18 +55,13 @@ return [
         'route' => 'admin.intro.index',
     ],
     [
-        'title' => 'Cấu hình',
-        'icon' => 'bi bi-gear',
-        'route' => 'admin.settings.index',
-    ],
-    [
         'title' => 'Liên hệ',
         'icon' => 'bi bi-envelope',
         'route' => 'admin.contacts.index',
     ],
     [
-        'title' => 'Theme Generator',
-        'icon' => 'bi bi-palette',
-        'url'  => '/dist/pages/generate/theme',
+        'title' => 'Cài đặt chung',
+        'icon' => 'bi bi-gear',
+        'route'  => 'admin.settings.index',
     ],
 ];
