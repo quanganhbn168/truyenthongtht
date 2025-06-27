@@ -19,11 +19,13 @@ class Post extends Model
         'content',
         'is_featured',
         'status',
+        'is_home',
     ];
 
     protected $casts = [
         'is_featured' => 'boolean',
         'status' => 'boolean',
+        'is_home' => 'boolean',
     ];
 
     protected static function booted(): void
@@ -38,5 +40,14 @@ class Post extends Model
     public function category()
     {
         return $this->belongsTo(PostCategory::class, 'post_category_id');
+    }
+    public function slug()
+    {
+        return $this->morphOne(\App\Models\Slug::class, 'sluggable');
+    }
+
+    public function getSlugUrlAttribute()
+    {
+        return url($this->slug->slug ?? '#');
     }
 }

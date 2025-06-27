@@ -3,8 +3,7 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use App\Models\Slide;
-use Illuminate\Support\Str;
+
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Slide>
  */
@@ -18,11 +17,7 @@ class SlideFactory extends Factory
     public function definition(): array
     {
         return [
-            'title' => fake()->sentence(3),
-            'image' => 'uploads/slides/demo.jpg',
-            'link' => fake()->url(),
-            'sort_order' => fake()->numberBetween(1, 10),
-            'status' => true,
+            //
         ];
     }
 }

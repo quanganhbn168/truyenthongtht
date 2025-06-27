@@ -12,7 +12,8 @@ class ContactController extends Controller
      */
     public function index()
     {
-        //
+        $contacts = Contact::latest()->paginate(10);
+        return view('admin.contacts.index', compact('contacts'));
     }
 
     /**
@@ -28,7 +29,20 @@ class ContactController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->validate([
+            'name' => ['required', 'string', 'min:2', 'max:255'],
+            'phone' => [
+                'required',
+                'regex:/^(0[3|5|7|8|9])[0-9]{8}$|^\+84[3|5|7|8|9][0-9]{8}$/'
+            ],
+            'address' => ['nullable', 'string', 'max:255'],
+            'email' => ['nullable', 'email'],
+            'message' => ['nullable', 'string', 'max:1000'],
+        ]);
+
+        Contact::create($data);
+
+        return redirect()->back()->with('success', 'Gửi liên hệ thành công.');
     }
 
     /**
@@ -60,6 +74,7 @@ class ContactController extends Controller
      */
     public function destroy(Contact $contact)
     {
-        //
+        $contact->delete();
+        return redirect()->route('admin.contacts.index')->with('success', 'Xoá liên hệ thành công.');
     }
 }

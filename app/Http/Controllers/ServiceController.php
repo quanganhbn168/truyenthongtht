@@ -2,85 +2,96 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Models\Service;
+use App\Models\ServiceCategory;
 use App\Services\ServiceService;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Http\Request;
 
 class ServiceController extends Controller
 {
-    protected $serviceService;
-
-    public function __construct(ServiceService $serviceService)
+    protected $service;
+    public function __construct(ServiceService $service)
     {
-        $this->serviceService = $serviceService;
+        $this->service = $service;
     }
 
     public function index()
     {
-        $services = $this->serviceService->getAll();
+        $services = Service::with('category')->latest()->get();
         return view('admin.services.index', compact('services'));
     }
 
     public function create()
     {
-        return view('admin.services.create');
+        $categories = ServiceCategory::get(['id', 'parent_id', 'name'])->toArray();
+        return view('admin.services.create', compact('categories'));
     }
 
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:255',
-            'slug' => 'nullable|string|unique:services,slug',
-            'description' => 'nullable|string',
-            'content' => 'nullable|string',
-            'price' => 'nullable|numeric',
-            'status' => 'boolean',
-        ]);
 
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
-        }
-
-        $this->serviceService->create($request->all());
-
-        return redirect()->route('admin.services.index')->with('success', 'Thêm dịch vụ thành công.');
+        $this->service->create($request);
+        return $request->input('action') === 'save_new'
+            ? redirect()->route('admin.services.create')->with('success', 'Đã thêm dự án, tiếp tục thêm mới.')
+            : redirect()->route('admin.services.index')->with('success', 'Đã thêm dự án.');
     }
 
-    public function edit($id)
+    public function edit(Service $service)
     {
-        $service = $this->serviceService->findById($id);
-        return view('admin.services.edit', compact('service'));
+        $categories = ServiceCategory::get(['id', 'parent_id', 'name'])->toArray();
+        $images = $service->images->pluck('image')->toArray();
+        return view('admin.services.edit', compact('service', 'categories','images'));
     }
-
-    public function update(Request $request, $id)
+    public function show(Service $service)
     {
-        $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:255',
-            'slug' => 'nullable|string|unique:services,slug,' . $id,
-            'description' => 'nullable|string',
-            'content' => 'nullable|string',
-            'price' => 'nullable|numeric',
-            'status' => 'boolean',
-        ]);
-
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
-        }
-
-        $this->serviceService->update($id, $request->all());
-
+        $categories = ServiceCategory::get(['id', 'parent_id', 'name'])->toArray();
+        $images = $service->images->pluck('image')->toArray();
+        return view('admin.services.edit', compact('service', 'categories','images'));
+    }
+    
+    public function update(Request $request, Service $service)
+    {
+        $this->service->update($request, $service);
         return redirect()->route('admin.services.index')->with('success', 'Cập nhật dịch vụ thành công.');
     }
 
-    public function destroy($id)
+    public function destroy(Service $service)
     {
-        $this->serviceService->delete($id);
-        return redirect()->route('admin.services.index')->with('success', 'Xóa dịch vụ thành công.');
+        $this->service->delete($service);
+        return redirect()->back()->with('success', 'Xoá dịch vụ thành công.');
     }
 
-    public function show($slug)
+    public function serviceByCate($slug)
     {
-        $service = $this->serviceService->findBySlug($slug);
-        return view('frontend.services.show', compact('service'));
+        $category = ServiceCategory::where("slug", $slug)->where("status", 1)->firstOrFail();
+
+        if ($category->parent_id == 0) {
+            // Danh mục cha → lấy toàn bộ service của các danh mục con
+            $childCategoryIds = $category->children()->pluck('id');
+
+            $services = Service::whereIn('service_category_id', $childCategoryIds)
+                ->where('status', 1)
+                ->get();
+        } else {
+            // Danh mục con → lấy service theo id hiện tại
+            $services = Service::where('service_category_id', $category->id)
+                ->where('status', 1)
+                ->get();
+        }
+
+        return view("frontend.services.serviceByCate", compact("category", "services"));
     }
+
+
+    public function detail(Service $service)
+    {
+        $relatedService = Service::where("status", 1)
+        ->where("id", '!=', $service->id)
+        ->orderBy("updated_at", "DESC")
+        ->limit(6)
+        ->get();
+
+        return view("frontend.services.detail", compact("service", "relatedService"));
+    }
+
 }

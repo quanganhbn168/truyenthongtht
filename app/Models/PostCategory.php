@@ -16,10 +16,12 @@ class PostCategory extends Model
         'image',
         'banner',
         'status',
+        'is_home',
     ];
 
     protected $casts = [
         'status' => 'boolean',
+        'is_home' => 'boolean',
         'parent_id' => 'integer',
     ];
 
@@ -40,5 +42,19 @@ class PostCategory extends Model
     public function children()
     {
         return $this->hasMany(self::class, 'parent_id');
+    }
+
+    public function posts()
+    {
+        return $this->hasMany(Post::class);
+    }
+    public function slug()
+    {
+        return $this->morphOne(\App\Models\Slug::class, 'sluggable');
+    }
+
+    public function getSlugUrlAttribute()
+    {
+        return url($this->slug->slug ?? '#');
     }
 }

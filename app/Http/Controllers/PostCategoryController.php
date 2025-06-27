@@ -2,64 +2,51 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Controller;
 use App\Models\PostCategory;
+use App\Services\PostCategoryService;
 use Illuminate\Http\Request;
 
 class PostCategoryController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    public function __construct(protected PostCategoryService $postCategoryService) {}
+
     public function index()
     {
-        //
+        $categories = $this->postCategoryService->getAll();
+
+        return view('admin.post_categories.index', compact('categories'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        $categories = $this->postCategoryService->getParentOptions();
+        return view('admin.post_categories.create', compact('categories'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $this->postCategoryService->create($request);
+        return $request->input('action') === 'save_new'
+            ? redirect()->route('admin.post-categories.create')->with('success', 'Đã thêm danh mục, tiếp tục thêm mới.')
+            : redirect()->route('admin.post-categories.index')->with('success', 'Đã thêm danh mục.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(PostCategory $postCategory)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(PostCategory $postCategory)
     {
-        //
+        $categories = $this->postCategoryService->getParentOptions($postCategory->id);
+        return view('admin.post_categories.edit', compact('postCategory', 'categories'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, PostCategory $postCategory)
     {
-        //
+        $this->postCategoryService->update($postCategory, $request);
+        return redirect()->route('admin.post-categories.index')->with('success', 'Cập nhật danh mục bài viết thành công.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(PostCategory $postCategory)
     {
-        //
+        $this->postCategoryService->delete($postCategory);
+        return redirect()->route('admin.post-categories.index')->with('success', 'Xoá danh mục bài viết thành công.');
     }
 }

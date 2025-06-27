@@ -10,12 +10,13 @@ use Intervention\Image\Facades\Image;
 trait UploadImageTrait
 {
     /**
-     * Upload ảnh với resize, WebP và watermark.
+     * Upload ảnh với resize (có thể set chiều rộng và chiều cao), WebP và watermark.
      */
     public function uploadImage(
         UploadedFile $file,
         string $folder = 'uploads/images',
         int $resizeWidth = 1920,
+        int $resizeHeight = 0,
         bool $convertToWebp = true,
         string $watermarkPath = ''
     ): string {
@@ -29,11 +30,15 @@ trait UploadImageTrait
         $image = Image::make($file->getRealPath())->orientate();
 
         // Resize nếu cần
-        if ($resizeWidth > 0 && $image->width() > $resizeWidth) {
-            $image->resize($resizeWidth, null, function ($constraint) {
-                $constraint->aspectRatio();
-                $constraint->upsize();
-            });
+        if ($resizeWidth > 0 || $resizeHeight > 0) {
+            $image->resize(
+                $resizeWidth > 0 ? $resizeWidth : null,
+                $resizeHeight > 0 ? $resizeHeight : null,
+                function ($constraint) {
+                    $constraint->aspectRatio();
+                    $constraint->upsize();
+                }
+            );
         }
 
         // Thêm watermark nếu có

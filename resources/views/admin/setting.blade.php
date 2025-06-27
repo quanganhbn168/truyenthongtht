@@ -1,76 +1,42 @@
 @extends('layouts.admin')
-
-@section('title', 'Cấu hình website')
-@section('content_header', 'Cấu hình website')
+@section('title','Cài đặt chung')
+@section('content_header','Cài đặt chung')
 
 @section('content')
-<form action="{{ route('admin.settings.update') }}" method="POST" enctype="multipart/form-data">
-    @csrf
-    <div class="card">
-        <div class="card-body">
-
-            {{-- Tên website --}}
-            <x-form.input
-                name="site_name"
-                label="Tên website"
-                :value="old('site_name', setting('site_name'))"
-                required
-            />
-
-            {{-- Địa chỉ --}}
-            <x-form.input
-                name="site_address"
-                label="Địa chỉ"
-                :value="old('site_address', setting('site_address'))"
-            />
-
-            {{-- Số điện thoại --}}
-            <x-form.input
-                name="site_phone"
-                label="Số điện thoại"
-                :value="old('site_phone', setting('site_phone'))"
-            />
-
-            {{-- Fanpage Facebook --}}
-            <x-form.input
-                name="facebook_page"
-                label="Fanpage Facebook"
-                :value="old('facebook_page', setting('facebook_page'))"
-                type="url"
-            />
-
-            {{-- Link YouTube --}}
-            <x-form.input
-                name="youtube_channel"
-                label="Kênh YouTube"
-                :value="old('youtube_channel', setting('youtube_channel'))"
-                type="url"
-            />
-
-            {{-- Logo --}}
-            <x-form.filepond
-                name="site_logo"
-                label="Logo"
-                :value="setting('site_logo')"
-                uploadFolder="uploads/settings"
-                uploadUrl="/admin/upload"
-            />
-
-            {{-- Favicon --}}
-            <x-form.filepond
-                name="site_favicon"
-                label="Favicon"
-                :value="setting('site_favicon')"
-                uploadFolder="uploads/settings"
-                uploadUrl="/admin/upload"
-            />
-
-        </div>
-        <div class="card-footer text-end">
-            <button type="submit" class="btn btn-primary">
-                <i class="fas fa-save me-1"></i> Lưu thay đổi
-            </button>
-        </div>
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Cài đặt chung</h3>
     </div>
-</form>
+
+    <form action="{{ route('admin.settings.update') }}" method="POST" enctype="multipart/form-data">
+        @csrf
+        @method('PUT')
+
+        <div class="card-body">
+            <x-form.input name="name" label="Tên Công ty" :value="$setting->name ?? ''" />
+            <x-form.input name="email" label="Email" :value="$setting->email ?? ''" />
+            <x-form.input name="phone" label="Số điện thoại" :value="$setting->phone ?? ''" />
+            <x-form.input name="address" label="Địa chỉ" :value="$setting->address ?? ''" />
+            <x-form.ckeditor name="map" label="Iframe Google Map" :value="$setting->map ?? ''" />
+            <x-form.image-input
+                name="logo"
+                label="Logo"
+                :value="$setting->logo ?? ''"
+            />
+            <x-form.image-input
+                name="favicon"
+                label="Favicon"
+                :value="$setting->favicon ?? ''"
+            />
+            {{-- CKEditor for script fields --}}
+			<x-form.ckeditor name="schema_script" label="Schema JSON-LD" :value="$setting->schema_script ?? ''" />
+            <x-form.ckeditor name="head_script" label="Code trước </head>" :value="$setting->head_script ?? ''" />
+            <x-form.ckeditor name="body_script" label="Code trước </body>" :value="$setting->body_script ?? ''" />
+	   </div>
+
+        <div class="card-footer text-right">
+            <button type="submit" class="btn btn-primary">Lưu cài đặt</button>
+        </div>
+    </form>
+</div>
 @endsection

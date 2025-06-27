@@ -12,12 +12,11 @@ class Category extends Model
     protected $fillable = [
         'parent_id',
         'name',
-        'description',
-        'content',
         'slug',
         'image',
         'banner',
         'status',
+        'is_home',
     ];
 
     protected $casts = [
@@ -30,7 +29,7 @@ class Category extends Model
     {
         static::creating(function ($category) {
             if (empty($category->slug)) {
-                $category->slug = Str::slug($category->name);
+                $category->slug = Str::slug($category->name) . '-' . Str::random(5);
             }
         });
     }
@@ -47,8 +46,14 @@ class Category extends Model
         return $this->hasMany(self::class, 'parent_id');
     }
 
-    public function products()
+    public function slug()
     {
-        return $this->hasMany(Product::class);
+        return $this->morphOne(\App\Models\Slug::class, 'sluggable');
     }
+
+    public function getSlugUrlAttribute()
+    {
+        return url($this->slug->slug ?? '#');
+    }
+
 }

@@ -22,14 +22,16 @@
 </div>
 
 @push('js')
-    <script src="{{ asset('ckeditor/ckeditor.js') }}"></script>
-    <script src="{{ asset('ckfinder/ckfinder.js') }}"></script>
+    @push('js')
+    <script src="https://cdn.ckeditor.com/4.20.0/full/ckeditor.js"></script>
     <script>
         CKEDITOR.replace('{{ $editorId }}', {
-            filebrowserBrowseUrl: '/ckfinder/ckfinder.html',
-            filebrowserUploadUrl: '/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Files',
-            height: 300,
-            ...@json($config)
+            filebrowserBrowseUrl: '/laravel-filemanager?type=Images',
+            filebrowserUploadUrl: '/laravel-filemanager/upload?type=Images&_token={{ csrf_token() }}',
+            filebrowserImageBrowseUrl: '/laravel-filemanager?type=Images',
+            filebrowserImageUploadUrl: '/laravel-filemanager/upload?type=Images&_token={{ csrf_token() }}',
         });
     </script>
+@endpush
+
 @endpush

@@ -8,85 +8,65 @@ use App\Services\SlideService;
 
 class SlideController extends Controller
 {
-    protected SlideService $service;
+    protected $slideService;
 
-    public function __construct(SlideService $service)
+    public function __construct(SlideService $slideService)
     {
-        $this->service = $service;
+        $this->slideService = $slideService;
     }
 
+    /**
+     * Danh sách tất cả slide.
+     */
     public function index()
     {
-        $slides = $this->service->getAll();
+        $slides = Slide::orderBy('position')->get();
         return view('admin.slides.index', compact('slides'));
     }
 
+    /**
+     * Form tạo mới slide.
+     */
     public function create()
     {
         return view('admin.slides.create');
     }
 
+    /**
+     * Lưu slide mới vào CSDL.
+     */
     public function store(Request $request)
     {
-        $request->validate([
-            'title' => 'nullable|string|max:255',
-            'link' => 'nullable|url',
-            'sort_order' => 'nullable|integer',
-            'status' => 'boolean',
-            'image' => 'required|string|max:255',
-        ]);
+        $this->slideService->create($request);
 
-        $this->service->create($request);
-
-        return match ($request->input('action')) {
-            'save_new' => redirect()->route('admin.slides.create')->with('success', 'Slide đã tạo, tiếp tục thêm mới.'),
-            default    => redirect()->route('admin.slides.index')->with('success', 'Tạo slide thành công.'),
-        };
+        return $request->input('action') === 'save_new'
+            ? redirect()->route('admin.slides.create')->with('success', 'Đã thêm slide, tiếp tục thêm mới.')
+            : redirect()->route('admin.slides.index')->with('success', 'Đã thêm slide.');
     }
 
-    public function show(Slide $slide)
-    {
-        return view('admin.slides.show', compact('slide'));
-    }
-
+    /**
+     * Form chỉnh sửa slide.
+     */
     public function edit(Slide $slide)
     {
         return view('admin.slides.edit', compact('slide'));
     }
 
+    /**
+     * Cập nhật slide đã tồn tại.
+     */
     public function update(Request $request, Slide $slide)
     {
-        $request->validate([
-            'title' => 'nullable|string|max:255',
-            'link' => 'nullable|url',
-            'sort_order' => 'nullable|integer',
-            'status' => 'boolean',
-            'image' => 'nullable|string|max:255', // FilePond path hoặc giữ nguyên ảnh cũ
-        ]);
-
-        $this->service->update($request, $slide);
-
-        return match ($request->input('action')) {
-            'save_new' => redirect()->route('admin.slides.create')->with('success', 'Slide đã cập nhật, tiếp tục thêm mới.'),
-            default    => redirect()->route('admin.slides.index')->with('success', 'Cập nhật slide thành công.'),
-        };
+        $this->slideService->update($request, $slide);
+        return redirect()->route('admin.slides.index')->with('success', 'Đã cập nhật slide.');
     }
 
+    /**
+     * Xoá slide.
+     */
     public function destroy(Slide $slide)
     {
-        $this->service->delete($slide);
-        return redirect()->route('admin.slides.index')->with('success', 'Đã xoá slide.');
-    }
-
-    public function toggleStatus(Slide $slide)
-    {
-        $slide = $this->service->updateStatus($slide, !$slide->status);
-        return response()->json(['success' => true, 'status' => $slide->status]);
-    }
-
-    public function updatePosition(Request $request, Slide $slide)
-    {
-        $this->service->updateSortOrder($slide, $request->input('sort_order', 0));
-        return response()->json(['success' => true]);
+        $this->slideService->delete($slide);
+        return redirect()->route('admin.slides.index')->with('success', 'Đã xóa slide.');
     }
 }

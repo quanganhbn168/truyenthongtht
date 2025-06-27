@@ -16,7 +16,11 @@
         <link href="{{asset('plugins/summernote/summernote-bs4.min.css')}}" rel="stylesheet">
         <link rel="stylesheet" href="{{asset('plugins/sweetalert2/bootstrap-4.min.css')}}">
         <link rel="stylesheet" href="{{asset('plugins/toastr/toastr.min.css')}}">
-        <link rel="icon" href="{{ asset('THT-media.ico') }}" type="image/x-icon" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+        <link rel="shortcut icon" href="/favicon/favicon.ico">
+        <link rel="manifest" href="/manifest.json">
         @stack('css')
     </head>
     <body class="hold-transition sidebar-mini layout-fixed">

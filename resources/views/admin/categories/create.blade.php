@@ -1,63 +1,40 @@
 @extends('layouts.admin')
 
-@section('title', 'Thêm Danh mục mới')
-@section('content_header', 'Thêm Danh mục mới')
+@section('title', 'Thêm danh mục mới')
+@section('content_header', 'Thêm danh mục mới')
 
 @section('content')
 <div class="card">
     <div class="card-header">
-        <h3 class="card-title">Thêm Danh mục mới</h3>
+        <h3 class="card-title">Thêm danh mục mới</h3>
     </div>
 
-    <form action="{{ route('admin.categories.store') }}" method="POST" class="form-horizontal">
+    <form action="{{ route('admin.categories.store') }}" method="POST" class="form-horizontal" enctype="multipart/form-data">
         @csrf
         <div class="card-body">
-            <x-form.input
-                type="text"
-                name="name"
-                label="Tên Danh mục"
-                :value="old('name')"
-                required
-            />
+            <x-form.input type="text" name="name" label="Tên danh mục" :value="old('name')" />
+
+            <x-form.input type="text" name="slug" label="Slug (URL thân thiện)" :value="old('slug')" placeholder="Tự động tạo nếu để trống" />
 
             <x-form.select
                 name="parent_id"
                 label="Danh mục cha"
-                :options="$categories->pluck('name', 'id')"
+                :options="$categories"
                 :selected="old('parent_id', 0)"
-                placeholder="-- Danh mục cha --"
-            />
-            <x-form.textarea
-                name="description"
-                label="Mô tả"
-                :value="old('description')"
-            />
-            <x-form.summernote
-                name="content"
-                label="Nội dung"
-                :value="old('content')"
+                placeholder="-- Không có danh mục cha --"
             />
 
-            <x-form.filepond
+            <x-form.image-input
                 name="image"
-                label="Ảnh chính"
-                :value="old('image')"
-                upload-folder="uploads/categories"
+                label="Ảnh đại diện"
             />
 
-            <x-form.filepond
+            <x-form.image-input
                 name="banner"
                 label="Banner (tuỳ chọn)"
-                :value="old('banner')"
-                upload-folder="uploads/categories"
-                optional
             />
 
-            <x-form.switch
-                name="status"
-                label="Kích hoạt"
-                :checked="old('status', true)"
-            />
+            <x-form.switch name="status" label="Trạng thái" :checked="old('status', true)" />
         </div>
 
         <div class="card-footer">

@@ -22,6 +22,7 @@ return new class extends Migration
             $table->longText('content');
             $table->boolean('is_featured')->default(0);
             $table->boolean('status')->default(1);
+            $table->boolean('is_home')->default(1);
             $table->timestamps();
 
             $table->foreign('post_category_id')->references('id')->on('post_categories')->onDelete('cascade');

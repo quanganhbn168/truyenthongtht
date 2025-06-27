@@ -9,7 +9,7 @@
         <h3 class="card-title">Thêm slide mới</h3>
     </div>
 
-    <form action="{{ route('admin.slides.store') }}" method="POST" class="form-horizontal">
+    <form action="{{ route('admin.slides.store') }}" method="POST" class="form-horizontal" enctype="multipart/form-data">
         @csrf
         <div class="card-body">
             <x-form.input type="text" name="title" label="Tiêu đề slide" :value="old('title')" />
@@ -20,11 +20,9 @@
 
             <x-form.switch name="status" label="Trạng thái" :checked="old('status', true)" />
 
-            <x-form.filepond
+            <x-form.image-input
                 name="image"
                 label="Ảnh slide"
-                :value="old('image')"
-                upload-folder="uploads/slides"
             />
         </div>
 

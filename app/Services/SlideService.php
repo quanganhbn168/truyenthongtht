@@ -1,37 +1,61 @@
 <?php
+
 namespace App\Services;
 
 use App\Models\Slide;
-use Illuminate\Http\Request;
 use App\Traits\UploadImageTrait;
+use Illuminate\Http\Request;
 
 class SlideService
 {
     use UploadImageTrait;
 
-    public function getAll(): \Illuminate\Support\Collection
-    {
-        return Slide::orderBy('position')->get();
-    }
-
     public function create(Request $request): Slide
     {
-        $data = $request->only(['title', 'link', 'position', 'status','image']);
+        $data = $request->validate([
+            'title' => 'required|string|max:255',
+            'link' => 'nullable|string|max:255',
+            'position' => 'nullable|integer',
+            'status' => 'nullable|boolean',
+            'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+        ]);
+
+        if ($request->hasFile('image')) {
+            $data['image'] = $this->uploadImage(
+                $request->file('image'),
+                folder: 'uploads/slides',
+                resizeWidth: 1920,
+                resizeHeight: 800,
+                convertToWebp: true,
+                watermarkPath: ''
+            );
+        }
+
         return Slide::create($data);
     }
 
     public function update(Request $request, Slide $slide): Slide
     {
-        $data = $request->only(['title', 'link', 'position', 'status','image']);
+        $data = $request->validate([
+            'title' => 'required|string|max:255',
+            'link' => 'nullable|string|max:255',
+            'position' => 'nullable|integer',
+            'status' => 'nullable|boolean',
+            'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+        ]);
 
         if ($request->hasFile('image')) {
-            $this->deleteImage($slide->image);
+            if ($slide->image) {
+                $this->deleteImage($slide->image);
+            }
+
             $data['image'] = $this->uploadImage(
                 $request->file('image'),
-                'uploads/slides',
-                1200,
-                true,
-                'watermarks/logo.png'
+                folder: 'uploads/slides',
+                resizeWidth: 1920,
+                resizeHeight: 800,
+                convertToWebp: true,
+                watermarkPath: ''
             );
         }
 
@@ -39,23 +63,12 @@ class SlideService
         return $slide;
     }
 
-    public function delete(Slide $slide): bool
+    public function delete(Slide $slide): void
     {
-        $this->deleteImage($slide->image);
-        return $slide->delete();
-    }
+        if ($slide->image) {
+            $this->deleteImage($slide->image);
+        }
 
-    public function updateStatus(Slide $slide, bool $status): Slide
-    {
-        $slide->status = $status;
-        $slide->save();
-        return $slide;
-    }
-
-    public function updateSortOrder(Slide $slide, int $position): Slide
-    {
-        $slide->position = $position;
-        $slide->save();
-        return $slide;
+        $slide->delete();
     }
 }

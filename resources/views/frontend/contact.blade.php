@@ -1,5 +1,12 @@
 @extends('layouts.master')
 @section('title','Liên hệ')
+@push('css')
+<style>
+	.map iframe{
+		width: 100%!important;
+	}
+</style>
+@endpush
 @section('content')
 <div id="contact">
 	<div class="container">
@@ -10,10 +17,16 @@
 		<div class="row">
 			<div class="col-12 col-md-6 col-sm-12 order-2 order-md-1">
 				<h3>
-					<strong>CÔNG TY CỔ PHẦN NỘI THẤT VOYHOME</strong>
+					<strong>Liên hệ với {{$setting->name}}</strong>
 				</h3>
 				<ul>
-					<li></li>
+					<li>Địa chỉ: {{$setting->address}}</li>
+					<li>
+						<a href="tel:{{ preg_replace('/\s+/', '', $setting->phone) }}">Điện thoại: {{ $setting->phone }}</a>
+					</li>
+					<li>
+						<a href="mailto:{{ trim($setting->email) }}">Email: {{ $setting->email }}</a>
+					</li>
 				</ul>
 			</div>
 			<div class="col-12 col-md-6 col-sm-12 order-1 order-md-2">
@@ -24,7 +37,7 @@
 						</div>
 					</div>
 					<div class="card-body bg-light">
-						<form action="#" method="POST">
+						<form id="contact-form" action="{{route('contact.store')}}" method="POST">
 							@csrf
 							<div class="row">
 								<div class="col-12 col-md-6">
@@ -64,6 +77,67 @@
 				</div>
 			</div>
 		</div>
+		<div class="row">
+			<div class="col-12">
+				<div class="map text-center py-4">
+					{!!$setting->map!!}
+				</div>
+			</div>			
+		</div>
 	</div>
 </div>
 @endsection
+@push('js')
+<script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
+<script>
+    // Custom rule kiểm tra số điện thoại Việt Nam
+    $.validator.addMethod("phoneVN", function (value, element) {
+        return this.optional(element) || /^(0[3|5|7|8|9])[0-9]{8}$|^\+84[3|5|7|8|9][0-9]{8}$/.test(value);
+    }, "Số điện thoại không hợp lệ");
+
+    $(document).ready(function () {
+        $('#contact-form').validate({
+            rules: {
+                name: {
+                    required: true,
+                    minlength: 2
+                },
+                phone: {
+                    required: true,
+                    phoneVN: true
+                },
+                email: {
+                    email: true
+                },
+                content: {
+                    maxlength: 1000
+                }
+            },
+            messages: {
+                name: {
+                    required: "Vui lòng nhập họ và tên",
+                    minlength: "Tên quá ngắn"
+                },
+                phone: {
+                    required: "Vui lòng nhập số điện thoại",
+                    phoneVN: "Số điện thoại không hợp lệ (ví dụ: 098xxxxxxx)"
+                },
+                email: {
+                    email: "Email không hợp lệ"
+                },
+                content: {
+                    maxlength: "Ý kiến không vượt quá 1000 ký tự"
+                }
+            },
+            errorElement: 'small',
+            errorClass: 'text-danger',
+            highlight: function (element) {
+                $(element).addClass('is-invalid');
+            },
+            unhighlight: function (element) {
+                $(element).removeClass('is-invalid');
+            }
+        });
+    });
+</script>
+@endpush

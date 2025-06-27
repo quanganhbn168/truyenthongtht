@@ -1,64 +1,56 @@
 @extends('layouts.admin')
 
-@section('title', 'Chỉnh sửa Danh mục')
-@section('content_header', 'Chỉnh sửa Danh mục')
+@section('title', 'Chỉnh sửa danh mục')
+@section('content_header', 'Chỉnh sửa danh mục')
 
 @section('content')
 <div class="card">
     <div class="card-header">
-        <h3 class="card-title">Chỉnh sửa Danh mục</h3>
+        <h3 class="card-title">Chỉnh sửa danh mục</h3>
     </div>
 
-    <form action="{{ route('admin.categories.update', $category->id) }}" method="POST" class="form-horizontal">
+    <form action="{{ route('admin.categories.update', $category) }}" method="POST" class="form-horizontal" enctype="multipart/form-data">
         @csrf
         @method('PUT')
+
         <div class="card-body">
             <x-form.input
                 type="text"
                 name="name"
-                label="Tên Danh mục"
+                label="Tên danh mục"
                 :value="old('name', $category->name)"
-                required
+            />
+
+            <x-form.input
+                type="text"
+                name="slug"
+                label="Slug (URL thân thiện)"
+                :value="old('slug', $category->slug)"
             />
 
             <x-form.select
                 name="parent_id"
                 label="Danh mục cha"
-                :options="$categories->where('id', '!=', $category->id)->pluck('name', 'id')"
+                :options="$categories"
                 :selected="old('parent_id', $category->parent_id)"
-                placeholder="-- Danh mục cha --"
+                placeholder="-- Không có danh mục cha --"
             />
 
-            <x-form.textarea
-                name="description"
-                label="Mô tả"
-                :value="old('description', $category->description)"
-            />
-
-            <x-form.summernote
-                name="content"
-                label="Nội dung"
-                :value="old('content', $category->content)"
-            />
-
-            <x-form.filepond
+            <x-form.image-input
                 name="image"
-                label="Ảnh chính"
-                :value="old('image', $category->image)"
-                upload-folder="uploads/categories"
+                label="Ảnh đại diện"
+                :value="$category->image"
             />
 
-            <x-form.filepond
+            <x-form.image-input
                 name="banner"
                 label="Banner (tuỳ chọn)"
-                :value="old('banner', $category->banner)"
-                upload-folder="uploads/categories"
-                optional
+                :value="$category->banner"
             />
 
             <x-form.switch
                 name="status"
-                label="Kích hoạt"
+                label="Trạng thái"
                 :checked="old('status', $category->status)"
             />
         </div>

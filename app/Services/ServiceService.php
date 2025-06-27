@@ -1,49 +1,104 @@
 <?php
+
 namespace App\Services;
 
 use App\Models\Service;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+use App\Handlers\ImageGalleryHandler;
 use App\Traits\UploadImageTrait;
-
 class ServiceService
 {
     use UploadImageTrait;
+    public function __construct(
+        protected ImageGalleryHandler $imageGallery
+    ) {}
 
-    public function getAll(): \Illuminate\Support\Collection
+    public function create(Request $request): Service
     {
-        return Service::get();
+        $data = $request->validate([
+            'service_category_id' => 'required|exists:service_categories,id',
+            'name' => 'required|string|max:255',
+            'slug' => 'nullable|string|max:255|unique:services,slug',
+            'image' => 'required|image|mimes:jpg,jpeg,png,webp|max:2048',
+            'banner' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:4096',
+            'description' => 'nullable|string',
+            'content' => 'nullable|string',
+            'status' => 'nullable|boolean',
+            'gallery' => 'nullable|array',
+            'gallery.*' => 'image|mimes:jpg,jpeg,png,webp|max:4096'
+        ]);
+
+        $data['slug'] = $data['slug'] ?? Str::slug($data['name']);
+        $data['image'] = $this->uploadImage($request->file('image'), 'uploads/services', 800, 800, true);
+
+        if ($request->hasFile('banner')) {
+            $data['banner'] = $this->uploadImage($request->file('banner'), 'uploads/services', 1920,800, true);
+        }
+
+        $service = Service::create($data);
+
+        $this->imageGallery->sync($service, $request, 'gallery', 'uploads/services/gallery');
+
+        return $service;
     }
 
-    public function create(Request $request): Slide
+    public function update(Request $request, Service $service): Service
     {
-        $data = $request->only(['title', 'link', 'position', 'status','image']);
-        return Service::create($data);
+        $data = $request->validate([
+            'service_category_id' => 'required|exists:service_categories,id',
+            'name' => 'required|string|max:255',
+            'slug' => 'nullable|string|max:255|unique:services,slug,' . $service->id,
+            'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+            'banner' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:4096',
+            'description' => 'nullable|string',
+            'content' => 'nullable|string',
+            'status' => 'nullable|boolean',
+            'gallery_old' => 'nullable|array',
+            'gallery_old.*' => 'string',
+            'gallery' => 'nullable|array',
+            'gallery.*' => 'image|mimes:jpg,jpeg,png,webp|max:4096',
+        ]);
+
+        // Slug tự sinh nếu không có
+        $data['slug'] = $data['slug'] ?? Str::slug($data['name']);
+
+        // Cập nhật ảnh đại diện
+        if ($request->hasFile('image')) {
+            $this->deleteImage($service->image);
+            $data['image'] = $this->uploadImage($request->file('image'), 'uploads/services', 800,800, true);
+        }
+
+        // Cập nhật banner
+        if ($request->hasFile('banner')) {
+            $this->deleteImage($service->banner);
+            $data['banner'] = $this->uploadImage($request->file('banner'), 'uploads/services', 1920,800, true);
+        }
+
+        // Cập nhật thông tin cơ bản
+        $service->update($data);
+
+        $this->imageGallery->sync($service, $request, 'gallery', 'uploads/services/gallery');
+
+        return $service;
     }
 
-    public function update(Request $request, Slide $slide): Slide
+    public function delete(Service $service): void
     {
-        $data = $request->only(['title', 'link', 'position', 'status','image']);
-        $slide->update($data);
-        return $slide;
+        $this->deleteImage($service->image);
+        $this->deleteImage($service->banner);
+
+        foreach ($service->images as $img) {
+            $this->deleteImage($img->image);
+            $img->delete();
+        }
+
+        $service->delete();
     }
 
-    public function delete(Slide $slide): bool
+    public function getAll()
     {
-        $this->deleteImage($slide->image);
-        return $slide->delete();
-    }
-
-    public function updateStatus(Slide $slide, bool $status): Slide
-    {
-        $slide->status = $status;
-        $slide->save();
-        return $slide;
-    }
-
-    public function updateSortOrder(Slide $slide, int $position): Slide
-    {
-        $slide->position = $position;
-        $slide->save();
-        return $slide;
+        $slides = Slide::where('status', 1)->get();
+        return $slides;
     }
 }

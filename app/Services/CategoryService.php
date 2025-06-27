@@ -3,51 +3,68 @@
 namespace App\Services;
 
 use App\Models\Category;
-use Illuminate\Support\Str;
 use App\Traits\UploadImageTrait;
+use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class CategoryService
 {
     use UploadImageTrait;
 
-    public function create(array $data): Category
+    public function create(Request $request): Category
     {
+        $data = $request->validate([
+            'name'    => 'required|string|max:255',
+            'slug'    => 'nullable|string|max:255|unique:categories,slug',
+            'image'   => 'required|image|mimes:jpg,jpeg,png,webp|max:2048',
+            'banner'  => 'nullable|image|mimes:jpg,jpeg,png,webp|max:4096',
+            'parent_id' => 'nullable|integer|min:0',
+            'status'  => 'nullable|boolean',
+        ]);
+
         $data['slug'] = $data['slug'] ?? Str::slug($data['name']);
-        $data['parent_id'] = $data['parent_id'] ?? 0;
-        $data['status'] = $data['status'] ?? 1;
+        $data['parent_id'] = (int) ($data['parent_id'] ?? 0);
+        $data['image'] = $this->uploadImage($request->file('image'), 'uploads/categories', 800, 800, true);
+        
+        if ($request->hasFile('banner')) {
+            $data['banner'] = $this->uploadImage($request->file('banner'), 'uploads/categories', 1920, 600, true);
+        }
 
         return Category::create($data);
     }
 
-    public function update(Category $category, array $data): Category
+    public function update(Request $request, Category $category): Category
     {
-        $data['slug'] = $data['slug'] ?? Str::slug($data['name']);
-        $data['parent_id'] = $data['parent_id'] ?? 0;
+        $data = $request->validate([
+            'name'    => 'required|string|max:255',
+            'slug'    => 'nullable|string|max:255|unique:categories,slug,' . $category->id,
+            'image'   => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+            'banner'  => 'nullable|image|mimes:jpg,jpeg,png,webp|max:4096',
+            'parent_id' => 'nullable|integer|min:0',
+            'status'  => 'nullable|boolean',
+        ]);
 
-        // Nếu ảnh mới khác ảnh cũ → xoá ảnh cũ
-        if (!empty($data['image']) && $data['image'] !== $category->image) {
+        $data['slug'] = $data['slug'] ?? Str::slug($data['name']);
+        $data['parent_id'] = (int) ($data['parent_id'] ?? 0);
+
+        if ($request->hasFile('image')) {
             $this->deleteImage($category->image);
+            $data['image'] = $this->uploadImage($request->file('image'), 'uploads/categories', 800, 800, true);
         }
 
-        if (!empty($data['banner']) && $data['banner'] !== $category->banner) {
+        if ($request->hasFile('banner')) {
             $this->deleteImage($category->banner);
+            $data['banner'] = $this->uploadImage($request->file('banner'), 'uploads/categories', 1920, 600, true);
         }
 
         $category->update($data);
         return $category;
     }
 
-    public function delete(Category $category): bool
+    public function delete(Category $category): void
     {
-        // Không xoá nếu còn danh mục con
-        if (Category::where('parent_id', $category->id)->exists()) {
-            return false;
-        }
-
-        // Xoá ảnh nếu có
         $this->deleteImage($category->image);
         $this->deleteImage($category->banner);
-
-        return $category->delete();
+        $category->delete();
     }
 }

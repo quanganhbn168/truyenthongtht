@@ -10,8 +10,8 @@
 
     {{-- Title & SEO --}}
     <title>@yield('title') | {{ config('app.name') }}</title>
-    <meta name="description" content="@yield('meta_description', 'Mô tả ngắn gọn về trang, giúp tăng CTR trên Google')">
-    <meta name="keywords" content="@yield('meta_keywords', 'từ khóa, cách, phân cách, bởi, dấu, phẩy')">
+    <meta name="description" content="@yield('meta_description', 'Trung tâm đào tạo tiếng Trung doanh nghiệp')">
+    <meta name="keywords" content="@yield('meta_keywords', 'Tiếng Trung, Tiếng Trung doanh nghiệp, Tiếng Trung Ở Bắc Ninh, Tiếng Trung Quế Võ')">
     <meta name="robots" content="@yield('meta_robots', 'index, follow')">
 
     {{-- Canonical --}}
@@ -30,32 +30,15 @@
     <meta name="twitter:title"       content="@yield('title') | {{ config('app.name') }}" />
     <meta name="twitter:description" content="@yield('meta_description')" />
     <meta name="twitter:image"       content="@yield('meta_image', asset('images/default-og.jpg'))" />
-
-    {{-- Schema.org JSON-LD --}}
-    <script type="application/ld+json">
-    {!! json_encode([
-        "@context" => "https://schema.org",
-        "@type"    => "Organization",
-        "name"     => config('app.name'),
-        "url"      => url('/'),
-        "logo"     => asset('images/logo.png'),
-        "sameAs"   => [
-            "https://www.facebook.com/YourPage",
-            "https://www.instagram.com/YourPage",
-            // thêm link mạng xã hội khác nếu có
-        ],
-    ], JSON_UNESCAPED_SLASHES|JSON_UNESCAPED_UNICODE) !!}
-    </script>
-
     {{-- Fonts, Favicons --}}
-    <link rel="icon" href="{{ asset('images/setting/THT-media-logo.png') }}" type="image/x-icon" />
-    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('apple-touch-icon.png') }}" />
+    <link rel="icon" href="{{ asset($setting->favicon) }}" type="image/x-icon" />
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset($setting->favicon) }}" />
     {{-- CSS & JS --}}
     <link rel="stylesheet" href="{{asset('vendor/bootstrap/css/bootstrap.min.css')}}">
     <link rel="stylesheet" href="{{asset('vendor/fontawesome/css/all.min.css')}}">
     <link rel="stylesheet" href="{{asset('vendor/swiper/swiper-bundle.min.css')}}">
+    <link rel="stylesheet" href="{{asset('css/slide.css')}}?{{time()}}">
     <link rel="stylesheet" href="{{asset('css/style.css')}}?{{time()}}">
-    
     @stack('css')
 </head>
 
@@ -80,6 +63,17 @@
               $('#mobileSidebar').removeClass('show');
               $('#mobileSidebarOverlay').removeClass('active');
           });
+        });
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            document.querySelector(".gotop").addEventListener("click", function(e) {
+                e.preventDefault();
+                window.scrollTo({
+                    top: 0,
+                    behavior: "smooth"
+                });
+            });
         });
     </script>
 

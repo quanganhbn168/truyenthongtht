@@ -22,8 +22,8 @@ return new class extends Migration
             $table->decimal('price_discount', 12, 2)->nullable();
             $table->boolean('is_featured')->default(0); 
             $table->boolean('is_on_sale')->default(0);  
+            $table->boolean('is_home')->default(0);  
             $table->longText('description')->nullable();
-            $table->longText('content')->nullable();
             $table->boolean('status')->default(1);
             $table->timestamps();
 

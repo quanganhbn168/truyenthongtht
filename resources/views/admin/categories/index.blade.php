@@ -1,5 +1,5 @@
 @extends('layouts.admin')
-@section('title','Quản lý danh mục')
+@section('title','Danh sách danh mục')
 @section('content_header','Danh sách danh mục')
 @section('content')
 
@@ -8,7 +8,7 @@
 		<h3 class="card-title"></h3>
 		<div class="card-tools">
 			<a href="{{ route('admin.categories.create') }}" class="btn btn-primary">
-				<i class="fas fa-plus"></i> Thêm danh mục
+				<i class="fas fa-plus"></i> Thêm Danh mục
 			</a>
 		</div>
 	</div>
@@ -17,11 +17,12 @@
 			<thead>
 				<tr>
 					<th>#</th>
-					<th>Tiêu đề</th>
+					<th>Tên danh mục</th>
+					<th>Slug</th>
 					<th>Ảnh</th>
+					<th>Danh mục cha</th>
 					<th>Trạng thái</th>
 					<th>Ngày tạo</th>
-					<th>Cập nhật</th>
 					<th>Thao tác</th>
 				</tr>
 			</thead>
@@ -30,25 +31,25 @@
 				<tr>
 					<td>{{ $key + 1 }}</td>
 					<td>{{ $category->name }}</td>
+					<td>{{ $category->slug }}</td>
 					<td>
-						<img src="{{ asset($category->image) }}" alt="category" style="height: 80px;">
+						<img src="{{ asset($category->image) }}" alt="Image" style="height: 60px;">
 					</td>
 					<td>
-						<div class="custom-control custom-switch">
-							<input type="checkbox" class="custom-control-input" id="status_{{ $category->id }}" {{ $category->status ? 'checked' : '' }}>
-							<label for="status_{{ $category->id }}" class="custom-control-label">
-								{{ $category->status ? 'Hiện' : 'Ẩn' }}
-							</label>
-						</div>
+						{{ $category->parent?->name ?? '---' }}
+					</td>
+					<td>
+						<span class="badge badge-{{ $category->status ? 'success' : 'secondary' }}">
+							{{ $category->status ? 'Hiện' : 'Ẩn' }}
+						</span>
 					</td>
 					<td>{{ $category->created_at->format('d/m/Y') }}</td>
-					<td>{{ $category->updated_at->format('d/m/Y') }}</td>
 					<td>
 						<a href="{{ route('admin.categories.edit', $category) }}" class="btn btn-warning">
 							<i class="far fa-edit"></i>
 						</a>
 
-						<form action="{{ route('admin.categories.destroy', $category) }}" method="POST" style="display:inline-block;" class="form-delete">
+						<form action="{{ route('admin.categories.destroy', $category) }}" method="POST" class="d-inline form-delete">
 							@csrf
 							@method('DELETE')
 							<button type="submit" class="btn btn-danger delete">

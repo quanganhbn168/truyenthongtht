@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('image');
             $table->string('banner')->nullable();
             $table->boolean('status')->default(1);
+            $table->boolean('is_home')->default(1);
             $table->timestamps();
         });
     }

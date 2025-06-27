@@ -19,7 +19,7 @@ class Product extends Model
         'price',
         'price_discount',
         'description',
-        'content',
+        'is_home',
         'status',
     ];
 
@@ -27,6 +27,7 @@ class Product extends Model
         'price' => 'float',
         'price_discount' => 'float',
         'status' => 'boolean',
+        'is_home' => 'boolean',
         'is_featured' => 'boolean',
         'is_on_sale' => 'boolean',
     ];
@@ -35,7 +36,7 @@ class Product extends Model
     {
         static::creating(function ($product) {
             if (empty($product->slug)) {
-                $product->slug = Str::slug($product->name) . '-' . Str::random(5);
+                $product->slug = Str::slug($product->name);
             }
         });
     }
@@ -43,5 +44,14 @@ class Product extends Model
     public function category()
     {
         return $this->belongsTo(Category::class);
+    }
+    public function slug()
+    {
+        return $this->morphOne(\App\Models\Slug::class, 'sluggable');
+    }
+
+    public function getSlugUrlAttribute()
+    {
+        return url($this->slug->slug ?? '#');
     }
 }

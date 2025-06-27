@@ -13,11 +13,16 @@ return new class extends Migration
     {
         Schema::create('settings', function (Blueprint $table) {
             $table->id();
-            $table->string('key')->unique(); 
-            $table->text('value')->nullable(); 
-            $table->string('group')->nullable(); 
-            $table->string('type')->nullable(); 
-            $table->boolean('autoload')->default(true);
+            $table->string('name')->nullable();
+            $table->string('logo')->nullable();
+            $table->string('favicon')->nullable();
+            $table->string('email')->nullable();
+            $table->string('phone')->nullable();
+            $table->string('address')->nullable();
+            $table->text('map')->nullable();
+            $table->text('schema_script')->nullable(); 
+            $table->text('head_script')->nullable();   
+            $table->text('body_script')->nullable();
             $table->timestamps();
         });
     }

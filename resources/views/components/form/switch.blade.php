@@ -1,14 +1,10 @@
 @props([
     'name',
     'label',
-    'value' => 0,
+    'checked' => false,
     'onText' => 'Hiện',
     'offText' => 'Ẩn',
 ])
-
-@php
-    $checked = old($name, $value);
-@endphp
 
 <div class="form-group row">
     <label for="{{ $name }}" class="col-sm-2 col-form-label">{{ $label }}</label>
