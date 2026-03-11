@@ -71,7 +71,7 @@
                         {{-- Image Wrapper (Interactive Context) --}}
                         <a href="{{ url($project->slug . ($project->slug ? '.html' : '')) }}" class="relative block overflow-hidden shrink-0">
                             @if($project->image)
-                                <img src="{{ Storage::url($project->image) }}"
+                                <img src="{{ asset('storage/' . $project->image) }}"
                                      alt="{{ $project->title ?? $project->name ?? 'Dự án' }}"
                                      loading="lazy"
                                      class="w-full aspect-[4/3] object-cover transition-transform duration-700 ease-out group-hover:scale-105">

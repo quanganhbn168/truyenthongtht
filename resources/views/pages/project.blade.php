@@ -116,7 +116,7 @@
                 <img src="{{ $url }}" alt="{{ $project->name }}">
             @endif
         @elseif($project->image)
-            <img src="{{ Storage::url($project->image) }}" alt="{{ $project->name }}" class="w-full h-full object-cover">
+            <img src="{{ asset('storage/' . $project->image) }}" alt="{{ $project->name }}" class="w-full h-full object-cover">
         @else
             <div class="bg-gray-800 w-full h-full"></div>
         @endif
@@ -246,9 +246,9 @@
                             
                             <div class="relative rounded-2xl overflow-hidden bg-gray-100 group shadow-sm {{ $colSpan }}">
                                 @if($isVideo)
-                                    <video src="{{ Storage::url($media) }}" class="w-full h-full object-cover" controls preload="metadata"></video>
+                                    <video src="{{ asset('storage/' . $media) }}" class="w-full h-full object-cover" controls preload="metadata"></video>
                                 @else
-                                    <img src="{{ Storage::url($media) }}" alt="Gallery {{ $index }}" loading="lazy" 
+                                    <img src="{{ asset('storage/' . $media) }}" alt="Gallery {{ $index }}" loading="lazy" 
                                          class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
                                 @endif
                                 <div class="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors duration-300 pointer-events-none"></div>
@@ -300,7 +300,7 @@
                 <a href="{{ url($relProject->slug . '.html') }}" class="group bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 block">
                     <div class="relative w-full aspect-[4/3] overflow-hidden bg-gray-100">
                         @if($relProject->image)
-                            <img src="{{ Storage::url($relProject->image) }}" alt="{{ $relProject->name }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                            <img src="{{ asset('storage/' . $relProject->image) }}" alt="{{ $relProject->name }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
                         @endif
                         <div class="absolute inset-0 bg-gradient-to-t from-gray-900/80 via-gray-900/10 to-transparent opacity-80 group-hover:opacity-100 transition-opacity"></div>
                         
@@ -327,7 +327,7 @@
   "@@type": "Article",
   "name": "{{ addslashes($project->name) }}",
   "description": "{{ addslashes($project->summary ?? '') }}",
-  "image": "{{ $project->image ? url(Storage::url($project->image)) : '' }}",
+  "image": "{{ $project->image ? asset('storage/' . $project->image) : '' }}",
   "publisher": {
     "@@type": "Organization",
     "name": "THT Media"
