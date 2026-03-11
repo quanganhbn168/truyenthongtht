@@ -2,10 +2,14 @@
 
 @section('content')
 {{-- ── Premium Hero Header ── --}}
-<div class="relative bg-gray-900 overflow-hidden">
+@php
+    $hasBanner = isset($category) && $category && $category->banner;
+    $bannerUrl = $hasBanner ? asset($category->banner) : null;
+@endphp
+<div class="relative bg-gray-900 overflow-hidden" {!! $hasBanner ? 'style="background-image: url(\''.$bannerUrl.'\'); background-size: cover; background-position: center;"' : '' !!}>
     <!-- Background Decor -->
     <div class="absolute inset-0 z-0">
-        <div class="absolute inset-0 bg-gradient-to-br from-gray-900 via-gray-900/95 to-red-900/40"></div>
+        <div class="absolute inset-0 bg-gradient-to-br {{ $hasBanner ? 'from-gray-900/90 via-gray-900/80 to-red-900/50' : 'from-gray-900 via-gray-900/95 to-red-900/40' }}"></div>
         <div class="absolute top-0 right-0 -mt-20 -mr-20 w-96 h-96 bg-red-600/20 rounded-full blur-[100px]"></div>
         <div class="absolute bottom-0 left-0 -mb-20 -ml-20 w-80 h-80 bg-red-800/20 rounded-full blur-[80px]"></div>
     </div>
@@ -70,8 +74,8 @@
                     <article class="group bg-white rounded-3xl shadow-sm hover:shadow-2xl border border-gray-100 overflow-hidden flex flex-col transition-all duration-500 hover:-translate-y-2">
                         {{-- Image Wrapper (Interactive Context) --}}
                         <a href="{{ url($project->slug . ($project->slug ? '.html' : '')) }}" class="relative block overflow-hidden shrink-0">
-                            @if($project->image)
-                                <img src="{{ asset('storage/' . $project->image) }}"
+                            @if($project->thumbnail || $project->image)
+                                <img src="{{ asset($project->thumbnail ?: $project->image) }}"
                                      alt="{{ $project->title ?? $project->name ?? 'Dự án' }}"
                                      loading="lazy"
                                      class="w-full aspect-[4/3] object-cover transition-transform duration-700 ease-out group-hover:scale-105">

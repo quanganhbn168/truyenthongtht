@@ -88,7 +88,15 @@ class ProjectForm
                                     ->maxSize(10240) // 10MB per file
                                     ->panelLayout('grid')
                                     ->columnSpanFull(),
-                                TextInput::make('thumbnail')->label('Thumbnail URL (Tùy chọn)'),
+                                FileUpload::make('thumbnail')
+                                    ->label('Ảnh đại diện (Thumbnail)')
+                                    ->disk('public_uploads')
+                                    ->directory('upload/images')
+                                    ->visibility('public')
+                                    ->preserveFilenames()
+                                    ->imageEditor()
+                                    ->openable()
+                                    ->downloadable(),
                                 TextInput::make('tvc_url')->label('Video TVC (Cũ) / Youtube URL')->url()->columnSpanFull(),
                             ]),
                         Tab::make('Cài đặt')

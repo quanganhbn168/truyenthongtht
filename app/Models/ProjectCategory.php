@@ -12,7 +12,7 @@ class ProjectCategory extends Model
     use HasSlug;
     protected $fillable = [
         'name', 'slug', 'parent_id', 'description', 'content',
-        'image', 'thumbnail', 'meta_title', 'meta_description',
+        'image', 'thumbnail', 'banner', 'meta_title', 'meta_description',
         'keywords', 'sort_order', 'is_active',
     ];
 

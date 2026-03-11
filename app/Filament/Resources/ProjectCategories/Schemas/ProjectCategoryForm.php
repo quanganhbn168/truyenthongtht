@@ -59,6 +59,16 @@ class ProjectCategoryForm
                             ->imagePreviewHeight('200')
                             ->openable()
                             ->downloadable(),
+                        FileUpload::make('banner')
+                            ->label('Ảnh Banner')
+                            ->disk('public_uploads')
+                            ->directory('upload/banners')
+                            ->visibility('public')
+                            ->preserveFilenames()
+                            ->imageEditor()
+                            ->imagePreviewHeight('200')
+                            ->openable()
+                            ->downloadable(),
                         TextInput::make('meta_title')
                             ->label('Meta Title')
                             ->maxLength(500),

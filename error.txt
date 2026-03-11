@@ -1,0 +1,38 @@
+
+   Symfony\Component\ErrorHandler\Error\FatalError 
+
+  Type of App\Filament\Resources\Quotes\QuoteResource::$navigationGroup must be UnitEnum|string|null (as in class Filament\Resources\Resource)
+
+  at app\Filament\Resources\Quotes\QuoteResource.php:15
+     11▕ use Filament\Schemas\Schema;
+     12▕ use Filament\Support\Icons\Heroicon;
+     13▕ use Filament\Tables\Table;
+     14▕ 
+  ➜  15▕ class QuoteResource extends Resource
+     16▕ {
+     17▕     protected static ?string $model = Quote::class;
+     18▕ 
+     19▕     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedDocumentText;
+
+
+   Whoops\Exception\ErrorException 
+
+  Type of App\Filament\Resources\Quotes\QuoteResource::$navigationGroup must be UnitEnum|string|null (as in class Filament\Resources\Resource)
+
+  at app\Filament\Resources\Quotes\QuoteResource.php:15
+     11▕ use Filament\Schemas\Schema;
+     12▕ use Filament\Support\Icons\Heroicon;
+     13▕ use Filament\Tables\Table;
+     14▕ 
+  ➜  15▕ class QuoteResource extends Resource
+     16▕ {
+     17▕     protected static ?string $model = Quote::class;
+     18▕ 
+     19▕     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedDocumentText;
+
+  1   vendor\filp\whoops\src\Whoops\Run.php:520
+      Whoops\Run::handleError("Type of App\Filament\Resources\Quotes\QuoteResource::$navigationGroup must be UnitEnum|string|null (as in class Filament\Resources\Resource)", "D:\laragon\www\truyenthongtht\app\Filament\Resources\Quotes\QuoteResource.php")
+
+  2   [internal]:0
+      Whoops\Run::handleShutdown()
+
