@@ -49,7 +49,7 @@ class ProjectForm
                                     ->options([
                                         'upload' => 'Tải ảnh lên',
                                         'youtube' => 'Link YouTube',
-                                        'external' => 'Link ngoài (Video/Ảnh)',
+                                        'external' => 'Link ngoài (Google Drive, Vimeo...)',
                                     ])
                                     ->default('upload')
                                     ->inline()
