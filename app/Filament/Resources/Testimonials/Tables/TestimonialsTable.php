@@ -17,7 +17,7 @@ class TestimonialsTable
         return $table
             ->columns([
                 TextColumn::make('sort_order')->label('STT')->numeric()->sortable()->width(60),
-                ImageColumn::make('avatar')->label('Ảnh')->circular(),
+                ImageColumn::make('avatar')->label('Ảnh')->disk('public_uploads')->circular(),
                 TextColumn::make('name')->label('Khách hàng')->searchable()->sortable(),
                 TextColumn::make('position')->label('Chức vụ')->limit(40)->toggleable(),
                 TextColumn::make('rating')->label('Sao')->sortable(),

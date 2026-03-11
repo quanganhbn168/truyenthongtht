@@ -17,7 +17,7 @@ class SlidersTable
         return $table
             ->columns([
                 TextColumn::make('name')->label('Tên')->searchable()->sortable(),
-                ImageColumn::make('image')->label('Ảnh banner'),
+                ImageColumn::make('image')->label('Ảnh banner')->disk('public_uploads'),
                 TextColumn::make('link')->label('Liên kết')->limit(40),
                 TextColumn::make('sort_order')->label('Thứ tự')->numeric()->sortable(),
                 IconColumn::make('is_active')->label('Hiển thị')->boolean(),

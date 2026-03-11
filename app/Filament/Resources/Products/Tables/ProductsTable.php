@@ -18,7 +18,7 @@ class ProductsTable
         return $table
             ->columns([
                 TextColumn::make('name')->label('Tên SP')->searchable()->sortable()->limit(50),
-                ImageColumn::make('image')->label('Ảnh'),
+                ImageColumn::make('image')->label('Ảnh')->disk('public_uploads'),
                 TextColumn::make('category.name')->label('Danh mục')->sortable(),
                 TextColumn::make('price')->label('Giá bán')
                     ->formatStateUsing(fn ($state) => number_format($state) . '₫')->sortable(),

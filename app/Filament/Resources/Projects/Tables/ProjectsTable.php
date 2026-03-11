@@ -18,7 +18,7 @@ class ProjectsTable
         return $table
             ->columns([
                 TextColumn::make('name')->label('Tên DA')->searchable()->sortable()->limit(50),
-                ImageColumn::make('image')->label('Ảnh'),
+                ImageColumn::make('image')->label('Ảnh')->disk('public_uploads'),
                 TextColumn::make('category.name')->label('Danh mục')->sortable(),
                 TextColumn::make('client_name')->label('Khách hàng')->searchable(),
                 TextColumn::make('project_date')->label('Ngày TH')->date('d/m/Y')->sortable(),

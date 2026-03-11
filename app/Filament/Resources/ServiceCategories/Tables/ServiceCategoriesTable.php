@@ -19,7 +19,7 @@ class ServiceCategoriesTable
                 TextColumn::make('name')->label('Tên')->searchable()->sortable(),
                 TextColumn::make('slug')->label('Slug')->searchable()->limit(30),
                 TextColumn::make('parent.name')->label('DM cha')->searchable(),
-                ImageColumn::make('image')->label('Ảnh'),
+                ImageColumn::make('image')->label('Ảnh')->disk('public_uploads'),
                 TextColumn::make('services_count')->label('Số DV')
                     ->counts('services')->sortable(),
                 TextColumn::make('sort_order')->label('Thứ tự')->numeric()->sortable(),

@@ -19,6 +19,7 @@ class PostCategoriesTable
             ->columns([
                 ImageColumn::make('image')
                     ->label('Ảnh')
+                    ->disk('public_uploads')
                     ->circular()
                     ->defaultImageUrl(fn () => 'https://ui-avatars.com/api/?name=C&background=e5e7eb&color=9ca3af&size=40')
                     ->size(40),

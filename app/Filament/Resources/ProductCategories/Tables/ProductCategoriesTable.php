@@ -19,7 +19,7 @@ class ProductCategoriesTable
                 TextColumn::make('name')->label('Tên')->searchable()->sortable(),
                 TextColumn::make('slug')->label('Slug')->searchable()->limit(30),
                 TextColumn::make('parent.name')->label('DM cha')->searchable(),
-                ImageColumn::make('image')->label('Ảnh'),
+                ImageColumn::make('image')->label('Ảnh')->disk('public_uploads'),
                 TextColumn::make('sort_order')->label('Thứ tự')->numeric()->sortable(),
                 IconColumn::make('is_active')->label('Hiển thị')->boolean(),
                 TextColumn::make('created_at')->label('Ngày tạo')->dateTime('d/m/Y')

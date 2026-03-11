@@ -18,7 +18,7 @@ class BrandsTable
             ->columns([
                 TextColumn::make('name')->label('Tên')->searchable()->sortable(),
                 TextColumn::make('slug')->label('Slug')->searchable()->limit(30),
-                ImageColumn::make('image')->label('Logo'),
+                ImageColumn::make('image')->label('Logo')->disk('public_uploads'),
                 TextColumn::make('sort_order')->label('Thứ tự')->numeric()->sortable(),
                 IconColumn::make('is_active')->label('Hiển thị')->boolean(),
             ])

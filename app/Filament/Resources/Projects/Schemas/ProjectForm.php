@@ -50,7 +50,9 @@ class ProjectForm
                                     ->label('Thư viện Hình ảnh / Video Hậu trường (Gallery)')
                                     ->multiple()
                                     ->acceptedFileTypes(['image/*', 'video/*'])
+                                    ->disk('public_uploads')
                                     ->directory('upload/project_gallery')
+                                    ->visibility('public')
                                     ->maxSize(10240) // 10MB per file
                                     ->panelLayout('grid')
                                     ->columnSpanFull(),

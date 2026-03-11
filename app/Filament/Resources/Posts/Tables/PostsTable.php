@@ -20,7 +20,7 @@ class PostsTable
                 TextColumn::make('title')->label('Tiêu đề')->searchable()->sortable()->limit(50)
                     ->description(fn ($record) => $record->slug),
                 ImageColumn::make('image')->label('Ảnh')
-                    ->getStateUsing(fn ($record) => $record->image ? asset($record->image) : null)
+                    ->disk('public_uploads')
                     ->height(48)
                     ->width(72),
                 TextColumn::make('category.name')->label('Danh mục')->sortable(),

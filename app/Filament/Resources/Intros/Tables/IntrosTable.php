@@ -17,7 +17,7 @@ class IntrosTable
         return $table
             ->columns([
                 TextColumn::make('sort_order')->label('STT')->numeric()->sortable()->width(60),
-                ImageColumn::make('image')->label('Ảnh')->defaultImageUrl(null)->circular(),
+                ImageColumn::make('image')->label('Ảnh')->disk('public_uploads')->circular(),
                 TextColumn::make('icon')->label('Icon class')->limit(30),
                 TextColumn::make('title')->label('Tiêu đề')->searchable()->sortable()->limit(50),
                 TextColumn::make('subtitle')->label('Tiêu đề phụ')->limit(40)->toggleable(),

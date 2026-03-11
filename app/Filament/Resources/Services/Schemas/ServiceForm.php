@@ -45,7 +45,9 @@ class ServiceForm
                                     ->label('Hậu trường thực tế (Ảnh/Video)')
                                     ->multiple()
                                     ->acceptedFileTypes(['image/*', 'video/*'])
+                                    ->disk('public_uploads')
                                     ->directory('upload/behind_the_scenes')
+                                    ->visibility('public')
                                     ->maxSize(10240) // 10MB max per file
                                     ->panelLayout('grid')
                                     ->columnSpanFull(),
