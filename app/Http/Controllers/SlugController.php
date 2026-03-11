@@ -3,100 +3,53 @@
 namespace App\Http\Controllers;
 
 use App\Models\Slug;
+use Illuminate\Http\Request;
 
 class SlugController extends Controller
 {
-    public function resolve($slug)
+    /**
+     * Map morph alias → [Controller class, method]
+     * SlugController chỉ resolve slug rồi delegate sang controller tương ứng.
+     */
+    private const DISPATCH_MAP = [
+        'post'             => [PostController::class,    'show'],
+        'post_category'    => [PostController::class,    'category'],
+        'product'          => [ProductController::class, 'show'],
+        'product_category' => [ProductController::class, 'category'],
+        'service'          => [ServiceController::class, 'show'],
+        'service_category' => [ServiceController::class, 'category'],
+        'project'          => [ProjectController::class, 'show'],
+        'project_category' => [ProjectController::class, 'category'],
+    ];
+
+    public function show(string $slug, Request $request)
     {
-        $slugModel = Slug::where('slug', $slug)->firstOrFail();
-        $model = $slugModel->sluggable;
+        // 1. Resolve slug → Eloquent model
+        $record = Slug::resolve($slug);
 
-        return match (get_class($model)) {
-            \App\Models\Product::class         => $this->detailProduct($model),
-            \App\Models\Service::class         => $this->detailService($model),
-            \App\Models\Project::class         => $this->detailProject($model),
-            \App\Models\Post::class            => $this->detailPost($model),
-            \App\Models\Category::class        => $this->productByCategory($model),
-            \App\Models\ServiceCategory::class => $this->serviceByCategory($model),
-            \App\Models\PostCategory::class    => $this->postByCategory($model),
-            default                            => abort(404),
-        };
-    }
-
-    protected function detailProduct($product)
-    {
-        $category = $product->category()->select('id', 'name', 'slug', 'parent_id')->firstOrFail();
-        $relatedProduct = Product::whereNot("id",$product->id)->where("category_id",$category->id)->get();
-        return view('frontend.product.detail', compact('product','category',));
-    }
-
-    protected function detailService($service)
-    {
-        $category = $service->category;
-        return view('frontend.services.detail', compact('service','category'));
-    }
-
-    protected function detailProject($project)
-    {
-        return view('frontend.project.detail', compact('project'));
-    }
-
-    protected function detailPost($post)
-    {
-        return view('frontend.post.detail', compact('post'));
-    }
-
-    protected function productByCategory($category)
-    {
-        $products = $category->products()->where("status",1)->get();
-        return view('frontend.product.byCategory', compact('category'));
-    }
-
-    protected function serviceByCategory($service)
-    {   
-        if($service->slug == "tieng-trung-doanh-nghiep")
-        {
-            return view("frontend.tiengtrungdoanhnghiep");
-        }
-        $category = $service;
-        return view('frontend.services.serviceByCate', compact('category'));
-    }
-
-    protected function postByCategory($category)
-    {
-        if($category->slug == "tieng-trung-doanh-nghiep")
-        {
-            return view("tiengtrungdoanhnghiep.html");
-        }
-    // Lấy tất cả danh mục để hiển thị ở sidebar
-        $allCategories = \App\Models\PostCategory::where('status', 1)->get();
-
-    // Nếu là danh mục cha thì lấy thêm bài viết từ danh mục con
-        if ($category->parent_id === 0) {
-            $categoryIds = \App\Models\PostCategory::where('parent_id', $category->id)->pluck('id')->toArray();
-            $categoryIds[] = $category->id;
-        } else {
-            $categoryIds = [$category->id];
+        if (! $record || (property_exists($record, 'is_active') && ! $record->is_active)) {
+            abort(404);
         }
 
-    // Lấy danh sách bài viết thuộc các danh mục đã xác định
-        $posts = \App\Models\Post::whereIn('post_category_id', $categoryIds)
-        ->where('status', 1)
-        ->latest()
-        ->paginate(10);
+        // 2. Increment view count nếu có cột view_count
+        if (method_exists($record, 'increment') &&
+            $record->getConnection()->getSchemaBuilder()->hasColumn($record->getTable(), 'view_count')) {
+            $record->increment('view_count');
+        }
 
-    // Các bài viết nổi bật: lấy 5 bài mới nhất (tùy chỉnh thêm điều kiện nếu cần)
-        $featuredPosts = \App\Models\Post::where('status', 1)
-        ->latest('updated_at')
-        ->limit(5)
-        ->get();
+        // 3. Xác định morph alias
+        $morphAlias = array_search(
+            get_class($record),
+            \Illuminate\Database\Eloquent\Relations\Relation::morphMap()
+        ) ?: $record->getMorphClass();
 
-        return view('frontend.post.postByCate', [
-            'category' => $category,
-            'posts' => $posts,
-            'allCategories' => $allCategories,
-            'featuredPosts' => $featuredPosts,
-        ]);
-        return view('frontend.post.postByCate', compact('category','posts'));
+        // 4. Dispatch sang controller tương ứng
+        if (isset(self::DISPATCH_MAP[$morphAlias])) {
+            [$controllerClass, $method] = self::DISPATCH_MAP[$morphAlias];
+            return app($controllerClass)->$method($record, $request);
+        }
+
+        // 5. Fallback: render view pages.default nếu không có controller
+        return view('pages.default', ['record' => $record]);
     }
 }

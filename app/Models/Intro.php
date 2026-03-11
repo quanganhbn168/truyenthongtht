@@ -2,23 +2,28 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Intro extends Model
 {
-    /** @use HasFactory<\Database\Factories\IntroFactory> */
-    use HasFactory;
     protected $fillable = [
         'title',
-        'description',
-        'content',
+        'subtitle',
+        'icon',
         'image',
-        'banner',
-        'status',
+        'content',
+        'link',
+        'link_text',
+        'sort_order',
+        'is_active',
     ];
 
     protected $casts = [
-        'status' => 'boolean',
+        'is_active' => 'boolean',
     ];
+
+    public function scopeActive($query)
+    {
+        return $query->where('is_active', true)->orderBy('sort_order');
+    }
 }

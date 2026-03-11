@@ -3,78 +3,52 @@
 namespace App\Http\Controllers;
 
 use App\Models\Contact;
+use App\Settings\PageSettings;
+use App\Settings\WebsiteSettings;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class ContactController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Hiển thị trang Liên hệ.
      */
     public function index()
     {
-        $contacts = Contact::latest()->paginate(10);
-        return view('admin.contacts.index', compact('contacts'));
+        return view('pages.contact');
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
+     * Lưu liên hệ vào DB + gửi email thông báo cho admin.
      */
     public function store(Request $request)
     {
         $data = $request->validate([
-            'name' => ['required', 'string', 'min:2', 'max:255'],
-            'phone' => [
-                'required',
-                'regex:/^(0[3|5|7|8|9])[0-9]{8}$|^\+84[3|5|7|8|9][0-9]{8}$/'
-            ],
-            'address' => ['nullable', 'string', 'max:255'],
-            'email' => ['nullable', 'email'],
-            'message' => ['nullable', 'string', 'max:1000'],
+            'name'    => 'required|string|max:255',
+            'phone'   => 'required|string|max:20',
+            'email'   => 'nullable|email|max:255',
+            'message' => 'nullable|string|max:2000',
+            'subject' => 'nullable|string|max:255',
         ]);
 
-        Contact::create($data);
+        // 1. Lưu vào database
+        $contact = Contact::create($data);
 
-        return redirect()->back()->with('success', 'Gửi liên hệ thành công.');
-    }
+        // 2. Gửi email thông báo cho admin (nếu cấu hình MAIL_FROM_ADDRESS)
+        $adminEmail = config('mail.from.address');
+        if ($adminEmail && filter_var($adminEmail, FILTER_VALIDATE_EMAIL)) {
+            try {
+                Mail::send([], [], function ($message) use ($contact, $adminEmail) {
+                    $message->to($adminEmail)
+                        ->subject('Liên hệ mới từ ' . $contact->name . ' - ' . config('app.name'))
+                        ->html(view('emails.contact-notify', ['contact' => $contact])->render());
+                });
+            } catch (\Exception $e) {
+                // Không break nếu mail lỗi, chỉ log
+                logger()->error('Contact mail failed: ' . $e->getMessage());
+            }
+        }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Contact $contact)
-    {
-        return view('frontend.contact');
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Contact $contact)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Contact $contact)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Contact $contact)
-    {
-        $contact->delete();
-        return redirect()->route('admin.contacts.index')->with('success', 'Xoá liên hệ thành công.');
+        return back()->with('success', 'Cảm ơn bạn đã liên hệ! Chúng tôi sẽ phản hồi trong vòng 24 giờ.');
     }
 }

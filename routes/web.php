@@ -1,46 +1,47 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\HomeController;
-use App\Http\Controllers\IntroController;
-use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\AboutController;
 use App\Http\Controllers\ContactController;
-use App\Http\Controllers\PostCategoryController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProductController;
-use App\Http\Controllers\SettingController;
+use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\ServiceController;
-use App\Http\Controllers\VideoController;
 use App\Http\Controllers\SlugController;
-use UniSharp\LaravelFilemanager\Lfm;
+use Illuminate\Support\Facades\Route;
 
-Route::group(['prefix' => 'laravel-filemanager', 'middleware' => ['auth']], function () {
-    Lfm::routes();
-});
-Route::get("/", [HomeController::class,"index"])->name("home"); 
-Route::group(['prefix'=>'san-pham'], function(){
+/*
+|--------------------------------------------------------------------------
+| Frontend Routes
+|--------------------------------------------------------------------------
+*/
 
-    Route::get('/san-pham-1', function(){
-        return view('frontend.products.detail');
-    });
-    Route::get('/', [ProductController::class,'allProduct'])->name('frontend.allProduct');
-    Route::get('/{categories}', [ProductController::class,'productByCate'])->name('frontend.productByCate');
-    Route::get('chi-tiet/{product-slug}', [ProductController::class,'show'])->name('frontend.show');
-});
-Route::group(["prefix"=>"danh-muc"], function(){
-    Route::get("/{postCategory:slug}",[PostController::class,"postByCate"])->name("frontend.post.postByCate");
-    Route::get("chi-tiet/{post:slug}",[PostController::class,"detail"])->name("frontend.post.detail");
-});
-Route::group(["prefix"=>"du-an"], function(){
-    Route::get("/danh-muc/{slug}", [ServiceController::class,"serviceByCate"])->name("services.serviceByCate");
-    Route::get("/{services:slug}", [ServiceController::class,"detail"])->name("services.show");
-});
-Route::get('/tim-kiem', [HomeController::class, 'search'])->name('frontend.post.search');
+Route::get('/', [HomeController::class, 'index'])->name('home');
 
-Route::get('gioi-thieu', [IntroController::class,'show'])->name('intro.show');
-Route::get('lien-he',[ContactController::class,'show'])->name('contact.show');
-Route::post('lien-he',[ContactController::class,'store'])->name('contact.store');
+// Listing pages
+Route::get('/tin-tuc.html',   [PostController::class,    'index'])->name('posts.index');
+Route::get('/tin-tuc',   [PostController::class,    'index']);
+Route::get('/dich-vu.html', [ServiceController::class, 'index'])->name('services.index');
+Route::get('/dich-vu',   [ServiceController::class, 'index']);
+Route::get('/san-pham.html',  [ProductController::class, 'index'])->name('products.index');
+Route::get('/san-pham',  [ProductController::class, 'index']);
+Route::get('/du-an.html', [ProjectController::class, 'index'])->name('projects.index');
+Route::get('/du-an',     [ProjectController::class, 'index']);
 
-require __DIR__.'/admin.php';   
-require __DIR__.'/auth.php';   
-Route::get('/{slug}', [SlugController::class, 'resolve'])->name('slug.resolve');
+// Static pages (định nghĩa trước catch-all)
+Route::get('/gioi-thieu.html', [AboutController::class, 'index'])->name('about');
+Route::get('/gioi-thieu',      [AboutController::class, 'index']);
+
+// Contact form
+Route::get('/lien-he.html', [ContactController::class, 'index'])->name('contact.index');
+Route::post('/lien-he', [ContactController::class, 'store'])->name('contact.store');
+
+/*
+|--------------------------------------------------------------------------
+| Catch-all slug route — MUST be last
+| Handles: /slug, /slug.html, /category/slug, etc.
+|--------------------------------------------------------------------------
+*/
+Route::get('{slug}', [SlugController::class, 'show'])
+    ->where('slug', '.*')
+    ->name('slug.show');

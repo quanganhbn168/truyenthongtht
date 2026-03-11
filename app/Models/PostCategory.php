@@ -2,59 +2,75 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Traits\HasSlug;
+use Datlechin\FilamentMenuBuilder\Contracts\MenuPanelable;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Str;
-class PostCategory extends Model
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+
+class PostCategory extends Model implements MenuPanelable
 {
-    /** @use HasFactory<\Database\Factories\PostCategoryFactory> */
-    use HasFactory;
+    use HasSlug;
     protected $fillable = [
-        'parent_id',
         'name',
         'slug',
+        'parent_id',
+        'description',
+        'show_home',
+        'show_home2',
+        'show_menu',
+        'show_footer',
         'image',
-        'banner',
-        'status',
-        'is_home',
+        'thumbnail',
+        'view_count',
+        'content',
+        'meta_title',
+        'meta_description',
+        'keywords',
+        'sort_order',
+        'is_active',
     ];
 
     protected $casts = [
-        'status' => 'boolean',
-        'is_home' => 'boolean',
-        'parent_id' => 'integer',
+        'show_home' => 'boolean',
+        'show_home2' => 'boolean',
+        'show_menu' => 'boolean',
+        'show_footer' => 'boolean',
+        'is_active' => 'boolean',
     ];
 
-    protected static function booted(): void
+    public function parent(): BelongsTo
     {
-        static::creating(function ($category) {
-            if (empty($category->slug)) {
-                $category->slug = Str::slug($category->name) . '-' . Str::random(5);
-            }
-        });
+        return $this->belongsTo(PostCategory::class, 'parent_id');
     }
 
-    public function parent()
+    public function children(): HasMany
     {
-        return $this->belongsTo(self::class, 'parent_id');
+        return $this->hasMany(PostCategory::class, 'parent_id');
     }
 
-    public function children()
+    public function posts(): HasMany
     {
-        return $this->hasMany(self::class, 'parent_id');
+        return $this->hasMany(Post::class, 'category_id');
     }
 
-    public function posts()
+    public function getMenuPanelName(): string
     {
-        return $this->hasMany(Post::class);
-    }
-    public function slug()
-    {
-        return $this->morphOne(\App\Models\Slug::class, 'sluggable');
+        return 'Danh mục bài viết';
     }
 
-    public function getSlugUrlAttribute()
+    public function getMenuPanelTitleColumn(): string
     {
-        return url($this->slug->slug ?? '#');
+        return 'name';
+    }
+
+    public function getMenuPanelUrlUsing(): callable
+    {
+        return fn (self $record) => '/' . ltrim($record->slug, '/') . '.html';
+    }
+
+    public function getMenuPanelModifyQueryUsing(): callable
+    {
+        return fn ($query) => $query->where('is_active', true)->orderBy('sort_order');
     }
 }

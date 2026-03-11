@@ -2,6 +2,8 @@
 
 return [
     App\Providers\AppServiceProvider::class,
-    App\Providers\SettingServiceProvider::class,
+    App\Providers\Filament\AdminPanelProvider::class,
+    App\Providers\GlobalSettingsProvider::class,
     App\Providers\SlugServiceProvider::class,
+    App\Providers\ViewServiceProvider::class,
 ];

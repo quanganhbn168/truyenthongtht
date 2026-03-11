@@ -2,23 +2,18 @@
 
 namespace App\Providers;
 
+use App\Observers\MediaImageObserver;
+use Awcodes\Curator\Models\Media;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
-    /**
-     * Register any application services.
-     */
-    public function register(): void
-    {
-        //
-    }
+    public function register(): void {}
 
-    /**
-     * Bootstrap any application services.
-     */
     public function boot(): void
     {
-        //
+        Media::observe(MediaImageObserver::class);
     }
 }
+
+

@@ -2,40 +2,34 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Traits\HasSlug;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Project extends Model
 {
-    use HasFactory;
-
+    use HasSlug;
     protected $fillable = [
-        'name',
-        'parent_id',
-        'description',
-        'content',
-        'status',
-        'is_home',
-        'image',
-        'banner',
+        'category_id', 'name', 'slug', 'summary', 'content',
+        'client_name', 'project_date', 'image', 'thumbnail',
+        'view_count', 'meta_title', 'meta_description', 'keywords',
+        'sort_order', 'is_featured', 'is_active',
     ];
 
-    public function parent()
+    protected $casts = [
+        'project_date' => 'date',
+        'is_featured' => 'boolean',
+        'is_active' => 'boolean',
+    ];
+
+    public function category(): BelongsTo
     {
-        return $this->belongsTo(Project::class, 'parent_id');
+        return $this->belongsTo(ProjectCategory::class, 'category_id');
     }
 
-    public function children()
+    public function services(): BelongsToMany
     {
-        return $this->hasMany(Project::class, 'parent_id');
-    }
-    public function slug()
-    {
-        return $this->morphOne(\App\Models\Slug::class, 'sluggable');
-    }
-
-    public function getSlugUrlAttribute()
-    {
-        return url($this->slug->slug ?? '#');
+        return $this->belongsToMany(Service::class, 'project_service');
     }
 }

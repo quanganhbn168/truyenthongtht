@@ -1,82 +1,80 @@
-{{-- resources/views/layouts/master.blade.php --}}
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" prefix="og: https://ogp.me/ns#">
 <head>
-    {{-- Basic --}}
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    {{-- CSRF --}}
-    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-    {{-- Title & SEO --}}
-    <title>@yield('title') | {{ config('app.name') }}</title>
-    <meta name="description" content="@yield('meta_description', 'Trung tâm đào tạo tiếng Trung doanh nghiệp')">
-    <meta name="keywords" content="@yield('meta_keywords', 'Tiếng Trung, Tiếng Trung doanh nghiệp, Tiếng Trung Ở Bắc Ninh, Tiếng Trung Quế Võ')">
-    <meta name="robots" content="@yield('meta_robots', 'index, follow')">
-
-    {{-- Canonical --}}
-    <link rel="canonical" href="{{ url()->current() }}" />
+    {{-- SEO Core --}}
+    <title>{{ $seoTitleFull }}</title>
+    <meta name="description" content="{{ $seoDescription }}">
+    @if($seoKeywords)
+    <meta name="keywords" content="{{ $seoKeywords }}">
+    @endif
+    <meta name="robots" content="{{ $robots }}">
+    <link rel="canonical" href="{{ $canonical }}">
 
     {{-- Open Graph --}}
-    <meta property="og:type"        content="@yield('og_type','website')" />
-    <meta property="og:title"       content="@yield('title') | {{ config('app.name') }}" />
-    <meta property="og:description" content="@yield('meta_description')" />
-    <meta property="og:url"         content="{{ url()->current() }}" />
-    <meta property="og:site_name"   content="{{ config('app.name') }}" />
-    <meta property="og:image"       content="@yield('meta_image', asset('images/default-og.jpg'))" />
+    <meta property="og:type" content="{{ $ogType }}">
+    <meta property="og:site_name" content="{{ $siteName }}">
+    <meta property="og:title" content="{{ $seoTitle }}">
+    <meta property="og:description" content="{{ $seoDescriptionFull }}">
+    <meta property="og:url" content="{{ $seoUrl }}">
+    <meta property="og:image" content="{{ $seoImageUrl }}">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:locale" content="vi_VN">
 
     {{-- Twitter Card --}}
-    <meta name="twitter:card"        content="summary_large_image" />
-    <meta name="twitter:title"       content="@yield('title') | {{ config('app.name') }}" />
-    <meta name="twitter:description" content="@yield('meta_description')" />
-    <meta name="twitter:image"       content="@yield('meta_image', asset('images/default-og.jpg'))" />
-    {{-- Fonts, Favicons --}}
-    <link rel="icon" href="{{ asset($setting->favicon) }}" type="image/x-icon" />
-    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset($setting->favicon) }}" />
-    {{-- CSS & JS --}}
-    <link rel="stylesheet" href="{{asset('vendor/bootstrap/css/bootstrap.min.css')}}">
-    <link rel="stylesheet" href="{{asset('vendor/fontawesome/css/all.min.css')}}">
-    <link rel="stylesheet" href="{{asset('vendor/swiper/swiper-bundle.min.css')}}">
-    <link rel="stylesheet" href="{{asset('css/slide.css')}}?{{time()}}">
-    <link rel="stylesheet" href="{{asset('css/style.css')}}?{{time()}}">
-    @stack('css')
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{{ $seoTitle }}">
+    <meta name="twitter:description" content="{{ $seoDescriptionFull }}">
+    <meta name="twitter:image" content="{{ $seoImageUrl }}">
+
+    {{-- JSON-LD Structured Data --}}
+    <script type="application/ld+json">{!! json_encode([
+        '@context'    => 'https://schema.org',
+        '@type'       => $schemaType,
+        'name'        => $seoTitle,
+        'description' => $seoDescriptionFull,
+        'url'         => $seoUrl,
+        'image'       => $seoImageUrl,
+        'publisher'   => [
+            '@type' => 'Organization',
+            'name'  => $siteName,
+            'url'   => url('/'),
+        ],
+    ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) !!}</script>
+    @stack('schema')
+
+    {{-- Favicon --}}
+    <link rel="icon" type="image/x-icon" href="{{ $faviconUrl }}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('apple-touch-icon.png') }}">
+
+    {{-- Fonts --}}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet">
+
+    {{-- Assets --}}
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+
+    @stack('head')
+    @stack('styles')
 </head>
+<body class="{{ $bodyClass ?? '' }}">
 
-<body>
-    
-    @include('partials.frontend.header')
-    @yield('content')
-    @include('partials.frontend.footer')
-    <script src="{{asset('/js/jquery-3.7.1.min.js')}}?{{time()}}"></script>
-    <script src="{{asset('/vendor/bootstrap/popper.min.js')}}?{{time()}}"></script>
-    <script src="{{asset('/vendor/bootstrap/js/bootstrap.min.js')}}?{{time()}}"></script>
-    <script src="{{asset('/vendor/swiper/swiper-bundle.min.js')}}?{{time()}}"></script>
-    <script src="{{asset('/js/main.js')}}"></script>
-    <script>
-        $(document).ready(function () {
-            $('.toggle-sidebar').on('click', function () {
-              $('#mobileSidebar').addClass('show');
-              $('#mobileSidebarOverlay').addClass('active');
-          });
+    @include('layouts.partials.topbar')
+    @include('layouts.partials.header')
 
-            $('.close-sidebar, #mobileSidebarOverlay').on('click', function () {
-              $('#mobileSidebar').removeClass('show');
-              $('#mobileSidebarOverlay').removeClass('active');
-          });
-        });
-    </script>
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            document.querySelector(".gotop").addEventListener("click", function(e) {
-                e.preventDefault();
-                window.scrollTo({
-                    top: 0,
-                    behavior: "smooth"
-                });
-            });
-        });
-    </script>
+    <main id="main-content" role="main">
+        @yield('content')
+    </main>
 
-    @stack('js')
+    @include('layouts.partials.footer')
+
+    @include('partials.float-widget')
+
+    @stack('scripts')
 </body>
 </html>

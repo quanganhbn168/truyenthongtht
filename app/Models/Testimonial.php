@@ -2,22 +2,27 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Testimonial extends Model
 {
-    /** @use HasFactory<\Database\Factories\TestimonialFactory> */
-    use HasFactory;
     protected $fillable = [
         'name',
-        'image',
         'position',
+        'avatar',
         'content',
-        'status',
+        'rating',
+        'sort_order',
+        'is_active',
     ];
 
     protected $casts = [
-        'status' => 'boolean',
+        'is_active' => 'boolean',
+        'rating'    => 'integer',
     ];
+
+    public function scopeActive($query)
+    {
+        return $query->where('is_active', true)->orderBy('sort_order');
+    }
 }

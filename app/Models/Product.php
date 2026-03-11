@@ -2,56 +2,44 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Traits\HasSlug;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Str;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Product extends Model
 {
-    /** @use HasFactory<\Database\Factories\ProductFactory> */
-    use HasFactory;
+    use HasSlug;
     protected $fillable = [
         'category_id',
         'name',
         'slug',
-        'image',
-        'banner',
+        'summary',
+        'content',
+        'original_price',
         'price',
-        'price_discount',
-        'description',
-        'is_home',
-        'status',
+        'image',
+        'thumbnail',
+        'published_at',
+        'is_bestseller',
+        'view_count',
+        'meta_title',
+        'meta_description',
+        'keywords',
+        'sort_order',
+        'is_active',
+        'tags',
     ];
 
     protected $casts = [
-        'price' => 'float',
-        'price_discount' => 'float',
-        'status' => 'boolean',
-        'is_home' => 'boolean',
-        'is_featured' => 'boolean',
-        'is_on_sale' => 'boolean',
+        'published_at' => 'date',
+        'is_bestseller' => 'boolean',
+        'is_active' => 'boolean',
+        'original_price' => 'decimal:0',
+        'price' => 'decimal:0',
     ];
 
-    protected static function booted(): void
+    public function category(): BelongsTo
     {
-        static::creating(function ($product) {
-            if (empty($product->slug)) {
-                $product->slug = Str::slug($product->name);
-            }
-        });
-    }
-
-    public function category()
-    {
-        return $this->belongsTo(Category::class);
-    }
-    public function slug()
-    {
-        return $this->morphOne(\App\Models\Slug::class, 'sluggable');
-    }
-
-    public function getSlugUrlAttribute()
-    {
-        return url($this->slug->slug ?? '#');
+        return $this->belongsTo(ProductCategory::class, 'category_id');
     }
 }

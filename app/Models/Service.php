@@ -2,39 +2,60 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Traits\HasSlug;
+use Datlechin\FilamentMenuBuilder\Contracts\MenuPanelable;
 use Illuminate\Database\Eloquent\Model;
-use App\Traits\HasImageGallery;
-use App\Traits\UploadImageTrait;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
-class Service extends Model
+class Service extends Model implements MenuPanelable
 {
-    use HasFactory, HasImageGallery, UploadImageTrait;
-
+    use HasSlug;
     protected $fillable = [
-        'service_category_id',
-        'name',
-        'slug',
-        'image',
-        'banner',
-        'description',
-        'content',
-        'is_home',
-        'status',
+        'category_id', 'name', 'slug', 'summary', 'content',
+        'price', 'image', 'thumbnail', 'published_at', 'view_count',
+        'meta_title', 'meta_description', 'keywords',
+        'sort_order', 'is_active',
     ];
 
-    public function category()
+    protected $casts = [
+        'published_at' => 'date',
+        'is_active' => 'boolean',
+        'price' => 'decimal:0',
+    ];
+
+    public function category(): BelongsTo
     {
-        return $this->belongsTo(ServiceCategory::class,"service_category_id");
-    }
-    public function slug()
-    {
-        return $this->morphOne(\App\Models\Slug::class, 'sluggable');
+        return $this->belongsTo(ServiceCategory::class, 'category_id');
     }
 
-    public function getSlugUrlAttribute()
+    public function posts(): BelongsToMany
     {
-        return url($this->slug->slug ?? '#');
+        return $this->belongsToMany(Post::class, 'post_service');
     }
 
+    public function projects(): BelongsToMany
+    {
+        return $this->belongsToMany(Project::class, 'project_service');
+    }
+
+    public function getMenuPanelName(): string
+    {
+        return 'Dịch vụ';
+    }
+
+    public function getMenuPanelTitleColumn(): string
+    {
+        return 'name';
+    }
+
+    public function getMenuPanelUrlUsing(): callable
+    {
+        return fn (self $record) => '/' . ltrim($record->slug, '/') . '.html';
+    }
+
+    public function getMenuPanelModifyQueryUsing(): callable
+    {
+        return fn ($query) => $query->where('is_active', true)->orderBy('sort_order');
+    }
 }

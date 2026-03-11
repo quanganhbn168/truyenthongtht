@@ -1,26 +1,21 @@
-@php
-    $segments = Request::segments();
-    $url = '';
-@endphp
-
-<ol class="breadcrumb float-sm-right">
-    <li class="breadcrumb-item">
-        <a href="{{ url('/admin/dashboard') }}">Trang chủ</a>
-    </li>
-
-    @foreach($segments as $index => $segment)
-        @php
-            $url .= '/' . $segment;
-            $is_last = $index === array_key_last($segments);
-            $label = ucfirst(str_replace('-', ' ', $segment));
-        @endphp
-
-        <li class="breadcrumb-item {{ $is_last ? 'active' : '' }}" {{ $is_last ? 'aria-current=page' : '' }}>
-            @if (!$is_last)
-                <a href="{{ url($url) }}">{{ $label }}</a>
+@if(count($items) > 1)
+<nav aria-label="breadcrumb" class="breadcrumb-nav">
+    <ol class="breadcrumb-list" role="list" itemscope itemtype="https://schema.org/BreadcrumbList">
+        @foreach($items as $index => $item)
+        @php $isLast = $loop->last @endphp
+        <li class="breadcrumb-item {{ $isLast ? 'active' : '' }}"
+            itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+            @if(!$isLast && !empty($item['url']))
+                <a href="{{ $item['url'] }}" itemprop="item" class="breadcrumb-link">
+                    <span itemprop="name">{{ $item['label'] }}</span>
+                </a>
+                <span class="breadcrumb-sep" aria-hidden="true"><i class="fa-solid fa-chevron-right"></i></span>
             @else
-                {{ $label }}
+                <span itemprop="name" aria-current="page">{{ $item['label'] }}</span>
             @endif
+            <meta itemprop="position" content="{{ $index + 1 }}">
         </li>
-    @endforeach
-</ol>
+        @endforeach
+    </ol>
+</nav>
+@endif

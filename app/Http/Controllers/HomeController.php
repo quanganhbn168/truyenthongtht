@@ -2,62 +2,32 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\Slide;
-use App\Models\Category;
+use App\Models\Intro;
+use App\Models\Post;
+use App\Models\Project;
+use App\Models\ProjectCategory;
 use App\Models\Service;
 use App\Models\ServiceCategory;
-use App\Models\PostCategory;
-use App\Models\Post;
-use App\Models\Intro;
 use App\Models\Testimonial;
-use App\Models\Team;
+use App\Models\Slide;
 
 class HomeController extends Controller
 {
     public function index()
     {
-        $slides = Slide::where('status',1)->get();
-        $intro = Intro::first();
-        $categories = Category::where('status',1)->get();
-        $serviceCategory = ServiceCategory::where('status', 1)->whereNot('parent_id', 0)
-            ->with(['services' => function($query) {
-                $query->where('status', 1)->limit(6);
-            }])->get();
-        $services = Service::where("status",1)->get();
-        $serviceCategoryHome = ServiceCategory::where("status",1)->where("parent_id",0)->get();
-        $homeCategories = PostCategory::where('status', 1)
-            ->where('is_home', 1)
-            ->with(['posts' => function ($q) {
-                $q->where('status', 1)->latest()->limit(6);
-            }])->get();
-        $testimonials = Testimonial::where("status",1)->get();
-        $teams = Team::get();
-        return view('frontend.index', compact(
-            'slides',
-            'categories',
-            'serviceCategory',
-            'serviceCategoryHome',
-            'homeCategories',
-            'intro',
-            'testimonials',
-            'teams',
-            'services'
-        ));
-    }
- 
-    public function search(Request $request)
-    {
-        $keyword = trim($request->input('q'));
+        $slides       = Slide::where('is_active', true)->orderBy('sort_order')->get();
+        $intros       = Intro::where('is_active', true)->orderBy('sort_order')->get();
+        $services     = ServiceCategory::where('is_active', true)->whereNull('parent_id')->orderBy('sort_order')->limit(6)->get();
+        $latestPosts  = Post::where('is_active', true)->orderByDesc('published_at')->limit(3)->get();
+        $testimonials = Testimonial::where('is_active', true)->orderBy('sort_order')->get();
+        
+        $projects           = Project::with('category')->where('is_active', true)->where('is_featured', true)->orderBy('sort_order')->limit(6)->get();
+        $projectCategories  = ProjectCategory::where('is_active', true)->orderBy('sort_order')->get();
 
-        $posts = Post::where('status', 1)
-        ->where(function ($query) use ($keyword) {
-            $query->where('title', 'LIKE', "%{$keyword}%")
-            ->orWhere('content', 'LIKE', "%{$keyword}%");
-        })
-        ->latest()
-        ->paginate(10);
-
-        return view('frontend.posts.result', compact('posts', 'keyword'));
+        return view('home', compact('slides', 'intros', 'services', 'latestPosts', 'testimonials', 'projects', 'projectCategories'))
+            ->with('seoTitle', config('site.name', config('app.name')))
+            ->with('seoDescription', config('site.description', 'Chuyên cung cấp dịch vụ truyền thông, quay phim, chụp ảnh chuyên nghiệp.'))
+            ->with('ogType', 'website')
+            ->with('schemaType', 'Organization');
     }
 }

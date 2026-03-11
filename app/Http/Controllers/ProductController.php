@@ -3,51 +3,35 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use App\Models\ProductCategory;
 use Illuminate\Http\Request;
-use App\Services\ProductService;
 
 class ProductController extends Controller
 {
-    public function __construct(protected ProductService $productService) {}
-
-    public function index()
+    /** Trang tất cả sản phẩm */
+    public function index(Request $request)
     {
-        $products = $this->productService->getAll();
-        return view('admin.products.index', compact('products'));
+        $categories = ProductCategory::where('is_active', true)->orderBy('sort_order')->get();
+        $query      = Product::where('is_active', true)->orderBy('sort_order');
+
+        if ($request->category) {
+            $cat = ProductCategory::where('slug', $request->category)->firstOrFail();
+            $query->where('category_id', $cat->id);
+        }
+
+        $products = $query->paginate(12);
+
+        return view('pages.products', compact('products', 'categories'));
     }
 
-    public function create()
+    /** Gọi bởi SlugController khi record là Product */
+    public function show(Product $product, Request $request)
     {
-        $categories = $this->productService->getParentOptions();
-        return view('admin.products.create', compact('categories'));
-    }
+        $related  = Product::where('category_id', $product->category_id)
+            ->where('id', '!=', $product->id)
+            ->where('is_active', true)->orderBy('sort_order')->limit(4)->get();
+        $category = ProductCategory::find($product->category_id);
 
-    public function store(Request $request)
-    {
-        $this->productService->create($request);
-
-        $route = $request->has('save_new')
-            ? route('admin.products.create')
-            : route('admin.products.index');
-
-        return redirect($route)->with('success', 'Thêm sản phẩm thành công.');
-    }
-
-    public function edit(Product $product)
-    {
-        $categories = $this->productService->getParentOptions();
-        return view('admin.products.edit', compact('product', 'categories'));
-    }
-
-    public function update(Request $request, Product $product)
-    {
-        $this->productService->update($request, $product);
-        return redirect()->route('admin.products.index')->with('success', 'Cập nhật sản phẩm thành công.');
-    }
-
-    public function destroy(Product $product)
-    {
-        $this->productService->delete($product);
-        return redirect()->route('admin.products.index')->with('success', 'Xoá sản phẩm thành công.');
+        return view('pages.product', compact('product', 'related', 'category'));
     }
 }

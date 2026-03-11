@@ -2,34 +2,27 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Slide extends Model
 {
-    /** @use HasFactory<\Database\Factories\SlideFactory> */
-    use HasFactory;
+    protected $table = 'sliders';
+
     protected $fillable = [
-        'title',
+        'name',
         'link',
         'image',
-        'position',
-        'status',
+        'thumbnail',
+        'sort_order',
+        'is_active',
     ];
 
-    /**
-     * Lấy ảnh đầy đủ path (nếu dùng asset)
-     */
-    public function getImageUrlAttribute(): string
-    {
-        return $this->image ? asset($this->image) : asset('images/setting/no-image.png');
-    }
+    protected $casts = [
+        'is_active' => 'boolean',
+    ];
 
-    /**
-     * Scope lọc slide đang bật
-     */
     public function scopeActive($query)
     {
-        return $query->where('status', true);
+        return $query->where('is_active', true)->orderBy('sort_order');
     }
 }

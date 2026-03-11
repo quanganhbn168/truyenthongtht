@@ -2,23 +2,22 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Contact extends Model
 {
-    /** @use HasFactory<\Database\Factories\ContactFactory> */
-    use HasFactory;
     protected $fillable = [
         'name',
         'email',
         'phone',
         'subject',
         'message',
-        'status',
+        'is_read',
+        'is_active',
     ];
 
     protected $casts = [
-        'status' => 'boolean',
+        'is_read' => 'boolean',
+        'is_active' => 'boolean',
     ];
 }

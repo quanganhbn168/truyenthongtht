@@ -3,51 +3,57 @@
 namespace App\Http\Controllers;
 
 use App\Models\Project;
-use App\Services\ProjectService;
+use App\Models\ProjectCategory;
 use Illuminate\Http\Request;
 
 class ProjectController extends Controller
 {
-    protected $service;
-
-    public function __construct(ProjectService $service)
+    /** Trang tất cả dự án / công trình */
+    public function index(Request $request)
     {
-        $this->service = $service;
+        $categories = ProjectCategory::where('is_active', true)->orderBy('sort_order')->get();
+        $projects   = Project::where('is_active', true)->orderByDesc('created_at')->paginate(12)->onEachSide(1);
+
+        return view('pages.projects', compact('projects', 'categories'));
     }
 
-    public function index()
+    /** Gọi bởi Slash-Link filter khi User Click vào Tabs */
+    public function category(\App\Models\ProjectCategory $category, Request $request)
     {
-        $projects = Project::with('parent')->latest()->get();
-        return view('admin.projects.index', compact('projects'));
+        $categories = \App\Models\ProjectCategory::where('is_active', true)->orderBy('sort_order')->get();
+
+        $projects = Project::where('category_id', $category->id)
+            ->where('is_active', true)
+            ->orderByDesc('created_at')
+            ->paginate(12)
+            ->onEachSide(1);
+
+        return view('pages.projects', compact('projects', 'categories', 'category'));
     }
 
-    public function create()
+    /** Gọi bởi SlugController khi record là Project */
+    public function show(Project $project, Request $request)
     {
-        $projects = Project::pluck('name', 'id');
-        return view('admin.projects.create', compact('projects'));
-    }
+        $project->load('category', 'services');
+        
+        // Lấy danh sách ID dịch vụ của dự án hiện tại
+        $serviceIds = $project->services->pluck('id')->toArray();
 
-    public function store(Request $request)
-    {
-        $this->service->create($request);
-        return redirect()->route('admin.projects.index')->with('success', 'Tạo dự án thành công');
-    }
+        // Lấy các dự án có chung ít nhất 1 dịch vụ (ngoại trừ dự án hiện tại)
+        $relatedQuery = Project::where('id', '!=', $project->id)->where('is_active', true);
+        
+        if (!empty($serviceIds)) {
+            $relatedQuery->whereHas('services', function($q) use ($serviceIds) {
+                $q->whereIn('services.id', $serviceIds);
+            });
+        } else {
+            // Fallback: Nếu không có dịch vụ nào, load theo category cũ
+            $relatedQuery->where('category_id', $project->category_id);
+        }
 
-    public function edit(Project $project)
-    {
-        $projects = Project::where('id', '!=', $project->id)->pluck('name', 'id');
-        return view('admin.projects.edit', compact('project', 'projects'));
-    }
+        $related = $relatedQuery->orderBy('sort_order')->limit(4)->get();
+        $category = $project->category;
 
-    public function update(Request $request, Project $project)
-    {
-        $this->service->update($request, $project);
-        return redirect()->route('admin.projects.index')->with('success', 'Cập nhật dự án thành công');
-    }
-
-    public function destroy(Project $project)
-    {
-        $this->service->delete($project);
-        return redirect()->route('admin.projects.index')->with('success', 'Đã xóa dự án');
+        return view('pages.project', compact('project', 'related', 'category'));
     }
 }

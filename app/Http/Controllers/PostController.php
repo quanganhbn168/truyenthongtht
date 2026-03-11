@@ -3,105 +3,91 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
-use Illuminate\Http\Request;
-use App\Services\PostService;
 use App\Models\PostCategory;
+use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class PostController extends Controller
 {
-    public function __construct(
-        protected PostService $postService
-    ) {}
-
-    public function index()
+    /** Trang danh sách tất cả bài viết */
+    public function index(Request $request)
     {
-        $posts = $this->postService->getAll();
-        return view('admin.posts.index', compact('posts'));
+        $category   = null;
+        $categories = PostCategory::where('is_active', true)->orderBy('sort_order')->get();
+
+        $query = Post::where('is_active', true)->orderByDesc('published_at');
+
+        if ($request->category) {
+            $category = PostCategory::where('slug', $request->category)->firstOrFail();
+            $query->where('category_id', $category->id);
+        }
+
+        $posts = $query->paginate(13)->onEachSide(1);
+
+        return view('posts.index', compact('posts', 'categories', 'category'));
     }
 
-    public function create()
+    /** Gọi bởi SlugController khi record là PostCategory */
+    public function category(\App\Models\PostCategory $category, Request $request)
     {
-        $categories = $this->postService->getParentOptions();
-        return view('admin.posts.create', compact('categories'));
+        $categories = \App\Models\PostCategory::where('is_active', true)->orderBy('sort_order')->get();
+
+        $posts = Post::where('category_id', $category->id)
+            ->where('is_active', true)
+            ->orderByDesc('published_at')
+            ->paginate(13)
+            ->onEachSide(1);
+
+        return view('posts.index', compact('posts', 'categories', 'category'));
     }
 
-    public function store(Request $request)
+    /** Gọi bởi SlugController khi record là Post */
+    public function show(Post $post, Request $request)
     {
-        $this->postService->create($request);
+        // Chỉ tính view một lần per session per bài
+        $sessionKey = 'viewed_post_' . $post->id;
+        if (! $request->session()->has($sessionKey)) {
+            $post->increment('view_count');
+            $request->session()->put($sessionKey, true);
+        }
 
-        return $request->has('save_new')
-            ? redirect()->route('admin.posts.create')->with('success', 'Thêm bài viết mới thành công.')
-            : redirect()->route('admin.posts.index')->with('success', 'Thêm bài viết thành công.');
-    }
+        // Inject id vào heading h2/h3 để TOC anchor hoạt động
+        $content = $this->injectHeadingIds($post->content ?? '');
 
-    public function edit(Post $post)
-    {
-        $categories = $this->postService->getParentOptions();
-        return view('admin.posts.edit', compact('post', 'categories'));
-    }
-
-    public function update(Request $request, Post $post)
-    {
-        $this->postService->update($request, $post);
-        return redirect()->route('admin.posts.index')->with('success', 'Cập nhật bài viết thành công.');
-    }
-
-    public function destroy(Post $post)
-    {
-        $this->postService->delete($post);
-        return redirect()->route('admin.posts.index')->with('success', 'Xoá bài viết thành công.');
-    }
-
-    public function detail(Post $post)
-    {
-        // Eager load category nếu chưa có
-        $post->load('category');
-
-        // Bài viết liên quan cùng danh mục, loại trừ chính bài viết hiện tại
-        $relatedPosts = Post::where('status', 1)
-            ->where('post_category_id', $post->post_category_id)
+        $related = Post::where('category_id', $post->category_id)
             ->where('id', '!=', $post->id)
-            ->latest()
-            ->take(6)
+            ->where('is_active', true)
+            ->orderByDesc('published_at')
+            ->limit(4)
             ->get();
 
-        return view('frontend.post.detail', compact('post', 'relatedPosts'));
+        $post->load('services');
+
+        return view('posts.show', compact('post', 'related', 'content'));
     }
-    public function postByCate(PostCategory $postCategory)
+
+    /**
+     * Inject id="toc-{slug}" vào <h2>/<h3> chưa có id.
+     * Đồng nhất với logic của Toc component.
+     */
+    private function injectHeadingIds(string $html): string
     {
-        if($postCategory->slug == "tieng-trung-doanh-nghiep")
-        {
-            return redirect()->route("home");
-        }
-    // Lấy tất cả danh mục để hiển thị ở sidebar
-        $allCategories = PostCategory::where('status', 1)->get();
+        return preg_replace_callback(
+            '/<(h[23])([^>]*)>(.*?)<\/\1>/si',
+            function ($m) {
+                [$full, $tag, $attrs, $inner] = $m;
 
-    // Nếu là danh mục cha thì lấy thêm bài viết từ danh mục con
-        if ($postCategory->parent_id === 0) {
-            $categoryIds = PostCategory::where('parent_id', $postCategory->id)->pluck('id')->toArray();
-            $categoryIds[] = $postCategory->id;
-        } else {
-            $categoryIds = [$postCategory->id];
-        }
+                // Giữ nguyên nếu đã có id
+                if (preg_match('/\bid\s*=/i', $attrs)) {
+                    return $full;
+                }
 
-    // Lấy danh sách bài viết thuộc các danh mục đã xác định
-        $posts = Post::whereIn('post_category_id', $categoryIds)
-        ->where('status', 1)
-        ->latest()
-        ->paginate(10);
+                $text = trim(html_entity_decode(strip_tags($inner), ENT_QUOTES | ENT_HTML5, 'UTF-8'));
+                $id   = 'toc-' . Str::slug($text);
 
-    // Các bài viết nổi bật: lấy 5 bài mới nhất (tùy chỉnh thêm điều kiện nếu cần)
-        $featuredPosts = Post::where('status', 1)
-        ->latest('updated_at')
-        ->limit(5)
-        ->get();
-
-        return view('frontend.post.postByCate', [
-            'category' => $postCategory,
-            'posts' => $posts,
-            'allCategories' => $allCategories,
-            'featuredPosts' => $featuredPosts,
-        ]);
+                return "<{$tag}{$attrs} id=\"{$id}\">{$inner}</{$tag}>";
+            },
+            $html
+        );
     }
-
 }

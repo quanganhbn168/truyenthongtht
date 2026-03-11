@@ -1,41 +1,37 @@
 <?php
 
-// app/Models/ServiceCategory.php
-
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Traits\HasSlug;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class ServiceCategory extends Model
 {
-    use HasFactory;
-    protected $table = 'service_categories';
+    use HasSlug;
     protected $fillable = [
-        'name', 'slug', 'image', 'banner', 'parent_id', 'status','is_home', 'description', 'content'
+        'name', 'slug', 'parent_id', 'description', 'content',
+        'image', 'thumbnail', 'meta_title', 'meta_description',
+        'keywords', 'sort_order', 'is_active',
     ];
 
-    public function parent()
+    protected $casts = [
+        'is_active' => 'boolean',
+    ];
+
+    public function parent(): BelongsTo
     {
         return $this->belongsTo(ServiceCategory::class, 'parent_id');
     }
 
-    public function children()
+    public function children(): HasMany
     {
         return $this->hasMany(ServiceCategory::class, 'parent_id');
     }
 
-    public function services()
+    public function services(): HasMany
     {
-        return $this->hasMany(Service::class);
-    }
-    public function slug()
-    {
-        return $this->morphOne(\App\Models\Slug::class, 'sluggable');
-    }
-
-    public function getSlugUrlAttribute()
-    {
-        return url($this->slug->slug ?? '#');
+        return $this->hasMany(Service::class, 'category_id');
     }
 }

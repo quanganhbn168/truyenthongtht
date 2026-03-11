@@ -2,52 +2,64 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Traits\HasSlug;
+use Datlechin\FilamentMenuBuilder\Contracts\MenuPanelable;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Str;
-class Post extends Model
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+
+class Post extends Model implements MenuPanelable
 {
-    /** @use HasFactory<\Database\Factories\PostFactory> */
-    use HasFactory;
+    use HasSlug;
     protected $fillable = [
-        'post_category_id',
         'title',
         'slug',
+        'summary',
+        'category_id',
         'image',
-        'banner',
-        'description',
+        'thumbnail',
         'content',
-        'is_featured',
-        'status',
-        'is_home',
+        'published_at',
+        'view_count',
+        'meta_title',
+        'meta_description',
+        'keywords',
+        'sort_order',
+        'is_active',
+        'tags',
     ];
 
     protected $casts = [
-        'is_featured' => 'boolean',
-        'status' => 'boolean',
-        'is_home' => 'boolean',
+        'published_at' => 'date',
+        'is_active' => 'boolean',
     ];
 
-    protected static function booted(): void
+    public function category(): BelongsTo
     {
-        static::creating(function ($post) {
-            if (empty($post->slug)) {
-                $post->slug = Str::slug($post->title) . '-' . Str::random(5);
-            }
-        });
+        return $this->belongsTo(PostCategory::class, 'category_id');
     }
 
-    public function category()
+    public function services(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
-        return $this->belongsTo(PostCategory::class, 'post_category_id');
-    }
-    public function slug()
-    {
-        return $this->morphOne(\App\Models\Slug::class, 'sluggable');
+        return $this->belongsToMany(Service::class, 'post_service');
     }
 
-    public function getSlugUrlAttribute()
+    public function getMenuPanelName(): string
     {
-        return url($this->slug->slug ?? '#');
+        return 'Bài viết';
+    }
+
+    public function getMenuPanelTitleColumn(): string
+    {
+        return 'title';
+    }
+
+    public function getMenuPanelUrlUsing(): callable
+    {
+        return fn (self $record) => '/' . ltrim($record->slug, '/') . '.html';
+    }
+
+    public function getMenuPanelModifyQueryUsing(): callable
+    {
+        return fn ($query) => $query->where('is_active', true)->orderByDesc('published_at')->limit(100);
     }
 }

@@ -4,94 +4,56 @@ namespace App\Http\Controllers;
 
 use App\Models\Service;
 use App\Models\ServiceCategory;
-use App\Services\ServiceService;
 use Illuminate\Http\Request;
 
 class ServiceController extends Controller
 {
-    protected $service;
-    public function __construct(ServiceService $service)
+    /** Trang tất cả dịch vụ */
+    public function index(Request $request)
     {
-        $this->service = $service;
+        // Tải danh mục cha kèm theo các dịch vụ đang hoạt động bên trong nó
+        $categories = ServiceCategory::with(['services' => function ($query) {
+                $query->where('is_active', true)->orderBy('sort_order');
+            }])
+            ->where('is_active', true)
+            ->whereNull('parent_id')
+            ->orderBy('sort_order')
+            ->get();
+
+        return view('services.index', compact('categories'));
     }
 
-    public function index()
+    /** Trang danh mục dịch vụ — gọi bởi SlugController khi record là ServiceCategory */
+    public function category(ServiceCategory $category, Request $request)
     {
-        $services = Service::with('category')->latest()->get();
-        return view('admin.services.index', compact('services'));
+        $services = Service::with('category')
+            ->where('category_id', $category->id)
+            ->where('is_active', true)
+            ->orderBy('sort_order')
+            ->paginate(12);
+
+        $allCategories = ServiceCategory::where('is_active', true)
+            ->whereNull('parent_id')
+            ->orderBy('sort_order')
+            ->get();
+
+        return view('services.category', compact('category', 'services', 'allCategories'));
     }
 
-    public function create()
+    /** Trang chi tiết dịch vụ — gọi bởi SlugController khi record là Service */
+    public function show(Service $service, Request $request)
     {
-        $categories = ServiceCategory::get(['id', 'parent_id', 'name'])->toArray();
-        return view('admin.services.create', compact('categories'));
+        $service->load('posts', 'category');
+
+        $related = Service::where('category_id', $service->category_id)
+            ->where('id', '!=', $service->id)
+            ->where('is_active', true)
+            ->orderBy('sort_order')
+            ->limit(4)
+            ->get();
+
+        $category = $service->category;
+
+        return view('services.show', compact('service', 'related', 'category'));
     }
-
-    public function store(Request $request)
-    {
-
-        $this->service->create($request);
-        return $request->input('action') === 'save_new'
-            ? redirect()->route('admin.services.create')->with('success', 'Đã thêm dự án, tiếp tục thêm mới.')
-            : redirect()->route('admin.services.index')->with('success', 'Đã thêm dự án.');
-    }
-
-    public function edit(Service $service)
-    {
-        $categories = ServiceCategory::get(['id', 'parent_id', 'name'])->toArray();
-        $images = $service->images->pluck('image')->toArray();
-        return view('admin.services.edit', compact('service', 'categories','images'));
-    }
-    public function show(Service $service)
-    {
-        $categories = ServiceCategory::get(['id', 'parent_id', 'name'])->toArray();
-        $images = $service->images->pluck('image')->toArray();
-        return view('admin.services.edit', compact('service', 'categories','images'));
-    }
-    
-    public function update(Request $request, Service $service)
-    {
-        $this->service->update($request, $service);
-        return redirect()->route('admin.services.index')->with('success', 'Cập nhật dịch vụ thành công.');
-    }
-
-    public function destroy(Service $service)
-    {
-        $this->service->delete($service);
-        return redirect()->back()->with('success', 'Xoá dịch vụ thành công.');
-    }
-
-    public function serviceByCate($slug)
-    {
-        $category = ServiceCategory::where("slug", $slug)->where("status", 1)->firstOrFail();
-
-        if ($category->parent_id == 0) {
-            // Danh mục cha → lấy toàn bộ service của các danh mục con
-            $childCategoryIds = $category->children()->pluck('id');
-
-            $services = Service::whereIn('service_category_id', $childCategoryIds)
-                ->where('status', 1)
-                ->get();
-        } else {
-            // Danh mục con → lấy service theo id hiện tại
-            $services = Service::where('service_category_id', $category->id)
-                ->where('status', 1)
-                ->get();
-        }
-
-        return view("frontend.services.serviceByCate", compact("category", "services"));
-    }
-
-
-    public function detail(Service $service)
-    {
-        $relatedService = Service::where("status", 1)
-        ->where("id", '!=', $service->id)
-        ->orderBy("updated_at", "DESC")
-        ->limit(6)
-        ->get();
-
-        return view("frontend.services.detail", compact("service", "relatedService"));
-    }
-
 }
