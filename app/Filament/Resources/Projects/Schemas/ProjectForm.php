@@ -48,7 +48,7 @@ class ProjectForm
                                 ToggleButtons::make('hero_media_type')
                                     ->label('Loại Media Banner')
                                     ->options([
-                                        'upload' => 'Tải ảnh lên',
+                                        'upload' => 'Tải lên (Ảnh/Video)',
                                         'youtube' => 'Link YouTube',
                                         'external' => 'Link ngoài (Google Drive, Vimeo...)',
                                     ])
@@ -58,8 +58,8 @@ class ProjectForm
                                     ->columnSpanFull(),
 
                                 FileUpload::make('image')
-                                    ->label('Ảnh Bìa / Hero Banner')
-                                    ->image()
+                                    ->label('File Tải lên (Hero Banner)')
+                                    ->acceptedFileTypes(['image/*', 'video/*'])
                                     ->disk('public_uploads')
                                     ->directory('upload/images')
                                     ->visibility('public')
