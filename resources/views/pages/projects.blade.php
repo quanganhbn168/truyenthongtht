@@ -12,25 +12,16 @@
     
     <div class="relative z-10 pt-32 pb-20 md:pt-40 md:pb-28">
         <div class="container mx-auto px-4 max-w-7xl text-center">
-            {{-- Breadcrumb (Dark variant) --}}
-            <nav class="flex justify-center text-sm mb-6" aria-label="Breadcrumb">
-                <ol class="inline-flex items-center space-x-1 md:space-x-3 bg-white/10 backdrop-blur-md px-4 py-2 rounded-full border border-white/10">
-                    <li class="inline-flex items-center">
-                        <a href="{{ route('home') }}" class="text-gray-300 hover:text-white transition-colors flex items-center gap-2">
-                            <i class="fa-solid fa-house text-xs"></i>
-                            Trang chủ
-                        </a>
-                    </li>
-                    <li>
-                        <div class="flex items-center">
-                            <i class="fa-solid fa-chevron-right text-gray-500 text-xs mx-2"></i>
-                            <span class="text-white font-medium">
-                                @if(isset($category) && $category) {{ $category->name }} @else Dự án tiêu biểu @endif
-                            </span>
-                        </div>
-                    </li>
-                </ol>
-            </nav>
+            {{-- Breadcrumb (Dark variant via component) --}}
+            <div class="inline-block bg-white/10 backdrop-blur-md px-5 py-1.5 rounded-full border border-white/10 mb-6">
+                <x-breadcrumb 
+                    :items="[
+                        ['label' => 'Trang chủ', 'url' => route('home')],
+                        ['label' => isset($category) && $category ? $category->name : 'Dự án tiêu biểu']
+                    ]" 
+                    theme="dark" 
+                />
+            </div>
 
             <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white mb-6 tracking-tight">
                 @if(isset($category) && $category) {{ $category->name }} @else Các Dự Án <span class="text-red-500">Nổi Bật</span> @endif

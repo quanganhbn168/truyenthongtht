@@ -1143,6 +1143,23 @@ address { font-style: normal; }
     font-weight: 500;
 }
 
+/* Dark theme for dark backgrounds */
+.breadcrumb-nav.theme-dark .breadcrumb-list {
+    color: #ccc;
+}
+.breadcrumb-nav.theme-dark .breadcrumb-link {
+    color: #ccc;
+}
+.breadcrumb-nav.theme-dark .breadcrumb-link:hover {
+    color: #fff;
+}
+.breadcrumb-nav.theme-dark .breadcrumb-item.active {
+    color: #fff;
+}
+.breadcrumb-nav.theme-dark .breadcrumb-sep {
+    color: rgba(255,255,255,0.4);
+}
+
 /* ═══════════════════════════════════════════
    TABLE OF CONTENTS (TOC)
 ═══════════════════════════════════════════ */

@@ -1,5 +1,6 @@
-@if(count($items) > 1)
-<nav aria-label="breadcrumb" class="breadcrumb-nav">
+@props(['items' => [], 'theme' => 'light'])
+@if(count($items) > 0)
+<nav aria-label="breadcrumb" class="breadcrumb-nav theme-{{ $theme }}">
     <ol class="breadcrumb-list" role="list" itemscope itemtype="https://schema.org/BreadcrumbList">
         @foreach($items as $index => $item)
         @php $isLast = $loop->last @endphp
