@@ -54,7 +54,6 @@ class PostCategoryForm
                             ->disk('public_uploads')
                             ->directory('upload/images')
                             ->visibility('public')
-                            ->preserveFilenames()
                             ->imageEditor()
                             ->openable()
                             ->downloadable(),
