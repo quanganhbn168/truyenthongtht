@@ -193,11 +193,10 @@
             <div class="w-full lg:w-5/12 shrink-0 space-y-12">
                 @if($project->challenge)
                 <div>
-                    <h2 class="text-3xl font-extrabold text-gray-900 mb-6 flex items-center gap-3">
-                        <span class="w-10 h-10 rounded-full bg-red-100 text-red-600 flex items-center justify-center text-lg"><i class="fa-solid fa-bullseye"></i></span>
-                        Bài toán đặt ra
+                    <h2 class="text-2xl font-bold text-gray-900 mb-6 uppercase tracking-wider text-sm border-b pb-3">
+                        01. Bài toán đặt ra
                     </h2>
-                    <div class="prose prose-lg text-gray-600 leading-relaxed border-l-2 border-red-200 pl-6 ml-5">
+                    <div class="prose prose-lg text-gray-600 leading-relaxed max-w-none">
                         {!! $project->challenge !!}
                     </div>
                 </div>
@@ -205,11 +204,10 @@
 
                 @if($project->solution)
                 <div>
-                    <h2 class="text-3xl font-extrabold text-gray-900 mb-6 flex items-center gap-3">
-                        <span class="w-10 h-10 rounded-full bg-green-100 text-green-700 flex items-center justify-center text-lg"><i class="fa-solid fa-lightbulb"></i></span>
-                        Giải pháp từ THT
+                    <h2 class="text-2xl font-bold text-gray-900 mb-6 uppercase tracking-wider text-sm border-b pb-3">
+                        02. Giải pháp từ THT
                     </h2>
-                    <div class="prose prose-lg text-gray-600 leading-relaxed border-l-2 border-green-200 pl-6 ml-5">
+                    <div class="prose prose-lg text-gray-600 leading-relaxed max-w-none">
                         {!! $project->solution !!}
                     </div>
                 </div>
@@ -217,35 +215,10 @@
 
                 @if($project->result)
                 <div>
-                    <h2 class="text-3xl font-extrabold text-gray-900 mb-6 flex items-center gap-3">
-                        <span class="w-10 h-10 rounded-full bg-yellow-100 text-yellow-600 flex items-center justify-center text-lg"><i class="fa-solid fa-trophy"></i></span>
-                        Kết quả đạt được
+                    <h2 class="text-2xl font-bold text-gray-900 mb-6 uppercase tracking-wider text-sm border-b pb-3">
+                        03. Kết quả đạt được
                     </h2>
-                    <div class="prose prose-lg text-gray-600 leading-relaxed border-l-2 border-yellow-200 pl-6 ml-5 bg-yellow-50/50 p-4 rounded-xl">
-                        {!! $project->result !!}
-                    </div>
-                </div>
-                @endif
-
-                @if($project->result)
-                <div>
-                    <h2 class="text-3xl font-extrabold text-gray-900 mb-6 flex items-center gap-3">
-                        <span class="w-10 h-10 rounded-full bg-yellow-100 text-yellow-600 flex items-center justify-center text-lg"><i class="fa-solid fa-trophy"></i></span>
-                        Kết quả đạt được
-                    </h2>
-                    <div class="prose prose-lg text-gray-600 leading-relaxed border-l-2 border-yellow-200 pl-6 ml-5 bg-yellow-50/50 p-4 rounded-xl">
-                        {!! $project->result !!}
-                    </div>
-                </div>
-                @endif
-
-                @if($project->result)
-                <div>
-                    <h2 class="text-3xl font-extrabold text-gray-900 mb-6 flex items-center gap-3">
-                        <span class="w-10 h-10 rounded-full bg-yellow-100 text-yellow-600 flex items-center justify-center text-lg"><i class="fa-solid fa-trophy"></i></span>
-                        Kết quả đạt được
-                    </h2>
-                    <div class="prose prose-lg text-gray-600 leading-relaxed border-l-2 border-yellow-200 pl-6 ml-5 bg-yellow-50/50 p-4 rounded-xl">
+                    <div class="prose prose-lg text-gray-600 leading-relaxed max-w-none bg-green-50/30 p-6 rounded-2xl border border-green-100">
                         {!! $project->result !!}
                     </div>
                 </div>
