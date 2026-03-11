@@ -10,6 +10,7 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
+use Filament\Forms\Components\ToggleButtons;
 use Filament\Schemas\Components\Tabs;
 use Filament\Schemas\Components\Tabs\Tab;
 use Filament\Schemas\Schema;
@@ -44,7 +45,7 @@ class ProjectForm
                         Tab::make('Media & Thư viện')
                             ->icon('heroicon-o-film')
                             ->schema([
-                                \Filament\Forms\Components\ToggleButtons::make('hero_media_type')
+                                ToggleButtons::make('hero_media_type')
                                     ->label('Loại Media Banner')
                                     ->options([
                                         'upload' => 'Tải ảnh lên',
@@ -66,14 +67,14 @@ class ProjectForm
                                     ->imageEditor()
                                     ->openable()
                                     ->downloadable()
-                                    ->hidden(fn (\Filament\Forms\Get $get) => $get('hero_media_type') !== 'upload')
+                                    ->hidden(fn (\Filament\Schemas\Components\Utilities\Get $get) => $get('hero_media_type') !== 'upload')
                                     ->columnSpanFull(),
 
                                 TextInput::make('hero_media_url')
                                     ->label('Đường dẫn Media (Link)')
                                     ->url()
                                     ->placeholder('Nhập link youtube hoặc link video/ảnh ngoài...')
-                                    ->hidden(fn (\Filament\Forms\Get $get) => in_array($get('hero_media_type'), [null, 'upload']))
+                                    ->hidden(fn (\Filament\Schemas\Components\Utilities\Get $get) => in_array($get('hero_media_type'), [null, 'upload']))
                                     ->columnSpanFull(),
 
                                 FileUpload::make('gallery')
@@ -93,7 +94,6 @@ class ProjectForm
                             ->icon('heroicon-o-cog-6-tooth')
                             ->schema([
                                 Toggle::make('is_featured')->label('Dự án Nổi bật'),
-                                Toggle::make('is_featured')->label('Nổi bật'),
                                 Toggle::make('is_active')->label('Hiển thị')->default(true),
                                 TextInput::make('sort_order')->label('Thứ tự')->numeric()->default(0),
                             ])->columns(2),
