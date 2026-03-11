@@ -61,6 +61,7 @@ class ImageService
         }
 
         $fullPath = $storage->path($path);
+        $originalSize = filesize($fullPath);
 
         try {
             $image = Image::read($fullPath);
@@ -75,10 +76,25 @@ class ImageService
                 $this->applyWatermark($image, $image->width(), $image->height());
             }
 
-            // 3. Lưu lại với quality compression
-            $image->save($fullPath, quality: $this->quality);
+            // 3. Lưu vào file tạm trước để so sánh kích thước
+            $tempPath = $fullPath . '.tmp';
+            $image->save($tempPath, quality: $this->quality);
+
+            $newSize = filesize($tempPath);
+
+            // 4. Chỉ dùng file mới nếu NHỎ HƠN file gốc
+            if ($newSize < $originalSize) {
+                rename($tempPath, $fullPath);
+            } else {
+                // File gốc đã tối ưu hơn → xóa file tạm, giữ nguyên
+                unlink($tempPath);
+            }
 
         } catch (\Throwable $e) {
+            // Dọn file tạm nếu có lỗi
+            if (isset($tempPath) && file_exists($tempPath)) {
+                @unlink($tempPath);
+            }
             // Log lỗi nhưng không throw để không ảnh hưởng flow upload
             logger()->error("ImageService::process failed for {$path}: " . $e->getMessage());
         }
