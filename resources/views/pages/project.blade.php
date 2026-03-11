@@ -106,12 +106,6 @@
     </div>
 
     <div class="project-hero-content container mx-auto px-4 max-w-7xl">
-        <x-breadcrumb :items="[
-            ['label' => 'Dự án', 'url' => route('projects.index')],
-            ['label' => $category->name ?? 'Tất cả', 'url' => $category ? url($category->slug . '.html') : '#'],
-            ['label' => Str::limit($project->name, 40)]
-        ]" class="text-gray-300 mb-6" />
-
         <div class="flex flex-col lg:flex-row gap-10 items-end justify-between">
             <div class="max-w-3xl">
                 <h1 class="text-4xl md:text-5xl lg:text-5xl font-extrabold text-white leading-tight mb-4 drop-shadow-md">
@@ -168,8 +162,15 @@
 </section>
 
 {{-- ── MAIN STORY & SHOWCASE ── --}}
-<div class="py-16 md:py-24 bg-white">
+<div class="py-12 md:py-20 bg-white">
     <div class="container mx-auto px-4 max-w-7xl">
+        
+        <x-breadcrumb :items="[
+            ['label' => 'Dự án', 'url' => route('projects.index')],
+            ['label' => $category->name ?? 'Tất cả', 'url' => $category ? url($category->slug . '.html') : '#'],
+            ['label' => Str::limit($project->name, 40)]
+        ]" class="mb-10 text-sm" />
+
         <div class="flex flex-col lg:flex-row gap-12 xl:gap-20">
             
             {{-- Left Column: Challenge & Solution --}}
