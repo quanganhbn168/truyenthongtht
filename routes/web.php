@@ -18,6 +18,9 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
+// Sitemap
+Route::get('/sitemap.xml', [App\Http\Controllers\SitemapController::class, 'index'])->name('sitemap');
+
 // Listing pages
 Route::get('/tin-tuc.html',   [PostController::class,    'index'])->name('posts.index');
 Route::get('/tin-tuc',   [PostController::class,    'index']);
