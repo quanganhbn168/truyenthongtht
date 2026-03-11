@@ -40,6 +40,7 @@ class SlugInput
                 ->label($label)
                 ->required($required)
                 ->maxLength(500)
+                ->columnSpanFull()
                 ->live(onBlur: true)
                 ->afterStateUpdated(function (Get $get, Set $set, ?string $state, $record) {
                     // Chỉ auto-generate khi slug chưa có (create) hoặc vẫn là slug mặc định
@@ -59,6 +60,7 @@ class SlugInput
                 ->maxLength(500)
                 ->prefix($baseUrl)
                 ->helperText('Tự động tạo từ tên.')
+                ->columnSpanFull()
                 ->live(onBlur: true)
                 ->afterStateUpdated(function (Set $set, ?string $state) {
                     // Sanitize khi người dùng tự gõ slug
