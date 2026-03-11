@@ -4,6 +4,7 @@ namespace App\Filament\Resources\PostCategories\Schemas;
 
 use App\Filament\Components\SlugInput;
 use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
