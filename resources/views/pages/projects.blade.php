@@ -34,11 +34,16 @@
     <div class="container mx-auto px-4 max-w-7xl">
 
         {{-- Breadcrumb (Light variant) --}}
+        @php
+            $breadcrumbItems = [
+                ['label' => 'Dự án', 'url' => route('projects.index')]
+            ];
+            if (isset($category) && $category) {
+                $breadcrumbItems[] = ['label' => $category->name];
+            }
+        @endphp
         <x-breadcrumb 
-            :items="[
-                ['label' => 'Dự án', 'url' => route('projects.index')],
-                isset($category) && $category ? ['label' => $category->name] : null
-            ]" 
+            :items="$breadcrumbItems" 
             class="mb-8 text-sm text-gray-500" 
         />
 
