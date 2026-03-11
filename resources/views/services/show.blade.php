@@ -208,7 +208,7 @@
                             </ul>
                             
                             <div class="mt-auto">
-                                <a href="tel:{{ config('site.phone', '') }}" class="block w-full py-3 px-4 rounded-xl text-center font-bold transition-all duration-300 {{ $isPopular ? 'bg-green-600 text-white hover:bg-green-700 shadow-lg hover:shadow-xl' : 'bg-green-50 text-green-700 hover:bg-green-100' }}">Chọn gói này</a>
+                                <a href="{{ url('/bao-gia.html') }}?service_id={{ $service->id }}" class="block w-full py-3 px-4 rounded-xl text-center font-bold transition-all duration-300 {{ $isPopular ? 'bg-green-600 text-white hover:bg-green-700 shadow-lg hover:shadow-xl' : 'bg-green-50 text-green-700 hover:bg-green-100' }}">Chọn gói này</a>
                             </div>
                         </div>
                         @endforeach
