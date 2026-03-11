@@ -89,34 +89,17 @@
                 </a>
             @endif
         @elseif($project->hero_media_type === 'external' && $project->hero_media_url)
-            @php
-                $url = $project->hero_media_url;
-                $isGoogleDrive = preg_match('%drive\.google\.com/file/d/([^/]+)%i', $url, $gdMatch);
-                
-                if ($isGoogleDrive) {
-                    $driveId = $gdMatch[1];
-                    $driveEmbedUrl = "https://drive.google.com/file/d/{$driveId}/preview";
-                } else {
-                    $ext = strtolower(pathinfo(parse_url($url, PHP_URL_PATH), PATHINFO_EXTENSION));
-                    $isVideo = in_array($ext, ['mp4', 'webm', 'ogg']);
-                }
-            @endphp
+            {{-- Simplified external embed (Google Drive/Vimeo/etc) --}}
+            <iframe src="{{ str_replace('/view?usp=sharing', '/preview', $project->hero_media_url) }}" width="100%" height="100%" class="w-full h-full border-0 absolute inset-0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
             
-            @if($isGoogleDrive)
-                <iframe src="{{ $driveEmbedUrl }}" width="100%" height="100%" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-                {{-- Invisible overlay to show play button on top of drive iframe for consistent UI --}}
-                <a href="{{ $url }}" target="_blank" class="play-overlay group">
-                    <div class="w-20 h-20 bg-green-600 rounded-full flex items-center justify-center text-white text-3xl group-hover:scale-110 transition-transform shadow-green-600/50 shadow-2xl">
-                        <i class="fa-solid fa-play ml-1"></i>
-                    </div>
-                </a>
-            @elseif(isset($isVideo) && $isVideo)
-                <video src="{{ $url }}" autoplay loop muted playsinline controlsList="nodownload"></video>
-            @else
-                <img src="{{ $url }}" alt="{{ $project->name }}">
-            @endif
+            {{-- Play button overlay --}}
+            <a href="{{ $project->hero_media_url }}" target="_blank" class="play-overlay group">
+                <div class="w-20 h-20 bg-green-600 rounded-full flex items-center justify-center text-white text-3xl group-hover:scale-110 transition-transform shadow-green-600/50 shadow-2xl">
+                    <i class="fa-solid fa-play ml-1"></i>
+                </div>
+            </a>
         @elseif($project->image)
-            <img src="{{ asset('storage/' . $project->image) }}" alt="{{ $project->name }}" class="w-full h-full object-cover">
+            <img src="{{ asset($project->image) }}" alt="{{ $project->name }}" class="w-full h-full object-cover">
         @else
             <div class="bg-gray-800 w-full h-full"></div>
         @endif
@@ -246,9 +229,9 @@
                             
                             <div class="relative rounded-2xl overflow-hidden bg-gray-100 group shadow-sm {{ $colSpan }}">
                                 @if($isVideo)
-                                    <video src="{{ asset('storage/' . $media) }}" class="w-full h-full object-cover" controls preload="metadata"></video>
+                                    <video src="{{ asset($media) }}" class="w-full h-full object-cover" controls preload="metadata"></video>
                                 @else
-                                    <img src="{{ asset('storage/' . $media) }}" alt="Gallery {{ $index }}" loading="lazy" 
+                                    <img src="{{ asset($media) }}" alt="Gallery {{ $index }}" loading="lazy" 
                                          class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
                                 @endif
                                 <div class="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors duration-300 pointer-events-none"></div>
