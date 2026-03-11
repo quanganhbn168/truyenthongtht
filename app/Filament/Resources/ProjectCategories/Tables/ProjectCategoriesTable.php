@@ -20,7 +20,6 @@ class ProjectCategoriesTable
                 ImageColumn::make('image')
                     ->label('Ảnh')
                     ->disk('public_uploads')
-                    ->circular()
                     ->defaultImageUrl(fn () => 'https://ui-avatars.com/api/?name=DA&background=e5e7eb&color=9ca3af&size=40')
                     ->size(40),
                 TextColumn::make('name')

@@ -14,6 +14,7 @@ class Project extends Model
         'category_id', 'name', 'slug', 'summary', 'content',
         'tvc_url', 'challenge', 'solution', 'gallery',
         'client_name', 'project_date', 'image', 'thumbnail',
+        'hero_media_type', 'hero_media_url',
         'view_count', 'meta_title', 'meta_description', 'keywords',
         'sort_order', 'is_featured', 'is_active',
     ];

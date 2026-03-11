@@ -72,23 +72,31 @@
 {{-- ── HERO / TVC SECTION ── --}}
 <section class="project-hero">
     <div class="project-hero-media" id="hero-media-container">
-        @if($project->tvc_url)
+        @if($project->hero_media_type === 'youtube' && $project->hero_media_url)
             @php
                 // Extract video ID from youtube URL
-                preg_match('%(?:youtube(?:-nocookie)?\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=)|youtu\.be/)([^"&?/\s]{11})%i', $project->tvc_url, $match);
+                preg_match('%(?:youtube(?:-nocookie)?\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=)|youtu\.be/)([^"&?/\s]{11})%i', $project->hero_media_url, $match);
                 $youtube_id = $match[1] ?? null;
             @endphp
             
             @if($youtube_id)
                 <iframe src="https://www.youtube.com/embed/{{ $youtube_id }}?autoplay=1&mute=1&controls=0&loop=1&playlist={{ $youtube_id }}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                {{-- Invisible overlay to trap clicks on mobile & show play button --}}
-                <a href="{{ $project->tvc_url }}" target="_blank" class="play-overlay group">
+                {{-- Invisible overlay to show play button --}}
+                <a href="{{ $project->hero_media_url }}" target="_blank" class="play-overlay group">
                     <div class="w-20 h-20 bg-green-600 rounded-full flex items-center justify-center text-white text-3xl group-hover:scale-110 transition-transform shadow-green-600/50 shadow-2xl">
                         <i class="fa-solid fa-play ml-1"></i>
                     </div>
                 </a>
+            @endif
+        @elseif($project->hero_media_type === 'external' && $project->hero_media_url)
+            @php
+                $ext = strtolower(pathinfo(parse_url($project->hero_media_url, PHP_URL_PATH), PATHINFO_EXTENSION));
+                $isVideo = in_array($ext, ['mp4', 'webm', 'ogg']);
+            @endphp
+            @if($isVideo)
+                <video src="{{ $project->hero_media_url }}" autoplay loop muted playsinline controlsList="nodownload"></video>
             @else
-                <video src="{{ $project->tvc_url }}" autoplay loop muted playsinline controlsList="nodownload"></video>
+                <img src="{{ $project->hero_media_url }}" alt="{{ $project->name }}">
             @endif
         @elseif($project->image)
             <img src="{{ asset($project->image) }}" alt="{{ $project->name }}">

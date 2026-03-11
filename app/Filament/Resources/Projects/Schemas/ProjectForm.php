@@ -44,8 +44,38 @@ class ProjectForm
                         Tab::make('Media & Thư viện')
                             ->icon('heroicon-o-film')
                             ->schema([
-                                TextInput::make('tvc_url')->label('Video TVC / Youtube URL (Tùy chọn)')->url()->columnSpanFull(),
-                                FileUpload::make('image')->label('Ảnh Bìa / Hero Banner (Kích thước lớn)')->image()->disk('public_uploads')->directory('upload/images')->visibility('public')->columnSpanFull(),
+                                \Filament\Forms\Components\ToggleButtons::make('hero_media_type')
+                                    ->label('Loại Media Banner')
+                                    ->options([
+                                        'upload' => 'Tải ảnh lên',
+                                        'youtube' => 'Link YouTube',
+                                        'external' => 'Link ngoài (Video/Ảnh)',
+                                    ])
+                                    ->default('upload')
+                                    ->inline()
+                                    ->live()
+                                    ->columnSpanFull(),
+
+                                FileUpload::make('image')
+                                    ->label('Ảnh Bìa / Hero Banner')
+                                    ->image()
+                                    ->disk('public_uploads')
+                                    ->directory('upload/images')
+                                    ->visibility('public')
+                                    ->preserveFilenames()
+                                    ->imageEditor()
+                                    ->openable()
+                                    ->downloadable()
+                                    ->hidden(fn (\Filament\Forms\Get $get) => $get('hero_media_type') !== 'upload')
+                                    ->columnSpanFull(),
+
+                                TextInput::make('hero_media_url')
+                                    ->label('Đường dẫn Media (Link)')
+                                    ->url()
+                                    ->placeholder('Nhập link youtube hoặc link video/ảnh ngoài...')
+                                    ->hidden(fn (\Filament\Forms\Get $get) => in_array($get('hero_media_type'), [null, 'upload']))
+                                    ->columnSpanFull(),
+
                                 FileUpload::make('gallery')
                                     ->label('Thư viện Hình ảnh / Video Hậu trường (Gallery)')
                                     ->multiple()
@@ -57,6 +87,7 @@ class ProjectForm
                                     ->panelLayout('grid')
                                     ->columnSpanFull(),
                                 TextInput::make('thumbnail')->label('Thumbnail URL (Tùy chọn)'),
+                                TextInput::make('tvc_url')->label('Video TVC (Cũ) / Youtube URL')->url()->columnSpanFull(),
                             ]),
                         Tab::make('Cài đặt')
                             ->icon('heroicon-o-cog-6-tooth')
