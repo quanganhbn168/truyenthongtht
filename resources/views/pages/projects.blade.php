@@ -16,7 +16,6 @@
             <div class="inline-block bg-white/10 backdrop-blur-md px-5 py-1.5 rounded-full border border-white/10 mb-6">
                 <x-breadcrumb 
                     :items="[
-                        ['label' => 'Trang chủ', 'url' => route('home')],
                         ['label' => isset($category) && $category ? $category->name : 'Dự án tiêu biểu']
                     ]" 
                     theme="dark" 

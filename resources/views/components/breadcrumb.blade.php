@@ -1,4 +1,3 @@
-@props(['items' => [], 'theme' => 'light'])
 @if(count($items) > 0)
 <nav aria-label="breadcrumb" class="breadcrumb-nav theme-{{ $theme }}">
     <ol class="breadcrumb-list" role="list" itemscope itemtype="https://schema.org/BreadcrumbList">

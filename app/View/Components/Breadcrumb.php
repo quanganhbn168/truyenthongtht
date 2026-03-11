@@ -19,6 +19,7 @@ class Breadcrumb extends Component
         public string $homeLabel = 'Trang chủ',
         public string $homeUrl = '/',
         public bool $showHome = true,
+        public string $theme = 'light',
     ) {
         // Tự động prepend Home nếu showHome = true
         if ($showHome) {
