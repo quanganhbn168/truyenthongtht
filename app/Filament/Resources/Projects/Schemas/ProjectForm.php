@@ -40,6 +40,7 @@ class ProjectForm
                             ->schema([
                                 RichEditor::make('challenge')->label('Bài toán / Yêu cầu từ khách hàng (Challenge)')->columnSpanFull()->fileAttachmentsDirectory('upload/images'),
                                 RichEditor::make('solution')->label('Giải pháp & Thi công (Solution)')->columnSpanFull()->fileAttachmentsDirectory('upload/images'),
+                                RichEditor::make('result')->label('Kết quả (Result)')->columnSpanFull()->fileAttachmentsDirectory('upload/images'),
                                 RichEditor::make('content')->label('Nội dung báo chí/Bổ sung (Nội dung cũ)')->columnSpanFull()->fileAttachmentsDirectory('upload/images'),
                             ]),
                         Tab::make('Media & Thư viện')

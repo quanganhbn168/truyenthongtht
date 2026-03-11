@@ -215,6 +215,42 @@
                 </div>
                 @endif
 
+                @if($project->result)
+                <div>
+                    <h2 class="text-3xl font-extrabold text-gray-900 mb-6 flex items-center gap-3">
+                        <span class="w-10 h-10 rounded-full bg-yellow-100 text-yellow-600 flex items-center justify-center text-lg"><i class="fa-solid fa-trophy"></i></span>
+                        Kết quả đạt được
+                    </h2>
+                    <div class="prose prose-lg text-gray-600 leading-relaxed border-l-2 border-yellow-200 pl-6 ml-5 bg-yellow-50/50 p-4 rounded-xl">
+                        {!! $project->result !!}
+                    </div>
+                </div>
+                @endif
+
+                @if($project->result)
+                <div>
+                    <h2 class="text-3xl font-extrabold text-gray-900 mb-6 flex items-center gap-3">
+                        <span class="w-10 h-10 rounded-full bg-yellow-100 text-yellow-600 flex items-center justify-center text-lg"><i class="fa-solid fa-trophy"></i></span>
+                        Kết quả đạt được
+                    </h2>
+                    <div class="prose prose-lg text-gray-600 leading-relaxed border-l-2 border-yellow-200 pl-6 ml-5 bg-yellow-50/50 p-4 rounded-xl">
+                        {!! $project->result !!}
+                    </div>
+                </div>
+                @endif
+
+                @if($project->result)
+                <div>
+                    <h2 class="text-3xl font-extrabold text-gray-900 mb-6 flex items-center gap-3">
+                        <span class="w-10 h-10 rounded-full bg-yellow-100 text-yellow-600 flex items-center justify-center text-lg"><i class="fa-solid fa-trophy"></i></span>
+                        Kết quả đạt được
+                    </h2>
+                    <div class="prose prose-lg text-gray-600 leading-relaxed border-l-2 border-yellow-200 pl-6 ml-5 bg-yellow-50/50 p-4 rounded-xl">
+                        {!! $project->result !!}
+                    </div>
+                </div>
+                @endif
+
                 {{-- Legacy text Content --}}
                 @if($project->content && !$project->challenge && !$project->solution)
                     <div class="prose prose-lg text-gray-600">

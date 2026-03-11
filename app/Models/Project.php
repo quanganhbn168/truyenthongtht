@@ -12,7 +12,7 @@ class Project extends Model
     use HasSlug;
     protected $fillable = [
         'category_id', 'name', 'slug', 'summary', 'content',
-        'tvc_url', 'challenge', 'solution', 'gallery',
+        'tvc_url', 'challenge', 'solution', 'result', 'gallery',
         'client_name', 'project_date', 'image', 'thumbnail',
         'hero_media_type', 'hero_media_url',
         'view_count', 'meta_title', 'meta_description', 'keywords',
