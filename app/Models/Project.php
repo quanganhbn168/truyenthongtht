@@ -12,6 +12,7 @@ class Project extends Model
     use HasSlug;
     protected $fillable = [
         'category_id', 'name', 'slug', 'summary', 'content',
+        'tvc_url', 'challenge', 'solution', 'gallery',
         'client_name', 'project_date', 'image', 'thumbnail',
         'view_count', 'meta_title', 'meta_description', 'keywords',
         'sort_order', 'is_featured', 'is_active',
@@ -21,6 +22,7 @@ class Project extends Model
         'project_date' => 'date',
         'is_featured' => 'boolean',
         'is_active' => 'boolean',
+        'gallery' => 'array',
     ];
 
     public function category(): BelongsTo

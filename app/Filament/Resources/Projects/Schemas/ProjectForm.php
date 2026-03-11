@@ -30,20 +30,36 @@ class ProjectForm
                                     ->relationship('category', 'name')->searchable()->preload()->required(),
                                 Select::make('services')->label('Dịch vụ áp dụng')
                                     ->relationship('services', 'name')->multiple()->searchable()->preload(),
-                                TextInput::make('client_name')->label('Tên khách hàng')->maxLength(200),
-                                Textarea::make('summary')->label('Mô tả ngắn')->rows(3)->columnSpanFull(),
-                                RichEditor::make('content')->label('Nội dung chi tiết')->columnSpanFull()->fileAttachmentsDirectory('upload/images'),
+                                TextInput::make('client_name')->label('Tên khách hàng / Đối tác')->maxLength(200),
+                                DatePicker::make('project_date')->label('Ngày/Tháng/Năm thực hiện'),
+                                Textarea::make('summary')->label('Mô tả ngắn (Hiển thị ngoài card)')->rows(3)->columnSpanFull(),
                             ])->columns(2),
-                        Tab::make('Hình ảnh')
-                            ->icon('heroicon-o-photo')
+                        Tab::make('Bài toán & Giải pháp')
+                            ->icon('heroicon-o-light-bulb')
                             ->schema([
-                                FileUpload::make('image')->label('Ảnh đại diện')->image()->disk('public_uploads')->directory('upload/images')->visibility('public'),
-                                TextInput::make('thumbnail')->label('Thumbnail URL'),
+                                RichEditor::make('challenge')->label('Bài toán / Yêu cầu từ khách hàng (Challenge)')->columnSpanFull()->fileAttachmentsDirectory('upload/images'),
+                                RichEditor::make('solution')->label('Giải pháp & Thi công (Solution)')->columnSpanFull()->fileAttachmentsDirectory('upload/images'),
+                                RichEditor::make('content')->label('Nội dung báo chí/Bổ sung (Nội dung cũ)')->columnSpanFull()->fileAttachmentsDirectory('upload/images'),
+                            ]),
+                        Tab::make('Media & Thư viện')
+                            ->icon('heroicon-o-film')
+                            ->schema([
+                                TextInput::make('tvc_url')->label('Video TVC / Youtube URL (Tùy chọn)')->url()->columnSpanFull(),
+                                FileUpload::make('image')->label('Ảnh Bìa / Hero Banner (Kích thước lớn)')->image()->disk('public_uploads')->directory('upload/images')->visibility('public')->columnSpanFull(),
+                                FileUpload::make('gallery')
+                                    ->label('Thư viện Hình ảnh / Video Hậu trường (Gallery)')
+                                    ->multiple()
+                                    ->acceptedFileTypes(['image/*', 'video/*'])
+                                    ->directory('upload/project_gallery')
+                                    ->maxSize(10240) // 10MB per file
+                                    ->panelLayout('grid')
+                                    ->columnSpanFull(),
+                                TextInput::make('thumbnail')->label('Thumbnail URL (Tùy chọn)'),
                             ]),
                         Tab::make('Cài đặt')
                             ->icon('heroicon-o-cog-6-tooth')
                             ->schema([
-                                DatePicker::make('project_date')->label('Ngày thực hiện'),
+                                Toggle::make('is_featured')->label('Dự án Nổi bật'),
                                 Toggle::make('is_featured')->label('Nổi bật'),
                                 Toggle::make('is_active')->label('Hiển thị')->default(true),
                                 TextInput::make('sort_order')->label('Thứ tự')->numeric()->default(0),
