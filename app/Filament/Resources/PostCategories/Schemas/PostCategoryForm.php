@@ -29,15 +29,11 @@ class PostCategoryForm
                                     ->relationship('parent', 'name')
                                     ->searchable()
                                     ->preload()
-                                    ->placeholder('-- Không có --'),
+                                    ->placeholder('Danh mục gốc'),
                                 Textarea::make('description')
                                     ->label('Mô tả ngắn')
                                     ->rows(3)
                                     ->columnSpanFull(),
-                                TextInput::make('sort_order')
-                                    ->label('Thứ tự')
-                                    ->numeric()
-                                    ->default(0),
                                 Toggle::make('is_active')
                                     ->label('Hiển thị')
                                     ->default(true),

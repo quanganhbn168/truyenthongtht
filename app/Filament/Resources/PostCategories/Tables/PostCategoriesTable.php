@@ -3,9 +3,9 @@
 namespace App\Filament\Resources\PostCategories\Tables;
 
 use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
-use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ToggleColumn;
@@ -17,19 +17,42 @@ class PostCategoriesTable
     {
         return $table
             ->columns([
-                TextColumn::make('name')->label('Tên')->searchable()->sortable(),
-                TextColumn::make('slug')->label('Slug')->searchable()->limit(30),
-                TextColumn::make('parent.name')->label('Danh mục cha')->searchable(),
-                ImageColumn::make('image')->label('Ảnh'),
-                TextColumn::make('sort_order')->label('Thứ tự')->numeric()->sortable(),
-                IconColumn::make('show_menu')->label('Menu')->boolean(),
+                ImageColumn::make('image')
+                    ->label('Ảnh')
+                    ->circular()
+                    ->defaultImageUrl(fn () => 'https://ui-avatars.com/api/?name=C&background=e5e7eb&color=9ca3af&size=40')
+                    ->size(40),
+                TextColumn::make('name')
+                    ->label('Tên danh mục')
+                    ->searchable()
+                    ->sortable()
+                    ->weight('bold')
+                    ->description(fn ($record) => $record->slug),
+                TextColumn::make('parent.name')
+                    ->label('Danh mục cha')
+                    ->placeholder('Danh mục gốc')
+                    ->badge()
+                    ->color(fn ($state) => $state ? 'info' : 'gray')
+                    ->searchable(),
+                TextColumn::make('posts_count')
+                    ->label('Số bài viết')
+                    ->counts('posts')
+                    ->badge()
+                    ->color('success'),
                 ToggleColumn::make('is_active')->label('Hiển thị'),
-                TextColumn::make('created_at')->label('Ngày tạo')->dateTime('d/m/Y')
-                    ->sortable()->toggleable(isToggledHiddenByDefault: true),
+                TextColumn::make('created_at')
+                    ->label('Ngày tạo')
+                    ->dateTime('d/m/Y')
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
             ])
+            ->reorderable('sort_order')
             ->defaultSort('sort_order')
             ->filters([])
-            ->recordActions([EditAction::make()])
+            ->recordActions([
+                EditAction::make(),
+                DeleteAction::make(),
+            ])
             ->toolbarActions([BulkActionGroup::make([DeleteBulkAction::make()])]);
     }
 }
