@@ -5,8 +5,10 @@ namespace App\Filament\Resources\Services\Schemas;
 use App\Filament\Components\SlugInput;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Components\Tabs;
@@ -21,7 +23,7 @@ class ServiceForm
             ->components([
                 Tabs::make('Tabs')
                     ->tabs([
-                        Tab::make('Nội dung')
+                        Tab::make('Nội dung cơ bản')
                             ->icon('heroicon-o-document-text')
                             ->schema([
                                 ...SlugInput::make(nameField: 'name', label: 'Tên dịch vụ'),
@@ -30,6 +32,33 @@ class ServiceForm
                                 Textarea::make('summary')->label('Mô tả ngắn')->rows(3)->columnSpanFull(),
                                 RichEditor::make('content')->label('Nội dung chi tiết')->columnSpanFull()->fileAttachmentsDirectory('upload/images'),
                             ])->columns(2),
+                        Tab::make('Khách hàng & Nỗi đau')
+                            ->icon('heroicon-o-heart')
+                            ->schema([
+                                RichEditor::make('pain_points')->label('Nỗi đau khách hàng (Pain points)')->columnSpanFull()->fileAttachmentsDirectory('upload/images'),
+                                RichEditor::make('benefits')->label('Lợi ích & Giải pháp (Benefits)')->columnSpanFull()->fileAttachmentsDirectory('upload/images'),
+                            ]),
+                        Tab::make('Hậu trường & Quy trình')
+                            ->icon('heroicon-o-film')
+                            ->schema([
+                                RichEditor::make('behind_the_scenes')->label('Hậu trường thực tế (Behind the scenes)')->columnSpanFull()->fileAttachmentsDirectory('upload/images'),
+                                Repeater::make('process')->label('Quy trình thực hiện')
+                                    ->schema([
+                                        TextInput::make('title')->label('Tiêu đề bước')->required(),
+                                        Textarea::make('description')->label('Mô tả chi tiết')->rows(3),
+                                    ])
+                                    ->collapsible()
+                                    ->itemLabel(fn (array $state): ?string => $state['title'] ?? null)
+                                    ->columnSpanFull(),
+                                Repeater::make('faq')->label('Câu hỏi thường gặp (FAQ)')
+                                    ->schema([
+                                        TextInput::make('question')->label('Câu hỏi')->required(),
+                                        Textarea::make('answer')->label('Trả lời')->rows(3)->required(),
+                                    ])
+                                    ->collapsible()
+                                    ->itemLabel(fn (array $state): ?string => $state['question'] ?? null)
+                                    ->columnSpanFull(),
+                            ]),
                         Tab::make('Giá & Hình ảnh')
                             ->icon('heroicon-o-currency-dollar')
                             ->schema([

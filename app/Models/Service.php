@@ -13,6 +13,7 @@ class Service extends Model implements MenuPanelable
     use HasSlug;
     protected $fillable = [
         'category_id', 'name', 'slug', 'summary', 'content',
+        'pain_points', 'benefits', 'behind_the_scenes', 'process', 'faq',
         'price', 'image', 'thumbnail', 'published_at', 'view_count',
         'meta_title', 'meta_description', 'keywords',
         'sort_order', 'is_active',
@@ -22,6 +23,8 @@ class Service extends Model implements MenuPanelable
         'published_at' => 'date',
         'is_active' => 'boolean',
         'price' => 'decimal:0',
+        'process' => 'array',
+        'faq' => 'array',
     ];
 
     public function category(): BelongsTo

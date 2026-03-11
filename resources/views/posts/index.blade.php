@@ -25,13 +25,13 @@
         <div class="flex flex-wrap gap-2 mb-8 lg:hidden">
             <a href="{{ route('posts.index') }}"
                class="px-4 py-1.5 rounded-full text-xs font-semibold border transition-colors
-                      {{ !$category ? 'bg-red-700 text-white border-red-700' : 'bg-white text-gray-600 border-gray-200 hover:border-red-700 hover:text-red-700' }}">
+                      {{ !$category ? 'bg-green-700 text-white border-green-700' : 'bg-white text-gray-600 border-gray-200 hover:border-green-700 hover:text-red-700' }}">
                 Tất cả
             </a>
             @foreach($categories as $cat)
             <a href="{{ url($cat->slug . '.html') }}"
                class="px-4 py-1.5 rounded-full text-xs font-semibold border transition-colors
-                      {{ $category?->id === $cat->id ? 'bg-red-700 text-white border-red-700' : 'bg-white text-gray-600 border-gray-200 hover:border-red-700 hover:text-red-700' }}">
+                      {{ $category?->id === $cat->id ? 'bg-green-700 text-white border-green-700' : 'bg-white text-gray-600 border-gray-200 hover:border-green-700 hover:text-red-700' }}">
                 {{ $cat->name }}
             </a>
             @endforeach
@@ -66,7 +66,7 @@
                                 </span>
                             @endif
                             <h2 class="text-xl md:text-2xl font-bold text-gray-900 leading-snug mb-3
-                                       group-hover:text-red-700 transition-colors line-clamp-3">
+                                       group-hover:text-green-700 transition-colors line-clamp-3">
                                 {{ $featured->title }}
                             </h2>
                             @if($featured->summary)
@@ -103,7 +103,7 @@
                                     </span>
                                 @endif
                                 <h2 class="text-[0.95rem] font-bold text-gray-900 leading-snug line-clamp-2 mb-2 flex-1
-                                           group-hover:text-red-700 transition-colors">
+                                           group-hover:text-green-700 transition-colors">
                                     <a href="{{ url($post->slug . '.html') }}">{{ $post->title }}</a>
                                 </h2>
                                 @if($post->summary)
@@ -130,14 +130,14 @@
             {{-- ── Sidebar (desktop) ── --}}
             <aside class="hidden lg:block w-64 xl:w-72 shrink-0 sticky top-24 self-start">
                 <div class="bg-white rounded-2xl shadow-sm p-6">
-                    <h2 class="text-sm font-bold text-gray-900 pb-3 border-b-2 border-red-700 mb-4">
+                    <h2 class="text-sm font-bold text-gray-900 pb-3 border-b-2 border-green-700 mb-4">
                         Danh mục
                     </h2>
                     <ul class="space-y-0.5">
                         <li>
                             <a href="{{ route('posts.index') }}"
                                class="flex items-center px-3 py-2 rounded-lg text-sm transition-colors gap-2
-                                      {{ !$category ? 'bg-red-50 text-red-700 font-semibold' : 'text-gray-600 hover:bg-gray-50 hover:text-red-700' }}">
+                                      {{ !$category ? 'bg-green-50 text-red-700 font-semibold' : 'text-gray-600 hover:bg-gray-50 hover:text-red-700' }}">
                                 <i class="fa-solid fa-border-all text-[10px] opacity-50"></i>
                                 Tất cả bài viết
                             </a>
@@ -146,7 +146,7 @@
                         <li>
                             <a href="{{ url($cat->slug . '.html') }}"
                                class="flex items-center px-3 py-2 rounded-lg text-sm transition-colors gap-2
-                                      {{ $category?->id === $cat->id ? 'bg-red-50 text-red-700 font-semibold' : 'text-gray-600 hover:bg-gray-50 hover:text-red-700' }}">
+                                      {{ $category?->id === $cat->id ? 'bg-green-50 text-red-700 font-semibold' : 'text-gray-600 hover:bg-gray-50 hover:text-red-700' }}">
                                 <i class="fa-regular fa-folder text-[10px] opacity-40"></i>
                                 {{ $cat->name }}
                             </a>
