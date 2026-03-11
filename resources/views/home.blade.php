@@ -734,7 +734,9 @@ document.addEventListener('DOMContentLoaded', function () {
         new Swiper('.service-swiper', {
             slidesPerView: 1.2,
             spaceBetween: 10,
-            loop: true,
+            loop: false,
+            rewind: true,
+            centerInsufficientSlides: true,
             autoplay: {
                 delay: 4000,
                 disableOnInteraction: false,
