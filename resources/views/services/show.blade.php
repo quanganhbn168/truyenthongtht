@@ -172,6 +172,50 @@
                 </section>
                 @endif
 
+                {{-- Bảng giá / Subscription Packages --}}
+                @if($service->packages && is_array($service->packages) && count($service->packages) > 0)
+                <section class="mt-12 scroll-mt-24" id="pricing">
+                    <div class="text-center mb-10">
+                        <h2 class="text-3xl font-bold text-gray-900 mb-4">Bảng Giá Dịch Vụ</h2>
+                        <p class="text-gray-500 max-w-2xl mx-auto">Lựa chọn gói giải pháp phù hợp nhất với nhu cầu và quy mô doanh nghiệp của bạn.</p>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 items-start">
+                        @foreach($service->packages as $package)
+                        @php
+                            $isPopular = $package['is_popular'] ?? false;
+                            $features = isset($package['features']) ? array_filter(array_map('trim', explode("\n", $package['features']))) : [];
+                        @endphp
+                        <div class="relative bg-white rounded-3xl border {{ $isPopular ? 'border-green-500 shadow-2xl scale-105 z-10' : 'border-gray-200 shadow-lg' }} p-8 flex flex-col h-full transition-transform duration-300">
+                            @if($isPopular)
+                                <div class="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                                    <span class="bg-green-600 text-white text-xs font-bold uppercase tracking-widest py-1.5 px-4 rounded-full shadow-md">Phổ biến nhất</span>
+                                </div>
+                            @endif
+                            
+                            <h3 class="text-xl font-bold text-gray-900 mb-4">{{ $package['name'] ?? 'Gói Dịch Vụ' }}</h3>
+                            <div class="mb-6 pb-6 border-b border-gray-100 flex-grow-0">
+                                <p class="text-3xl font-extrabold text-green-700">{{ $package['price_text'] ?? 'Liên hệ' }}</p>
+                            </div>
+                            
+                            <ul class="space-y-4 mb-8 flex-1">
+                                @foreach($features as $feature)
+                                <li class="flex items-start gap-3">
+                                    <i class="fa-solid fa-check text-green-500 mt-1"></i>
+                                    <span class="text-gray-600 text-sm">{{ $feature }}</span>
+                                </li>
+                                @endforeach
+                            </ul>
+                            
+                            <div class="mt-auto">
+                                <a href="tel:{{ config('site.phone', '') }}" class="block w-full py-3 px-4 rounded-xl text-center font-bold transition-all duration-300 {{ $isPopular ? 'bg-green-600 text-white hover:bg-green-700 shadow-lg hover:shadow-xl' : 'bg-green-50 text-green-700 hover:bg-green-100' }}">Chọn gói này</a>
+                            </div>
+                        </div>
+                        @endforeach
+                    </div>
+                </section>
+                @endif
+
                 {{-- Hậu trường / Behind the Scenes --}}
                 @if($service->behind_the_scenes)
                 <section>

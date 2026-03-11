@@ -59,6 +59,21 @@ class ServiceForm
                                     ->itemLabel(fn (array $state): ?string => $state['question'] ?? null)
                                     ->columnSpanFull(),
                             ]),
+                        Tab::make('Bảng giá & Gói dịch vụ')
+                            ->icon('heroicon-o-credit-card')
+                            ->schema([
+                                Repeater::make('packages')->label('Các gói dịch vụ (Tùy chọn)')
+                                    ->schema([
+                                        TextInput::make('name')->label('Tên gói (VD: Cơ bản, Chuyên nghiệp)')->required(),
+                                        TextInput::make('price_text')->label('Mức giá hiển thị (VD: 5.000.000đ / tháng)')->required(),
+                                        Textarea::make('features')->label('Quyền lợi (Mỗi dòng 1 quyền lợi)')->rows(4)->required(),
+                                        Toggle::make('is_popular')->label('Đánh dấu là Gói Phổ biến / Khuyên dùng')->default(false),
+                                    ])
+                                    ->collapsible()
+                                    ->itemLabel(fn (array $state): ?string => $state['name'] ?? null)
+                                    ->columnSpanFull()
+                                    ->addActionLabel('Thêm gói dịch vụ mới'),
+                            ]),
                         Tab::make('Giá & Hình ảnh')
                             ->icon('heroicon-o-currency-dollar')
                             ->schema([
