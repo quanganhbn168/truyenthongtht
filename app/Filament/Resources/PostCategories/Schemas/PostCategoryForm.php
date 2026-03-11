@@ -51,11 +51,9 @@ class PostCategoryForm
                     ->schema([
                         FileUpload::make('image')
                             ->label('Ảnh đại diện')
-                            ->acceptedFileTypes(['image/*'])
                             ->disk('public_uploads')
                             ->directory('upload/images')
                             ->visibility('public')
-                            ->imagePreviewHeight('200')
                             ->openable(),
                         TextInput::make('meta_title')
                             ->label('Meta Title')
