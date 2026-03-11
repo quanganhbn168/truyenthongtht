@@ -54,8 +54,8 @@ class PostCategoryForm
                             ->disk('public_uploads')
                             ->directory('upload/images')
                             ->visibility('public')
+                            ->preserveFilenames()
                             ->imageEditor()
-                            ->imagePreviewHeight('200')
                             ->openable()
                             ->downloadable(),
                         TextInput::make('meta_title')
