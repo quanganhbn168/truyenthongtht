@@ -67,14 +67,14 @@ class ProjectForm
                                     ->imageEditor()
                                     ->openable()
                                     ->downloadable()
-                                    ->hidden(fn (\Filament\Schemas\Components\Utilities\Get $get) => $get('hero_media_type') !== 'upload')
+                                    ->hidden(fn ($get) => $get('hero_media_type') !== 'upload')
                                     ->columnSpanFull(),
 
                                 TextInput::make('hero_media_url')
                                     ->label('Đường dẫn Media (Link)')
                                     ->url()
                                     ->placeholder('Nhập link youtube hoặc link video/ảnh ngoài...')
-                                    ->hidden(fn (\Filament\Schemas\Components\Utilities\Get $get) => in_array($get('hero_media_type'), [null, 'upload']))
+                                    ->hidden(fn ($get) => in_array($get('hero_media_type'), [null, 'upload']))
                                     ->columnSpanFull(),
 
                                 FileUpload::make('gallery')
