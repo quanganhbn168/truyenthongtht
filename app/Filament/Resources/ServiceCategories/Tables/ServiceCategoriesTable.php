@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\ServiceCategories\Tables;
 
 use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Tables\Columns\ImageColumn;
@@ -16,18 +17,43 @@ class ServiceCategoriesTable
     {
         return $table
             ->columns([
-                TextColumn::make('name')->label('Tên')->searchable()->sortable(),
-                TextColumn::make('slug')->label('Slug')->searchable()->limit(30),
-                TextColumn::make('parent.name')->label('DM cha')->searchable(),
-                ImageColumn::make('image')->label('Ảnh')->disk('public_uploads'),
-                TextColumn::make('services_count')->label('Số DV')
-                    ->counts('services')->sortable(),
-                TextColumn::make('sort_order')->label('Thứ tự')->numeric()->sortable(),
+                ImageColumn::make('image')
+                    ->label('Ảnh')
+                    ->disk('public_uploads')
+                    ->circular()
+                    ->defaultImageUrl(fn () => 'https://ui-avatars.com/api/?name=DV&background=e5e7eb&color=9ca3af&size=40')
+                    ->size(40),
+                TextColumn::make('name')
+                    ->label('Tên danh mục')
+                    ->searchable()
+                    ->sortable()
+                    ->weight('bold')
+                    ->description(fn ($record) => $record->slug),
+                TextColumn::make('parent.name')
+                    ->label('Danh mục cha')
+                    ->placeholder('Danh mục gốc')
+                    ->badge()
+                    ->color(fn ($state) => $state ? 'info' : 'gray')
+                    ->searchable(),
+                TextColumn::make('services_count')
+                    ->label('Số dịch vụ')
+                    ->counts('services')
+                    ->badge()
+                    ->color('success'),
                 ToggleColumn::make('is_active')->label('Hiển thị'),
+                TextColumn::make('created_at')
+                    ->label('Ngày tạo')
+                    ->dateTime('d/m/Y')
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
             ])
+            ->reorderable('sort_order')
             ->defaultSort('sort_order')
             ->filters([])
-            ->recordActions([EditAction::make()])
+            ->recordActions([
+                EditAction::make(),
+                DeleteAction::make(),
+            ])
             ->toolbarActions([BulkActionGroup::make([DeleteBulkAction::make()])]);
     }
 }
