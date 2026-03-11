@@ -58,7 +58,7 @@ class SitemapController extends Controller
         }
         
         // 4. Posts
-        $posts = Post::where('is_published', true)->get();
+        $posts = Post::where('is_active', true)->get();
         foreach ($posts as $post) {
             $urls[] = [
                 'loc' => url($post->slug . '.html'),
