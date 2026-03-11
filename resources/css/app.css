@@ -365,7 +365,7 @@ address { font-style: normal; }
     background: var(--clr-primary-dark);
     color: rgba(255,255,255,0.9);
     height: 36px;
-    position: fixed;
+    position: absolute;
     top: 0; left: 0; right: 0;
     z-index: 1000;
     font-size: 0.78rem;
@@ -450,7 +450,7 @@ address { font-style: normal; }
 .logo-text {
     font-size: 1.4rem;
     font-weight: 700;
-    color: #d32f2f;
+    color: var(--clr-primary);
 }
 
 .logo-white { display: none; }
@@ -493,8 +493,8 @@ address { font-style: normal; }
 
 .nav-link:hover,
 .nav-link.active {
-    color: #d32f2f;
-    background: #fff5f5;
+    color: var(--clr-primary);
+    background: rgba(26,107,46,0.05);
 }
 
 /* Transparent Header Overrides */
@@ -543,6 +543,10 @@ address { font-style: normal; }
 }
 
 /* ══ MEGA MENU PANEL ══════════════════════════════ */
+.nav-scrolled .mega-panel {
+    top: 70px !important;
+}
+
 .mega-panel {
     position: fixed;
     top: 106px; /* 36px topbar + 70px header */

@@ -50,6 +50,13 @@
                     $hasMega    = str_contains($item->classes ?? '', 'mega') && $item->children->isNotEmpty();
                     $hasDropdown= !$hasMega && $item->children->isNotEmpty();
                     $itemId     = 'nav-item-' . $item->id;
+                    
+                    $itemUrl = '#';
+                    if(isset($item->url) && $item->url !== '#') {
+                        $itemUrl = (str_ends_with($item->url, '.html') || $item->url === '/') ? url($item->url) : url($item->url . '.html');
+                    }
+                    $isActive = ($itemUrl !== '#' && request()->url() === $itemUrl);
+                    if ($item->url === '/' && request()->is('/')) $isActive = true;
                 @endphp
                 <li class="nav-item {{ $hasMega ? 'has-mega' : ($hasDropdown ? 'has-dropdown' : '') }}"
                     @if($hasMega || $hasDropdown)
@@ -57,8 +64,8 @@
                         @mouseleave="schedulClose()"
                     @endif>
 
-                    <a href="{{ (isset($item->url) && $item->url !== '#') ? (str_ends_with($item->url, '.html') || $item->url === '/' ? url($item->url) : url($item->url . '.html')) : '#' }}"
-                       class="nav-link"
+                    <a href="{{ $itemUrl }}"
+                       class="nav-link {{ $isActive ? 'active' : '' }}"
                        @if($item->target === '_blank') target="_blank" rel="noopener noreferrer" @endif
                        @if($hasMega || $hasDropdown) aria-haspopup="true" :aria-expanded="megaOpen === '{{ $itemId }}'" @endif>
                         {{ $item->title }}
