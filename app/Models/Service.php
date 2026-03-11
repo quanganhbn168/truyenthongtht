@@ -26,6 +26,7 @@ class Service extends Model implements MenuPanelable
         'process' => 'array',
         'faq' => 'array',
         'packages' => 'array',
+        'behind_the_scenes' => 'array',
     ];
 
     public function category(): BelongsTo

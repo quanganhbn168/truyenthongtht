@@ -216,14 +216,30 @@
                 </section>
                 @endif
 
-                {{-- Hậu trường / Behind the Scenes --}}
-                @if($service->behind_the_scenes)
-                <section>
+                {{-- Hậu trường / Behind the Scenes (Media Gallery) --}}
+                @if($service->behind_the_scenes && is_array($service->behind_the_scenes) && count($service->behind_the_scenes) > 0)
+                <section class="mt-12">
                     <h2 class="text-2xl font-bold text-gray-900 mb-6 pb-4 border-b">Hậu trường Thực tế</h2>
-                    <div class="bg-gray-50 rounded-2xl p-6 md:p-8">
-                        <div class="prose prose-lg max-w-none text-gray-700">
-                            {!! $service->behind_the_scenes !!}
-                        </div>
+                    
+                    <div class="grid grid-cols-2 md:grid-cols-3 gap-4 auto-rows-[200px]">
+                        @foreach($service->behind_the_scenes as $index => $media)
+                            @php
+                                $extension = pathinfo($media, PATHINFO_EXTENSION);
+                                $isVideo = in_array(strtolower($extension), ['mp4', 'webm', 'ogg', 'mov']);
+                                // Make the first item take up more space for visual interest
+                                $colSpan = $index === 0 ? 'col-span-2 row-span-2' : '';
+                            @endphp
+                            
+                            <div class="relative rounded-2xl overflow-hidden bg-gray-100 group {{ $colSpan }}">
+                                @if($isVideo)
+                                    <video src="{{ asset('storage/' . $media) }}" class="w-full h-full object-cover" controls preload="metadata"></video>
+                                @else
+                                    <img src="{{ asset('storage/' . $media) }}" alt="Hậu trường {{ $service->name }}" loading="lazy" 
+                                         class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 cursor-zoom-in">
+                                @endif
+                                <div class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
+                            </div>
+                        @endforeach
                     </div>
                 </section>
                 @endif

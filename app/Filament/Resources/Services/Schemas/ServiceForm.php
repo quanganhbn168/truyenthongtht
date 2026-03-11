@@ -41,7 +41,14 @@ class ServiceForm
                         Tab::make('Hậu trường & Quy trình')
                             ->icon('heroicon-o-film')
                             ->schema([
-                                RichEditor::make('behind_the_scenes')->label('Hậu trường thực tế (Behind the scenes)')->columnSpanFull()->fileAttachmentsDirectory('upload/images'),
+                                FileUpload::make('behind_the_scenes')
+                                    ->label('Hậu trường thực tế (Ảnh/Video)')
+                                    ->multiple()
+                                    ->acceptedFileTypes(['image/*', 'video/*'])
+                                    ->directory('upload/behind_the_scenes')
+                                    ->maxSize(10240) // 10MB max per file
+                                    ->panelLayout('grid')
+                                    ->columnSpanFull(),
                                 Repeater::make('process')->label('Quy trình thực hiện')
                                     ->schema([
                                         TextInput::make('title')->label('Tiêu đề bước')->required(),
