@@ -246,7 +246,7 @@
                             
                             <div class="relative rounded-2xl overflow-hidden bg-gray-100 group shadow-sm {{ $colSpan }}">
                                 @if($isVideo)
-                                    <video src="{{ asset('storage/' . $media) }}" class="w-full h-full object-cover" controls preload="metadata"></video>
+                                    <video src="{{ Storage::url($media) }}" class="w-full h-full object-cover" controls preload="metadata"></video>
                                 @else
                                     <img src="{{ Storage::url($media) }}" alt="Gallery {{ $index }}" loading="lazy" 
                                          class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
