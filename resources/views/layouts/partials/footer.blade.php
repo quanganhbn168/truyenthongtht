@@ -1,7 +1,7 @@
-<footer id="site-footer" class="bg-gray-900 text-gray-300 pt-16 pb-8 border-t-4 border-green-600 relative overflow-hidden" role="contentinfo">
+<footer id="site-footer" class="bg-gray-900 text-gray-300 pt-16 pb-8 border-t-4 border-orange-600 relative overflow-hidden" role="contentinfo">
     {{-- Background elements --}}
-    <div class="absolute top-0 right-0 w-64 h-64 bg-green-500/5 rounded-full blur-[80px] pointer-events-none"></div>
-    <div class="absolute bottom-0 left-0 w-80 h-80 bg-lime-500/5 rounded-full blur-[100px] pointer-events-none"></div>
+    <div class="absolute top-0 right-0 w-64 h-64 bg-orange-500/5 rounded-full blur-[80px] pointer-events-none"></div>
+    <div class="absolute bottom-0 left-0 w-80 h-80 bg-orange-500/5 rounded-full blur-[100px] pointer-events-none"></div>
 
     <div class="container mx-auto px-4 max-w-7xl relative z-10">
         {{-- Main 4-Column Grid --}}
@@ -22,19 +22,19 @@
                 <div class="space-y-3 text-sm">
                     @if(config('site.address'))
                     <p class="flex items-start gap-3">
-                        <i class="fa-solid fa-location-dot mt-1 text-green-500 w-4 text-center"></i> 
+                        <i class="fa-solid fa-location-dot mt-1 text-orange-500 w-4 text-center"></i>
                         <span class="flex-1">{{ config('site.address') }}</span>
                     </p>
                     @endif
                     @if(config('site.phone'))
                     <p class="flex items-center gap-3">
-                        <i class="fa-solid fa-phone text-green-500 w-4 text-center"></i> 
+                        <i class="fa-solid fa-phone text-orange-500 w-4 text-center"></i>
                         <a href="tel:{{ config('site.phone') }}" class="hover:text-white transition-colors">{{ config('site.phone') }}</a>
                     </p>
                     @endif
                     @if(config('site.email'))
                     <p class="flex items-center gap-3">
-                        <i class="fa-solid fa-envelope text-green-500 w-4 text-center"></i> 
+                        <i class="fa-solid fa-envelope text-orange-500 w-4 text-center"></i>
                         <a href="mailto:{{ config('site.email') }}" class="hover:text-white transition-colors">{{ config('site.email') }}</a>
                     </p>
                     @endif
@@ -64,19 +64,19 @@
                 <div class="col-span-1">
                     <h3 class="text-white font-bold text-base uppercase tracking-wider mb-5">Về chúng tôi</h3>
                     <ul class="space-y-3">
-                        <li><a href="/gioi-thieu" class="text-gray-400 hover:text-white hover:translate-x-1 inline-block transition-all text-sm">Giới thiệu về THT</a></li>
-                        <li><a href="/du-an" class="text-gray-400 hover:text-white hover:translate-x-1 inline-block transition-all text-sm">Dự án tiêu biểu</a></li>
-                        <li><a href="/tin-tuc" class="text-gray-400 hover:text-white hover:translate-x-1 inline-block transition-all text-sm">Tin tức sự kiện</a></li>
-                        <li><a href="/lien-he" class="text-gray-400 hover:text-white hover:translate-x-1 inline-block transition-all text-sm">Liên hệ hợp tác</a></li>
+                        <li><a href="{{ route('about') }}" class="text-gray-400 hover:text-white hover:translate-x-1 inline-block transition-all text-sm">Giới thiệu về THT</a></li>
+                        <li><a href="{{ route('projects.index') }}" class="text-gray-400 hover:text-white hover:translate-x-1 inline-block transition-all text-sm">Dự án tiêu biểu</a></li>
+                        <li><a href="{{ route('posts.index') }}" class="text-gray-400 hover:text-white hover:translate-x-1 inline-block transition-all text-sm">Tin tức sự kiện</a></li>
+                        <li><a href="{{ route('contact.index') }}" class="text-gray-400 hover:text-white hover:translate-x-1 inline-block transition-all text-sm">Liên hệ hợp tác</a></li>
                     </ul>
                 </div>
                 <div class="col-span-1">
                     <h3 class="text-white font-bold text-base uppercase tracking-wider mb-5">Dịch vụ chính</h3>
                     <ul class="space-y-3">
-                        <li><a href="/dich-vu" class="text-gray-400 hover:text-white hover:translate-x-1 inline-block transition-all text-sm">Sản xuất TVC Video</a></li>
-                        <li><a href="/dich-vu" class="text-gray-400 hover:text-white hover:translate-x-1 inline-block transition-all text-sm">Chụp ảnh doanh nghiệp</a></li>
-                        <li><a href="/dich-vu" class="text-gray-400 hover:text-white hover:translate-x-1 inline-block transition-all text-sm">Booking Media & PR</a></li>
-                        <li><a href="/dich-vu" class="text-gray-400 hover:text-white hover:translate-x-1 inline-block transition-all text-sm">Cung cấp nhân sự sự kiện</a></li>
+                        <li><a href="{{ route('services.index') }}" class="text-gray-400 hover:text-white hover:translate-x-1 inline-block transition-all text-sm">Sản xuất TVC Video</a></li>
+                        <li><a href="{{ route('services.index') }}" class="text-gray-400 hover:text-white hover:translate-x-1 inline-block transition-all text-sm">Chụp ảnh doanh nghiệp</a></li>
+                        <li><a href="{{ route('services.index') }}" class="text-gray-400 hover:text-white hover:translate-x-1 inline-block transition-all text-sm">Booking Media & PR</a></li>
+                        <li><a href="{{ route('services.index') }}" class="text-gray-400 hover:text-white hover:translate-x-1 inline-block transition-all text-sm">Cung cấp nhân sự sự kiện</a></li>
                     </ul>
                 </div>
             @endif
@@ -86,17 +86,17 @@
                 <h3 class="text-white font-bold text-base uppercase tracking-wider mb-5">Kết nối với THT</h3>
                 <div class="flex flex-wrap gap-3 mb-8">
                     @if(config('site.facebook'))
-                    <a href="{{ config('site.facebook') }}" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-gray-400 hover:bg-[#1877F2] hover:text-white transition-colors" aria-label="Facebook">
+                    <a href="{{ config('site.facebook') }}" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-gray-400 hover:bg-[var(--color-social-facebook)] hover:text-white transition-colors" aria-label="Facebook">
                         <i class="fa-brands fa-facebook-f text-lg" aria-hidden="true"></i>
                     </a>
                     @endif
                     @if(config('site.youtube'))
-                    <a href="{{ config('site.youtube') }}" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-gray-400 hover:bg-[#FF0000] hover:text-white transition-colors" aria-label="YouTube">
+                    <a href="{{ config('site.youtube') }}" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-gray-400 hover:bg-[var(--color-social-youtube)] hover:text-white transition-colors" aria-label="YouTube">
                         <i class="fa-brands fa-youtube text-lg" aria-hidden="true"></i>
                     </a>
                     @endif
                     @if(config('site.zalo'))
-                    <a href="{{ config('site.zalo') }}" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-gray-400 hover:bg-[#0068FF] hover:text-white transition-colors" aria-label="Zalo">
+                    <a href="{{ config('site.zalo') }}" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-gray-400 hover:bg-[var(--color-social-zalo)] hover:text-white transition-colors" aria-label="Zalo">
                         <i class="fa-solid fa-comment-dots text-lg" aria-hidden="true"></i>
                     </a>
                     @endif

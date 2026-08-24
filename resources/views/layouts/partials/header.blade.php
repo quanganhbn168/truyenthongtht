@@ -2,10 +2,6 @@
     x-data="{
         megaOpen: null,
         closeTimer: null,
-        scrolled: false,
-        init() {
-            this.scrolled = window.scrollY > 50;
-        },
         openMega(id) {
             clearTimeout(this.closeTimer);
             this.megaOpen = id;
@@ -14,10 +10,8 @@
             this.closeTimer = setTimeout(() => { this.megaOpen = null; }, 120);
         }
     }"
-    @scroll.window="scrolled = (window.scrollY > 50)"
     @keydown.escape="megaOpen = null"
-    :class="scrolled ? 'bg-white/95 backdrop-blur-md shadow-sm py-1 lg:py-0 !top-0 nav-scrolled' : '{{ request()->routeIs('home') ? 'bg-transparent is-transparent-hero' : 'bg-white shadow-none' }} py-2 lg:py-3'"
-    class="fixed w-full top-0 md:top-[36px] z-[999] transition-all duration-300"
+    class="fixed w-full top-0 md:top-[36px] z-[999] bg-white shadow-sm border-b border-gray-100"
 >
     <div class="header-inner">
 
@@ -27,17 +21,8 @@
                 <img src="{{ $logoUrl }}"
                      alt="{{ $siteName }}"
                      class="logo-dark"
-                     width="160" height="60"
                      loading="eager"
                      onerror="this.style.display='none'">
-                @if(isset($logoWhiteUrl))
-                <img src="{{ $logoWhiteUrl }}"
-                     alt="{{ $siteName }}"
-                     class="logo-white"
-                     width="160" height="60"
-                     loading="eager"
-                     onerror="this.style.display='none'">
-                @endif
             </a>
         </div>
 
@@ -47,7 +32,12 @@
             <ul class="nav-list" role="list">
                 @foreach($headerMenu->menuItems as $item)
                 @php
-                    $hasMega    = str_contains($item->classes ?? '', 'mega') && $item->children->isNotEmpty();
+                    // Mega menu is intentionally reserved for the top-level Services item.
+                    // Other menu entries keep their normal link/dropdown behaviour even if
+                    // an editor later adds a "mega" CSS class in the menu builder.
+                    $isServicesMenu = in_array(trim((string) $item->url, '/'), ['dich-vu', 'dich-vu.html'], true)
+                        || \Illuminate\Support\Str::lower(trim((string) $item->title)) === 'dịch vụ';
+                    $hasMega    = $isServicesMenu && $item->children->isNotEmpty();
                     $hasDropdown= !$hasMega && $item->children->isNotEmpty();
                     $itemId     = 'nav-item-' . $item->id;
                     
@@ -79,6 +69,7 @@
                     {{-- ── Mega Menu 2-panel ── --}}
                     @if($hasMega)
                     <div class="mega-panel"
+                         x-cloak
                          x-show="megaOpen === '{{ $itemId }}'"
                          x-transition:enter="transition ease-out duration-200"
                          x-transition:enter-start="opacity-0 -translate-y-1"
@@ -188,9 +179,7 @@
     </div>
 </header>
 
-@if(!request()->routeIs('home'))
 <div id="header-spacer" aria-hidden="true"></div>
-@endif
 
 {{-- Mobile Drawer (từ phải) --}}
 <x-drawer id="mobile-nav" title="THT Media" side="right" width="300px">

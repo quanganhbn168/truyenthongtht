@@ -128,7 +128,7 @@ class ImportFromOldDb extends Command
                     'name'             => $row->danhmuc,
                     'slug'             => $slug,
                     'parent_id'        => $row->cha > 0 ? $row->cha : null,
-                    'description'      => null,
+                    'description'      => $this->plainText($row->mota ?? null),
                     'show_home'        => (bool) $row->home,
                     'show_home2'       => (bool) $row->home2,
                     'show_menu'        => (bool) $row->menu,
@@ -447,6 +447,20 @@ class ImportFromOldDb extends Command
             $count++;
         }
         $this->line("  → {$count} liên hệ");
+    }
+
+    /** Convert legacy HTML summaries into text suitable for cards and excerpts. */
+    private function plainText(?string $value): ?string
+    {
+        if (! $value) {
+            return null;
+        }
+
+        $text = html_entity_decode(strip_tags($value), ENT_QUOTES | ENT_HTML5, 'UTF-8');
+        $text = preg_replace('/\s+/u', ' ', $text);
+        $text = trim($text);
+
+        return $text !== '' && $text !== '0' ? $text : null;
     }
 }
 

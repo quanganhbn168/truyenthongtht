@@ -21,7 +21,7 @@
                         <div class="flex items-center gap-4 mb-8">
                             <h2 class="text-2xl md:text-3xl font-bold text-gray-900 uppercase tracking-wide">{{ $category->name }}</h2>
                             <div class="h-px bg-gray-200 flex-1"></div>
-                            <a href="{{ url($category->slug . '.html') }}" class="text-sm font-semibold text-green-700 hover:text-green-900 transition-colors whitespace-nowrap">Xem tất cả <i class="fa-solid fa-arrow-right text-[10px] ml-1"></i></a>
+                            <a href="{{ url($category->slug . '.html') }}" class="text-sm font-semibold text-orange-700 hover:text-orange-900 transition-colors whitespace-nowrap">Xem tất cả →</a>
                         </div>
 
                         {{-- Services Grid --}}
@@ -34,24 +34,16 @@
                                              loading="lazy"
                                              class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
                                     @else
-                                        <div class="w-full h-full bg-gradient-to-br from-green-50 to-emerald-100 flex items-center justify-center">
-                                            <i class="fa-solid fa-wand-magic-sparkles text-4xl text-green-300"></i>
-                                        </div>
+                                        <div class="w-full h-full bg-[var(--color-brand-50)]"></div>
                                     @endif
                                     
                                     {{-- Lớp phủ tối khi hover --}}
                                     <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                                         <span class="w-12 h-12 bg-white rounded-full flex items-center justify-center text-green-700 transform scale-50 group-hover:scale-100 transition-transform duration-300">
-                                             <i class="fa-solid fa-arrow-right"></i>
-                                         </span>
+                                         <span class="bg-white rounded-full px-5 py-2 text-sm font-semibold text-orange-700 transform scale-90 group-hover:scale-100 transition-transform duration-300">Xem chi tiết</span>
                                     </div>
                                 </a>
                                 <div class="p-6 md:p-8 flex flex-col flex-1 relative bg-white z-10">
-                                    <div class="absolute -top-6 right-6 w-12 h-12 bg-white rounded-xl shadow-md flex items-center justify-center text-xl text-green-600 border border-green-50 z-20">
-                                        <i class="{{ $service->icon ?: 'fa-solid fa-star' }}"></i>
-                                    </div>
-
-                                    <h3 class="text-xl font-bold text-gray-900 leading-snug line-clamp-2 mb-3 pr-8 group-hover:text-green-700 transition-colors">
+                                    <h3 class="text-xl font-bold text-gray-900 leading-snug line-clamp-2 mb-3 group-hover:text-orange-700 transition-colors">
                                         <a href="{{ url($service->slug . '.html') }}">{{ $service->name }}</a>
                                     </h3>
                                     
@@ -61,7 +53,7 @@
                                     
                                     <div class="flex items-center justify-between mt-auto pt-4 border-t border-gray-100">
                                         @if($service->price > 0)
-                                            <span class="text-base font-bold text-green-700">{{ number_format($service->price) }}₫</span>
+                                            <span class="text-base font-bold text-orange-700">{{ number_format($service->price) }}₫</span>
                                         @else
                                             <span class="text-xs font-semibold uppercase tracking-widest text-gray-400">Liên hệ báo giá</span>
                                         @endif
@@ -74,7 +66,6 @@
                 @endif
             @empty
                 <div class="text-center py-24 text-gray-400 w-full">
-                    <i class="fa-regular fa-folder-open text-5xl mb-4 block opacity-40"></i>
                     <p class="text-sm">Hệ thống đang cập nhật dịch vụ.</p>
                 </div>
             @endforelse

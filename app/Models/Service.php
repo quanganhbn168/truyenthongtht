@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Traits\HasSlug;
 use Datlechin\FilamentMenuBuilder\Contracts\MenuPanelable;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -49,18 +50,20 @@ class Service extends Model implements MenuPanelable
         return 'Dịch vụ';
     }
 
-    public function getMenuPanelTitleColumn(): string
+    public function getMenuPanelTitle(): string
     {
-        return 'name';
+        return (string) $this->name;
     }
 
-    public function getMenuPanelUrlUsing(): callable
+    public function getMenuPanelUrl(): string
     {
-        return fn (self $record) => '/' . ltrim($record->slug, '/') . '.html';
+        return '/' . ltrim((string) $this->slug, '/') . '.html';
     }
 
-    public function getMenuPanelModifyQueryUsing(): callable
+    public function getMenuPanelQuery(): Builder
     {
-        return fn ($query) => $query->where('is_active', true)->orderBy('sort_order');
+        return $this->newQuery()
+            ->where('is_active', true)
+            ->orderBy('sort_order');
     }
 }

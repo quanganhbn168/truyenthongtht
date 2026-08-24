@@ -9,6 +9,7 @@ use BackedEnum;
 use Filament\Actions\Action;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Repeater;
+use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Concerns\InteractsWithForms;
@@ -119,17 +120,20 @@ class Settings extends Page implements HasForms
             'projects_banner'       => $page->projects_banner ? [$page->projects_banner] : [],
             'projects_title'        => $page->projects_title,
             'projects_description'  => $page->projects_description,
+            'quote_title'           => $page->quote_title,
+            'quote_description'     => $page->quote_description,
+            'quote_content'         => $page->quote_content,
+            'quote_meta_title'      => $page->quote_meta_title,
+            'quote_meta_description'=> $page->quote_meta_description,
+            'quote_keywords'        => $page->quote_keywords,
         ]);
-    }
-
-    public function defaultForm(Schema $schema): Schema
-    {
-        return $schema->statePath('data');
     }
 
     public function form(Schema $schema): Schema
     {
-        return $schema->components([
+        return $schema
+            ->statePath('data')
+            ->components([
             Tabs::make('settings_tabs')
                 ->tabs([
 
@@ -503,6 +507,17 @@ class Settings extends Page implements HasForms
                                     TextInput::make('projects_description')->label('Mô tả ngắn')->maxLength(500),
                                     FileUpload::make('projects_banner')->label('Banner hero')->image()->disk('public_uploads')->directory('banners')->columnSpanFull(),
                                 ])->columns(2),
+
+                            Section::make('Trang Báo giá (/bao-gia.html)')
+                                ->icon('heroicon-o-document-currency-dollar')
+                                ->schema([
+                                    TextInput::make('quote_title')->label('Tiêu đề trang')->maxLength(255)->columnSpanFull(),
+                                    Textarea::make('quote_description')->label('Mô tả mở đầu')->rows(3)->columnSpanFull(),
+                                    RichEditor::make('quote_content')->label('Nội dung chi tiết')->columnSpanFull(),
+                                    TextInput::make('quote_meta_title')->label('Meta title')->maxLength(255)->columnSpanFull(),
+                                    Textarea::make('quote_meta_description')->label('Meta description')->rows(3)->columnSpanFull(),
+                                    Textarea::make('quote_keywords')->label('Từ khóa SEO')->rows(2)->columnSpanFull(),
+                                ])->columns(2),
                         ]),
 
                 ])
@@ -613,6 +628,12 @@ class Settings extends Page implements HasForms
         $page->projects_banner      = is_array($data['projects_banner'] ?? null) ? (reset($data['projects_banner']) ?: '') : ($data['projects_banner'] ?? '');
         $page->projects_title       = $data['projects_title'] ?? '';
         $page->projects_description = $data['projects_description'] ?? '';
+        $page->quote_title          = $data['quote_title'] ?? '';
+        $page->quote_description    = $data['quote_description'] ?? '';
+        $page->quote_content        = $data['quote_content'] ?? '';
+        $page->quote_meta_title     = $data['quote_meta_title'] ?? '';
+        $page->quote_meta_description = $data['quote_meta_description'] ?? '';
+        $page->quote_keywords       = $data['quote_keywords'] ?? '';
         $page->save();
 
         // Xử lý nén ảnh cho các trang

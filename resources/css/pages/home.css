@@ -1,0 +1,350 @@
+/* ========================================================================
+   HOME PAGE
+   Hệ sinh thái dịch vụ và portfolio chỉ xuất hiện ở trang chủ.
+   ======================================================================== */
+
+.ecosystem {
+    background: var(--color-surface);
+    padding-top: clamp(4rem, 8vw, 7rem);
+}
+
+.ecosystem__intro {
+    max-width: 46rem;
+    padding-bottom: clamp(2.5rem, 5vw, 4rem);
+}
+
+.ecosystem__intro .section-heading {
+    margin-bottom: var(--space-4);
+}
+
+.ecosystem__intro > p {
+    color: var(--color-text-muted);
+    font-size: 1rem;
+    line-height: 1.8;
+    margin: 0;
+}
+
+.ecosystem-nav {
+    background: color-mix(in srgb, var(--color-surface) 94%, transparent);
+    border-bottom: 1px solid var(--color-border);
+    border-top: 1px solid var(--color-border);
+    position: sticky;
+    top: 4rem;
+    z-index: 20;
+}
+
+.ecosystem-nav__list {
+    -webkit-overflow-scrolling: touch;
+    display: flex;
+    gap: var(--space-6);
+    overflow-x: auto;
+    scrollbar-width: none;
+}
+
+.ecosystem-nav__list::-webkit-scrollbar {
+    display: none;
+}
+
+.ecosystem-nav a {
+    align-items: center;
+    border-bottom: 2px solid transparent;
+    color: var(--color-text-muted);
+    display: inline-flex;
+    flex: 0 0 auto;
+    font-size: 0.8rem;
+    font-weight: 700;
+    gap: var(--space-2);
+    letter-spacing: 0.01em;
+    padding: 1rem 0 0.875rem;
+    transition: border-color var(--transition-fast), color var(--transition-fast);
+}
+
+.ecosystem-nav a span {
+    color: var(--color-brand-primary);
+    font-size: 0.7rem;
+}
+
+.ecosystem-nav a:hover {
+    border-bottom-color: var(--color-brand-primary);
+    color: var(--color-text-strong);
+}
+
+.ecosystem-solution {
+    border-bottom: 1px solid var(--color-border);
+    padding: clamp(3.5rem, 7vw, 6rem) 0;
+    scroll-margin-top: 8rem;
+}
+
+.ecosystem-solution--warm {
+    background: var(--color-surface-warm);
+}
+
+.ecosystem-solution--cool {
+    background: var(--color-surface-cool);
+}
+
+.ecosystem-solution--plain {
+    background: var(--color-surface);
+}
+
+.ecosystem-solution__layout {
+    align-items: start;
+    display: grid;
+    gap: clamp(2.5rem, 6vw, 6rem);
+}
+
+.ecosystem-solution__summary {
+    max-width: 34rem;
+}
+
+.ecosystem-solution__number {
+    color: var(--color-brand-primary);
+    display: block;
+    font-size: clamp(3.5rem, 7vw, 6rem);
+    font-weight: 800;
+    letter-spacing: -0.08em;
+    line-height: 0.8;
+    margin-bottom: var(--space-6);
+}
+
+.ecosystem-solution__label {
+    color: var(--color-brand-primary);
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    margin: 0 0 var(--space-3);
+    text-transform: uppercase;
+}
+
+.ecosystem-solution h3 {
+    color: var(--color-text-strong);
+    font-family: var(--font-display);
+    font-size: clamp(1.8rem, 3.5vw, 2.7rem);
+    letter-spacing: -0.025em;
+    line-height: 1.15;
+    margin: 0 0 var(--space-4);
+}
+
+.ecosystem-solution__description {
+    color: var(--color-text);
+    line-height: 1.8;
+    margin: 0;
+}
+
+.ecosystem-solution__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    margin-top: var(--space-8);
+}
+
+.ecosystem-solution__items {
+    display: grid;
+    gap: var(--space-4);
+}
+
+.ecosystem-item {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    gap: var(--space-4);
+    min-height: 7.5rem;
+    padding: clamp(1.25rem, 3vw, 1.75rem);
+    transition: border-color var(--transition-base), box-shadow var(--transition-base), transform var(--transition-base);
+}
+
+.ecosystem-item:hover {
+    border-color: color-mix(in srgb, var(--color-brand-primary) 40%, var(--color-border));
+    box-shadow: var(--shadow-card);
+    transform: translateY(-0.25rem);
+}
+
+.ecosystem-item__marker {
+    background: var(--color-brand-primary);
+    flex: 0 0 0.25rem;
+    height: 2.75rem;
+}
+
+.ecosystem-item h4 {
+    color: var(--color-text-strong);
+    font-size: 1rem;
+    line-height: 1.35;
+    margin: 0 0 var(--space-2);
+}
+
+.ecosystem-item p {
+    color: var(--color-text-muted);
+    font-size: 0.875rem;
+    line-height: 1.65;
+    margin: 0;
+}
+
+@media (min-width: 1024px) {
+    .ecosystem-solution__layout {
+        grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    }
+}
+
+.project-filter {
+    align-items: center;
+    -webkit-overflow-scrolling: touch;
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 0.625rem;
+    justify-content: flex-start;
+    overflow-x: auto;
+    padding-bottom: var(--space-2);
+    scrollbar-width: none;
+}
+
+.project-filter::-webkit-scrollbar {
+    display: none;
+}
+
+.filter-btn {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-pill);
+    color: var(--color-text-muted);
+    cursor: pointer;
+    flex-shrink: 0;
+    font-size: 0.875rem;
+    font-weight: 600;
+    padding: var(--space-2) 1.25rem;
+    transition: all var(--transition-base);
+}
+
+.filter-btn:hover {
+    border-color: var(--color-brand-primary);
+    color: var(--color-brand-primary);
+}
+
+.filter-btn.active {
+    background: var(--color-brand-primary);
+    border-color: var(--color-brand-primary);
+    box-shadow: 0 4px 12px color-mix(in srgb, var(--color-brand-primary) 25%, transparent);
+    color: var(--color-on-brand);
+}
+
+.project-grid {
+    transition: height var(--transition-base);
+}
+
+.project-item {
+    transition: all 500ms cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.project-item.hide {
+    opacity: 0;
+    pointer-events: none;
+    position: absolute;
+    transform: scale(0.9);
+    visibility: hidden;
+}
+
+.project-card {
+    aspect-ratio: 4 / 3;
+    background: var(--color-surface-subtle);
+    border-radius: 0;
+    box-shadow: var(--shadow-sm);
+    display: block;
+    overflow: hidden;
+    position: relative;
+}
+
+.project-card__img {
+    height: 100%;
+    object-fit: cover;
+    transition: transform 600ms cubic-bezier(0.25, 0.8, 0.25, 1);
+    width: 100%;
+}
+
+.project-card:hover .project-card__img {
+    transform: scale(1.08);
+}
+
+.project-card::after {
+    background: color-mix(in srgb, var(--color-overlay-dark) 75%, transparent);
+    content: '';
+    inset: 0;
+    opacity: 0.8;
+    position: absolute;
+    transition: opacity var(--transition-base);
+}
+
+.project-card:hover::after {
+    opacity: 0.95;
+}
+
+.project-card__content {
+    bottom: 0;
+    color: var(--color-on-brand);
+    left: 0;
+    padding: var(--space-8);
+    position: absolute;
+    right: 0;
+    transform: translateY(1.25rem);
+    transition: transform var(--transition-base);
+    z-index: 1;
+}
+
+.project-card:hover .project-card__content {
+    transform: translateY(0);
+}
+
+.project-card__category {
+    background: var(--color-brand-lime);
+    border-radius: 0;
+    color: var(--color-text-strong);
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.05em;
+    margin-bottom: var(--space-3);
+    padding: var(--space-1) 0.75rem;
+    text-transform: uppercase;
+}
+
+.project-card__title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    line-height: 1.35;
+    margin-bottom: var(--space-2);
+    text-shadow: 0 2px 10px color-mix(in srgb, var(--color-black) 30%, transparent);
+}
+
+.project-card__client {
+    align-items: center;
+    color: color-mix(in srgb, var(--color-white) 70%, transparent);
+    display: flex;
+    font-size: 0.85rem;
+    gap: 0.375rem;
+    opacity: 0;
+    transition: opacity var(--transition-base) 100ms;
+}
+
+.project-card:hover .project-card__client {
+    opacity: 1;
+}
+
+@media (min-width: 768px) {
+    .project-filter {
+        flex-wrap: wrap;
+        justify-content: center;
+        overflow-x: visible;
+        padding-bottom: 0;
+    }
+}
+
+@media (min-width: 1024px) {
+    .project-card--large {
+        aspect-ratio: auto;
+        height: 100%;
+        min-height: 30rem;
+    }
+
+    .project-card--large .project-card__title {
+        font-size: 1.75rem;
+    }
+}

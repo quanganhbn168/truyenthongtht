@@ -1,0 +1,72 @@
+/* ========================================================================
+   PROJECT PAGES
+   Dùng chung cho danh sách và chi tiết dự án.
+   ======================================================================== */
+
+.projects-hero {
+    background-color: var(--color-text-strong);
+    background-image: var(--projects-hero-image, none);
+    background-position: center;
+    background-size: cover;
+}
+
+.project-detail-page .project-hero {
+    background-color: var(--color-text-strong);
+    color: var(--color-on-brand);
+    overflow: hidden;
+    position: relative;
+}
+
+.project-detail-page .project-hero-media {
+    height: 100%;
+    inset: 0;
+    position: absolute;
+    width: 100%;
+}
+
+.project-detail-page .project-hero-media img,
+.project-detail-page .project-hero-media iframe,
+.project-detail-page .project-hero-media video {
+    height: 100%;
+    object-fit: cover;
+    pointer-events: none;
+    width: 100%;
+}
+
+.project-detail-page .project-hero::after {
+    content: none;
+}
+
+.project-detail-page .project-hero-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    min-height: 60vh;
+    padding: 8rem 0 4rem;
+    position: relative;
+    z-index: 1;
+}
+
+.project-detail-page .brief-card {
+    -webkit-backdrop-filter: blur(16px);
+    backdrop-filter: blur(16px);
+    background: color-mix(in srgb, var(--color-white) 5%, transparent);
+    border: 1px solid color-mix(in srgb, var(--color-white) 10%, transparent);
+}
+
+.project-detail-page .play-overlay {
+    align-items: center;
+    background: color-mix(in srgb, var(--color-black) 30%, transparent);
+    cursor: pointer;
+    display: flex;
+    inset: 0;
+    justify-content: center;
+    opacity: 0;
+    position: absolute;
+    transition: opacity var(--transition-base);
+    z-index: 2;
+}
+
+.project-detail-page .project-hero:hover .play-overlay {
+    opacity: 1;
+}

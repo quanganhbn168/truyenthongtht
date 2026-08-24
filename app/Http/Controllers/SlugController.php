@@ -31,6 +31,21 @@ class SlugController extends Controller
             abort(404);
         }
 
+        // Chỉ public một URL chuẩn có đuôi .html. Slug cũ không có đuôi vẫn
+        // được giữ bằng redirect 301 để không tạo nội dung trùng lặp trên Google.
+        $recordSlug = (string) ($record->getAttribute('slug') ?: $slug);
+        $canonicalSlug = preg_replace('/\.html$/i', '', ltrim($recordSlug, '/')) . '.html';
+
+        if (strcasecmp(ltrim($slug, '/'), $canonicalSlug) !== 0) {
+            $destination = url($canonicalSlug);
+
+            if ($query = $request->getQueryString()) {
+                $destination .= '?' . $query;
+            }
+
+            return redirect()->to($destination, 301);
+        }
+
         // 2. Increment view count nếu có cột view_count
         if (method_exists($record, 'increment') &&
             $record->getConnection()->getSchemaBuilder()->hasColumn($record->getTable(), 'view_count')) {

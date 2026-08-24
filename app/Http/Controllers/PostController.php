@@ -19,7 +19,10 @@ class PostController extends Controller
 
         if ($request->category) {
             $category = PostCategory::where('slug', $request->category)->firstOrFail();
-            $query->where('category_id', $category->id);
+
+            // Danh mục có URL slug riêng. Giữ query cũ bằng 301 để tránh
+            // /tin-tuc.html?category=... cạnh tranh với /danh-muc.html.
+            return redirect()->to(url($category->slug . '.html'), 301);
         }
 
         $posts = $query->paginate(13)->onEachSide(1);

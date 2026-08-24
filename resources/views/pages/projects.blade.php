@@ -6,46 +6,39 @@
     $hasBanner = isset($category) && $category && $category->banner;
     $bannerUrl = $hasBanner ? asset($category->banner) : null;
 @endphp
-<div class="relative bg-gray-900 overflow-hidden" {!! $hasBanner ? 'style="background-image: url(\''.$bannerUrl.'\'); background-size: cover; background-position: center;"' : '' !!}>
+<div class="projects-hero relative overflow-hidden" @if($hasBanner) style="--projects-hero-image: url('{{ $bannerUrl }}')" @endif>
     <!-- Background Decor -->
     <div class="absolute inset-0 z-0">
-        <div class="absolute inset-0 bg-gradient-to-br {{ $hasBanner ? 'from-gray-900/90 via-gray-900/80 to-red-900/50' : 'from-gray-900 via-gray-900/95 to-red-900/40' }}"></div>
         <div class="absolute top-0 right-0 -mt-20 -mr-20 w-96 h-96 bg-red-600/20 rounded-full blur-[100px]"></div>
         <div class="absolute bottom-0 left-0 -mb-20 -ml-20 w-80 h-80 bg-red-800/20 rounded-full blur-[80px]"></div>
     </div>
     
     <div class="relative z-10 pt-32 pb-20 md:pt-40 md:pb-28">
         <div class="container mx-auto px-4 max-w-7xl text-center">
-            <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white mb-6 tracking-tight">
+            <h1 class="text-3xl md:text-4xl lg:text-5xl font-extrabold text-white mb-6 tracking-tight">
                 @if(isset($category) && $category) {{ $category->name }} @else Các Dự Án <span class="text-red-500">Nổi Bật</span> @endif
             </h1>
-            <p class="text-gray-400 text-lg md:text-xl max-w-3xl mx-auto font-light leading-relaxed">
-                @if(isset($category) && $category && $category->description)
-                    {{ $category->description }}
-                @else
-                    Khám phá những chiến dịch và sản phẩm truyền thông mang đậm dấu ấn sáng tạo do THT Media thực hiện, kiến tạo giá trị đột phá cho thương hiệu.
-                @endif
-            </p>
         </div>
+    </div>
+</div>
+
+<div class="border-b border-gray-100 bg-white">
+    <div class="container mx-auto max-w-7xl px-4">
+        @php
+            $breadcrumbItems = [
+                ['label' => 'Dự án', 'url' => route('projects.index')],
+            ];
+
+            if (isset($category) && $category) {
+                $breadcrumbItems[] = ['label' => $category->name];
+            }
+        @endphp
+        <x-breadcrumb :items="$breadcrumbItems" />
     </div>
 </div>
 
 <div class="py-16 md:py-24 bg-zinc-50">
     <div class="container mx-auto px-4 max-w-7xl">
-
-        {{-- Breadcrumb (Light variant) --}}
-        @php
-            $breadcrumbItems = [
-                ['label' => 'Dự án', 'url' => route('projects.index')]
-            ];
-            if (isset($category) && $category) {
-                $breadcrumbItems[] = ['label' => $category->name];
-            }
-        @endphp
-        <x-breadcrumb 
-            :items="$breadcrumbItems" 
-            class="mb-8 text-sm text-gray-500" 
-        />
 
         {{-- ── Category Filter (Modern Pills) ── --}}
         <div class="flex flex-nowrap overflow-x-auto md:flex-wrap md:justify-center gap-3 mb-12 pb-4 md:pb-0 hide-scrollbar">

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Quote;
 use App\Models\Service;
+use App\Settings\PageSettings;
 use Illuminate\Http\Request;
 
 class QuoteController extends Controller
@@ -11,10 +12,11 @@ class QuoteController extends Controller
     public function index(Request $request)
     {
         $services = Service::where('is_active', true)->orderBy('sort_order')->get();
+        $quotePage = app(PageSettings::class);
         // Lấy service_id từ query parameter (nếu khách click từ trang chi tiết dịch vụ)
         $selectedServiceId = $request->query('service_id');
         
-        return view('pages.quote', compact('services', 'selectedServiceId'));
+        return view('pages.quote', compact('services', 'selectedServiceId', 'quotePage'));
     }
 
     public function store(Request $request)

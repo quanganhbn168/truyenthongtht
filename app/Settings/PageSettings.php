@@ -31,6 +31,14 @@ class PageSettings extends Settings
     public string $projects_title;
     public string $projects_description;
 
+    // Trang Báo giá
+    public string $quote_title;
+    public string $quote_description;
+    public string $quote_content;
+    public string $quote_meta_title;
+    public string $quote_meta_description;
+    public string $quote_keywords;
+
     public static function group(): string
     {
         return 'page';

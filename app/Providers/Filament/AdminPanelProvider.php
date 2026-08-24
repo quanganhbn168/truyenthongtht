@@ -3,6 +3,10 @@
 namespace App\Providers\Filament;
 
 use Awcodes\Curator\CuratorPlugin;
+use App\Filament\Widgets\ContentStatsOverview;
+use App\Filament\Widgets\LatestContacts;
+use App\Filament\Widgets\LatestPosts;
+use App\Filament\Widgets\LatestQuotes;
 use BezhanSalleh\FilamentShield\FilamentShieldPlugin;
 use Datlechin\FilamentMenuBuilder\FilamentMenuBuilderPlugin;
 use Datlechin\FilamentMenuBuilder\MenuPanel\ModelMenuPanel;
@@ -49,7 +53,12 @@ class AdminPanelProvider extends PanelProvider
                 Dashboard::class,
             ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\Filament\Widgets')
-            ->widgets([])
+            ->widgets([
+                ContentStatsOverview::class,
+                LatestPosts::class,
+                LatestQuotes::class,
+                LatestContacts::class,
+            ])
             ->middleware([
                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,

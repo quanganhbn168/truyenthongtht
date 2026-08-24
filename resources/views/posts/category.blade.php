@@ -16,9 +16,17 @@
                 {{ $category->name }}
             </h1>
             @if($category->description)
-                <p class="text-gray-500 mt-1 text-sm">{{ $category->description }}</p>
+                <p class="w-full text-gray-500 mt-2 text-base md:text-lg leading-relaxed">{{ $category->description }}</p>
             @endif
         </div>
+
+        @if($category->content)
+            <section class="mb-12 pb-10 border-b border-gray-100">
+                <div class="prose prose-lg max-w-none text-gray-700" itemprop="description">
+                    {!! $category->content !!}
+                </div>
+            </section>
+        @endif
 
         <div class="flex flex-col lg:flex-row gap-10 items-start">
 

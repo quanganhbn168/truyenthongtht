@@ -9,7 +9,7 @@
                 <a href="{{ $item['url'] }}" itemprop="item" class="breadcrumb-link">
                     <span itemprop="name">{{ $item['label'] }}</span>
                 </a>
-                <span class="breadcrumb-sep" aria-hidden="true"><i class="fa-solid fa-chevron-right"></i></span>
+                <span class="breadcrumb-sep" aria-hidden="true">›</span>
             @else
                 <span itemprop="name" aria-current="page">{{ $item['label'] }}</span>
             @endif

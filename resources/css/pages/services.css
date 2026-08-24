@@ -1,0 +1,102 @@
+/* ========================================================================
+   SERVICE PAGES
+   Chỉ áp dụng cho trang chi tiết dịch vụ (.service-page).
+   ======================================================================== */
+
+.service-page .service-hero {
+    align-items: center;
+    background-attachment: fixed;
+    background-position: center;
+    background-size: cover;
+    color: var(--color-on-brand);
+    display: flex;
+    justify-content: center;
+    min-height: 70vh;
+    position: relative;
+}
+
+.service-page .service-hero::before {
+    content: none;
+}
+
+.service-page .service-hero-content {
+    position: relative;
+    width: 100%;
+    z-index: 1;
+}
+
+.service-page .landing-section {
+    padding: 5rem 0;
+}
+
+.service-page .landing-section:nth-child(even) {
+    background-color: var(--color-surface-subtle);
+}
+
+.service-page .section-title {
+    color: var(--color-text-strong);
+    font-size: 2.25rem;
+    font-weight: 800;
+    margin-bottom: 3rem;
+    position: relative;
+    text-align: center;
+}
+
+.service-page .section-title::after {
+    background-color: var(--color-brand-primary);
+    border-radius: var(--radius-pill);
+    content: '';
+    display: block;
+    height: 0.25rem;
+    margin: var(--space-4) auto 0;
+    width: 3.75rem;
+}
+
+.service-page .process-timeline {
+    position: relative;
+}
+
+.service-page .process-timeline::before {
+    background-color: var(--color-border);
+    bottom: 0;
+    content: '';
+    left: 1.5rem;
+    position: absolute;
+    top: 0;
+    width: 2px;
+}
+
+.service-page .process-step {
+    display: flex;
+    gap: var(--space-6);
+    margin-bottom: 2.5rem;
+    position: relative;
+}
+
+.service-page .process-step-number {
+    align-items: center;
+    background-color: var(--color-brand-primary);
+    border-radius: var(--radius-pill);
+    box-shadow: 0 0 0 4px var(--color-surface);
+    color: var(--color-on-brand);
+    display: flex;
+    flex-shrink: 0;
+    font-size: 1.25rem;
+    font-weight: 700;
+    height: 3.125rem;
+    justify-content: center;
+    width: 3.125rem;
+    z-index: 1;
+}
+
+.service-page .sticky-cta {
+    position: sticky;
+    top: 6rem;
+}
+
+@media (max-width: 768px) {
+    .service-page .service-hero {
+        background-attachment: scroll;
+        min-height: 34rem;
+    }
+}

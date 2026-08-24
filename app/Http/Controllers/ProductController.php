@@ -16,7 +16,9 @@ class ProductController extends Controller
 
         if ($request->category) {
             $cat = ProductCategory::where('slug', $request->category)->firstOrFail();
-            $query->where('category_id', $cat->id);
+
+            // Canonical category URL được phục vụ bởi SlugController.
+            return redirect()->to(url($cat->slug . '.html'), 301);
         }
 
         $products = $query->paginate(12);

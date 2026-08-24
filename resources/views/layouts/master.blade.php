@@ -51,11 +51,6 @@
     <link rel="icon" type="image/x-icon" href="{{ $faviconUrl }}">
     <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('apple-touch-icon.png') }}">
 
-    {{-- Fonts --}}
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet">
-
     {{-- Assets --}}
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
@@ -64,8 +59,14 @@
 </head>
 <body class="{{ $bodyClass ?? '' }}">
 
-    @include('layouts.partials.topbar')
-    @include('layouts.partials.header')
+    <div id="site-chrome"
+         x-data="{ scrolled: false }"
+         x-init="scrolled = window.scrollY > 24"
+         @scroll.window.passive="scrolled = window.scrollY > 24"
+         :class="{ 'is-scrolled': scrolled }">
+        @include('layouts.partials.topbar')
+        @include('layouts.partials.header')
+    </div>
 
     <main id="main-content" role="main">
         @yield('content')

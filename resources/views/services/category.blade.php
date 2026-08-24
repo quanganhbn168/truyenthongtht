@@ -12,7 +12,7 @@
         <div class="my-6">
             <h1 class="text-3xl md:text-4xl font-extrabold text-gray-900">{{ $category->name }}</h1>
             @if($category->description)
-                <p class="text-gray-500 mt-2 text-base md:text-lg max-w-3xl">{{ $category->description }}</p>
+                <p class="w-full text-gray-500 mt-2 text-base md:text-lg leading-relaxed">{{ $category->description }}</p>
             @endif
         </div>
 
@@ -21,7 +21,6 @@
             <div class="flex-1 min-w-0">
                 @if($services->isEmpty())
                     <div class="text-center py-24 text-gray-400 bg-white rounded-2xl border border-gray-100 shadow-sm">
-                        <i class="fa-regular fa-folder-open text-5xl mb-4 block opacity-40"></i>
                         <p class="text-sm">Chưa có dịch vụ nào trong danh mục này.</p>
                     </div>
                 @else
@@ -34,24 +33,16 @@
                                          loading="lazy"
                                          class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
                                 @else
-                                    <div class="w-full h-full bg-gradient-to-br from-green-50 to-emerald-100 flex items-center justify-center">
-                                        <i class="fa-solid fa-wand-magic-sparkles text-4xl text-green-300"></i>
-                                    </div>
+                                    <div class="w-full h-full bg-[var(--color-brand-50)]"></div>
                                 @endif
                                 
                                 {{-- Lớp phủ tối khi hover --}}
                                 <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                                     <span class="w-12 h-12 bg-white rounded-full flex items-center justify-center text-green-700 transform scale-50 group-hover:scale-100 transition-transform duration-300">
-                                         <i class="fa-solid fa-arrow-right"></i>
-                                     </span>
+                                     <span class="bg-white rounded-full px-5 py-2 text-sm font-semibold text-orange-700 transform scale-90 group-hover:scale-100 transition-transform duration-300">Xem chi tiết</span>
                                 </div>
                             </a>
                             <div class="p-6 flex flex-col flex-1 relative bg-white z-10">
-                                <div class="absolute -top-5 right-5 w-10 h-10 bg-white rounded-xl shadow-md flex items-center justify-center text-lg text-green-600 border border-green-50 z-20">
-                                    <i class="{{ $service->icon ?: 'fa-solid fa-star' }}"></i>
-                                </div>
-
-                                <h2 class="text-lg font-bold text-gray-900 leading-snug line-clamp-2 mb-2 pr-6 group-hover:text-green-700 transition-colors">
+                                <h2 class="text-lg font-bold text-gray-900 leading-snug line-clamp-2 mb-2 group-hover:text-orange-700 transition-colors">
                                     <a href="{{ url($service->slug . '.html') }}">{{ $service->name }}</a>
                                 </h2>
                                 
@@ -61,7 +52,7 @@
                                 
                                 <div class="flex items-center justify-between mt-auto pt-3 border-t border-gray-100">
                                     @if($service->price > 0)
-                                        <span class="text-base font-bold text-green-700">{{ number_format($service->price) }}₫</span>
+                                        <span class="text-base font-bold text-orange-700">{{ number_format($service->price) }}₫</span>
                                     @else
                                         <span class="text-xs font-semibold uppercase tracking-widest text-gray-400">Liên hệ báo giá</span>
                                     @endif
@@ -75,29 +66,35 @@
                         <div class="flex justify-center mt-10">{{ $services->links() }}</div>
                     @endif
                 @endif
+
+                @if($category->content)
+                    <section class="mt-12 pt-10 border-t border-gray-100">
+                        <div class="prose prose-lg max-w-none text-gray-700" itemprop="description">
+                            {!! $category->content !!}
+                        </div>
+                    </section>
+                @endif
             </div>
 
             {{-- Sidebar --}}
             <aside class="hidden lg:block w-64 xl:w-72 shrink-0 sticky top-24 self-start">
                 <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-                    <h2 class="text-sm font-bold text-gray-900 pb-3 border-b-2 border-green-600 mb-4">Danh mục dịch vụ</h2>
+                    <h2 class="text-sm font-bold text-gray-900 pb-3 border-b-2 border-orange-600 mb-4">Danh mục dịch vụ</h2>
                     <ul class="space-y-1 mt-2">
                         <li>
                             <a href="{{ route('services.index') }}"
-                               class="flex items-center px-3 py-2.5 rounded-xl text-sm gap-3 text-gray-600 hover:bg-green-50 hover:text-green-700 transition-colors">
-                                <i class="fa-solid fa-border-all text-xs opacity-50 w-4 text-center"></i>
+                               class="flex items-center px-3 py-2.5 rounded-xl text-sm text-gray-600 hover:bg-orange-50 hover:text-orange-700 transition-colors">
                                 <span class="font-medium">Tất cả dịch vụ</span>
                             </a>
                         </li>
                         @foreach($allCategories as $cat)
                         <li>
                             <a href="{{ url($cat->slug . '.html') }}"
-                               class="flex items-center px-3 py-2.5 rounded-xl text-sm gap-3 transition-colors
-                                      {{ $cat->id === $category->id ? 'bg-green-50 text-green-700 shadow-sm relative overflow-hidden' : 'text-gray-600 hover:bg-green-50 hover:text-green-700' }}">
+                               class="flex items-center px-3 py-2.5 rounded-xl text-sm transition-colors
+                                      {{ $cat->id === $category->id ? 'bg-orange-50 text-orange-700 shadow-sm relative overflow-hidden' : 'text-gray-600 hover:bg-orange-50 hover:text-orange-700' }}">
                                 @if($cat->id === $category->id)
-                                    <div class="absolute left-0 top-0 bottom-0 w-1 bg-green-600"></div>
+                                    <div class="absolute left-0 top-0 bottom-0 w-1 bg-orange-600"></div>
                                 @endif
-                                <i class="fa-regular fa-folder text-xs opacity-40 w-4 text-center"></i>
                                 <span class="{{ $cat->id === $category->id ? 'font-bold' : 'font-medium' }}">{{ $cat->name }}</span>
                             </a>
                         </li>

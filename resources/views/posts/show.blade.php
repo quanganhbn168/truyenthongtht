@@ -6,7 +6,7 @@
 
         <x-breadcrumb :items="[
             ['label' => 'Tin tức', 'url' => route('posts.index')],
-            ['label' => optional($post->category)->name ?? '', 'url' => $post->category ? route('posts.index', ['category' => $post->category->slug]) : null],
+            ['label' => optional($post->category)->name ?? '', 'url' => $post->category ? url($post->category->slug . '.html') : null],
             ['label' => $post->title],
         ]" />
 
@@ -18,29 +18,29 @@
 
                 <header class="px-8 pt-8 md:px-10">
                     @if($post->category)
-                        <a href="{{ route('posts.index', ['category' => $post->category->slug]) }}"
-                           class="inline-block bg-green-700 text-white text-xs font-semibold tracking-widest uppercase px-3 py-1 rounded-full mb-4 hover:bg-green-800 transition-colors">
+                        <a href="{{ url($post->category->slug . '.html') }}"
+                           class="inline-block bg-orange-700 text-white text-xs font-semibold tracking-widest uppercase px-3 py-1 rounded-full mb-4 hover:bg-orange-800 transition-colors">
                             {{ $post->category->name }}
                         </a>
                     @endif
 
-                    <h1 class="text-2xl md:text-3xl font-bold leading-snug text-gray-900 mb-4"
+                    <h1 class="post-article__title"
                         itemprop="headline">{{ $post->title }}</h1>
 
                     <div class="flex flex-wrap gap-4 text-sm text-gray-500 pb-5 border-b border-gray-100 mb-5">
                         <span itemprop="datePublished" content="{{ optional($post->published_at)->toIso8601String() }}">
-                            <i class="fa-regular fa-calendar text-green-700 mr-1"></i>
+                            <i class="fa-regular fa-calendar text-orange-700 mr-1"></i>
                             {{ optional($post->published_at)->format('d/m/Y') }}
                         </span>
                         <span>
-                            <i class="fa-regular fa-eye text-green-700 mr-1"></i>
+                            <i class="fa-regular fa-eye text-orange-700 mr-1"></i>
                             {{ number_format($post->view_count) }} lượt xem
                         </span>
                     </div>
 
                     @if($post->summary)
                         <p class="text-base text-gray-600 leading-relaxed
-                                  pl-4 border-l-4 border-green-700 bg-gray-50 rounded-r-lg py-3 pr-3 mb-0"
+                                  pl-4 border-l-4 border-orange-700 bg-gray-50 rounded-r-lg py-3 pr-3 mb-0"
                            itemprop="description">{{ $post->summary }}</p>
                     @endif
                 </header>
@@ -66,10 +66,10 @@
 
                 @if($post->tags)
                     <div class="flex flex-wrap gap-2 px-8 md:px-10 pb-6 items-center text-sm text-gray-500">
-                        <i class="fa-solid fa-hashtag text-green-700"></i>
+                        <i class="fa-solid fa-hashtag text-orange-700"></i>
                         @foreach(array_filter(array_map('trim', explode(',', $post->tags))) as $tag)
                             <span class="bg-gray-100 text-gray-600 px-3 py-1 rounded-full text-xs
-                                         hover:bg-green-700 hover:text-white transition-colors cursor-default">
+                                         hover:bg-orange-700 hover:text-white transition-colors cursor-default">
                                 {{ $tag }}
                             </span>
                         @endforeach
@@ -80,12 +80,12 @@
                     <span>Chia sẻ:</span>
                     <a href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode(url()->current()) }}"
                        target="_blank" rel="noopener"
-                       class="inline-flex items-center gap-1.5 bg-[#1877f2] text-white px-4 py-1.5 rounded-md text-xs font-semibold hover:opacity-90 transition-opacity">
+                       class="inline-flex items-center gap-1.5 bg-[var(--color-social-facebook)] text-white px-4 py-1.5 rounded-md text-xs font-semibold hover:opacity-90 transition-opacity">
                         <i class="fa-brands fa-facebook-f"></i> Facebook
                     </a>
                     <a href="https://twitter.com/intent/tweet?url={{ urlencode(url()->current()) }}&text={{ urlencode($post->title) }}"
                        target="_blank" rel="noopener"
-                       class="inline-flex items-center gap-1.5 bg-[#1da1f2] text-white px-4 py-1.5 rounded-md text-xs font-semibold hover:opacity-90 transition-opacity">
+                       class="inline-flex items-center gap-1.5 bg-[var(--color-social-x)] text-white px-4 py-1.5 rounded-md text-xs font-semibold hover:opacity-90 transition-opacity">
                         <i class="fa-brands fa-twitter"></i> Twitter
                     </a>
                 </div>
@@ -96,30 +96,30 @@
                 @if($post->services->isNotEmpty())
                     <div class="px-6 md:px-10 pb-8 border-t border-gray-100 pt-6">
                         <h2 class="text-lg font-bold text-gray-900 mb-5">
-                            <i class="fa-solid fa-wand-magic-sparkles text-green-700 mr-2"></i>
+                            <i class="fa-solid fa-wand-magic-sparkles text-orange-700 mr-2"></i>
                             Dịch vụ liên quan
                         </h2>
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             @foreach($post->services->where('is_active', true) as $service)
                                 <a href="{{ url($service->slug . '.html') }}"
-                                   class="group flex gap-3 bg-gray-50 rounded-xl p-3 hover:bg-green-50 transition-colors">
+                                   class="group flex gap-3 bg-gray-50 rounded-xl p-3 hover:bg-orange-50 transition-colors">
                                     @if($service->image)
                                         <img src="{{ asset($service->image) }}"
                                              alt="{{ $service->name }}"
                                              loading="lazy"
                                              class="w-20 h-14 object-cover rounded-lg shrink-0">
                                     @else
-                                        <div class="w-20 h-14 bg-gradient-to-br from-green-50 to-green-100 rounded-lg shrink-0 flex items-center justify-center">
-                                            <i class="fa-solid fa-wand-magic-sparkles text-green-300"></i>
+                                        <div class="w-20 h-14 bg-[var(--color-brand-50)] rounded-lg shrink-0 flex items-center justify-center">
+                                            <i class="fa-solid fa-wand-magic-sparkles text-orange-300"></i>
                                         </div>
                                     @endif
                                     <div class="flex-1 min-w-0">
                                         <span class="block text-sm font-semibold text-gray-800 leading-snug
-                                                     group-hover:text-green-700 transition-colors line-clamp-2 mb-1">
+                                                     group-hover:text-orange-700 transition-colors line-clamp-2 mb-1">
                                             {{ $service->name }}
                                         </span>
                                         @if($service->price > 0)
-                                            <span class="text-xs text-green-700 font-semibold">
+                                            <span class="text-xs text-orange-700 font-semibold">
                                                 {{ number_format($service->price) }}₫
                                             </span>
                                         @else
@@ -141,7 +141,7 @@
 
                 @if($related->isNotEmpty())
                     <div class="bg-white rounded-2xl shadow-sm p-6">
-                        <h2 class="text-sm font-bold text-gray-900 pb-3 border-b-2 border-green-700 mb-4">
+                        <h2 class="text-sm font-bold text-gray-900 pb-3 border-b-2 border-orange-700 mb-4">
                             Bài viết liên quan
                         </h2>
                         <ul class="space-y-4">
@@ -157,7 +157,7 @@
                                         @endif
                                         <div class="flex-1 min-w-0">
                                             <span class="block text-sm font-semibold text-gray-800 leading-snug
-                                                         group-hover:text-green-700 transition-colors line-clamp-2 mb-1">
+                                                         group-hover:text-orange-700 transition-colors line-clamp-2 mb-1">
                                                 {{ Str::limit($item->title, 55) }}
                                             </span>
                                             <span class="text-xs text-gray-400">

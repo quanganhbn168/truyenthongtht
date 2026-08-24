@@ -3,7 +3,7 @@
 namespace App\Providers;
 
 use App\Observers\MediaImageObserver;
-use Awcodes\Curator\Models\Media;
+use App\Models\CuratorMedia;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -12,8 +12,7 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
-        Media::observe(MediaImageObserver::class);
+        CuratorMedia::observe(MediaImageObserver::class);
     }
 }
-
 

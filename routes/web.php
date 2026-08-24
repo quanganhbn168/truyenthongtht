@@ -24,25 +24,34 @@ Route::get('/sitemap.xml', [App\Http\Controllers\SitemapController::class, 'inde
 
 // Listing pages
 Route::get('/tin-tuc.html',   [PostController::class,    'index'])->name('posts.index');
-Route::get('/tin-tuc',   [PostController::class,    'index']);
+Route::permanentRedirect('/tin-tuc', '/tin-tuc.html');
 Route::get('/dich-vu.html', [ServiceController::class, 'index'])->name('services.index');
-Route::get('/dich-vu',   [ServiceController::class, 'index']);
+Route::permanentRedirect('/dich-vu', '/dich-vu.html');
 Route::get('/san-pham.html',  [ProductController::class, 'index'])->name('products.index');
-Route::get('/san-pham',  [ProductController::class, 'index']);
+Route::permanentRedirect('/san-pham', '/san-pham.html');
 Route::get('/du-an.html', [ProjectController::class, 'index'])->name('projects.index');
-Route::get('/du-an',     [ProjectController::class, 'index']);
+Route::permanentRedirect('/du-an', '/du-an.html');
 
 // Static pages (định nghĩa trước catch-all)
 Route::get('/gioi-thieu.html', [AboutController::class, 'index'])->name('about');
-Route::get('/gioi-thieu',      [AboutController::class, 'index']);
+Route::permanentRedirect('/gioi-thieu', '/gioi-thieu.html');
 
 // Contact & Quote forms
 Route::get('/lien-he.html', [ContactController::class, 'index'])->name('contact.index');
+Route::permanentRedirect('/lien-he', '/lien-he.html');
 Route::post('/lien-he', [ContactController::class, 'store'])->name('contact.store');
 
 Route::get('/bao-gia.html', [QuoteController::class, 'index'])->name('quote.index');
-Route::get('/bao-gia',      [QuoteController::class, 'index']);
+Route::permanentRedirect('/bao-gia', '/bao-gia.html');
 Route::post('/bao-gia', [QuoteController::class, 'store'])->name('quote.store');
+
+// Legacy course landing URLs → canonical, human-readable URLs.
+Route::permanentRedirect('/khoa-hoc-chup-anh-.html', '/khoa-hoc-chup-anh.html');
+Route::permanentRedirect('/khoa-hoc-chup-anh-', '/khoa-hoc-chup-anh.html');
+Route::permanentRedirect('/khoa-hoc-chup-anh--1.html', '/khoa-hoc-chup-anh.html');
+Route::permanentRedirect('/khoa-hoc-chup-anh--1', '/khoa-hoc-chup-anh.html');
+Route::permanentRedirect('/khoa-hoc-chup-anh-bang-dien-thoai-1.html', '/khoa-hoc-chup-anh-bang-dien-thoai.html');
+Route::permanentRedirect('/khoa-hoc-chup-anh-bang-dien-thoai-1', '/khoa-hoc-chup-anh-bang-dien-thoai.html');
 
 /*
 |--------------------------------------------------------------------------

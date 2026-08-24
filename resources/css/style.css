@@ -1,0 +1,586 @@
+/* ========================================================================
+   THT MEDIA DESIGN SYSTEM
+   Tokens và component dùng chung cho toàn bộ frontend.
+   ======================================================================== */
+
+@font-face {
+    font-family: 'Montserrat';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url('/fonts/montserrat/montserrat-400.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Montserrat';
+    font-style: normal;
+    font-weight: 500;
+    font-display: swap;
+    src: url('/fonts/montserrat/montserrat-500.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Montserrat';
+    font-style: normal;
+    font-weight: 600;
+    font-display: swap;
+    src: url('/fonts/montserrat/montserrat-600.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Montserrat';
+    font-style: normal;
+    font-weight: 700;
+    font-display: swap;
+    src: url('/fonts/montserrat/montserrat-700.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Montserrat';
+    font-style: normal;
+    font-weight: 800;
+    font-display: swap;
+    src: url('/fonts/montserrat/montserrat-800.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Montserrat';
+    font-style: italic;
+    font-weight: 400;
+    font-display: swap;
+    src: url('/fonts/montserrat/montserrat-400-italic.ttf') format('truetype');
+}
+
+:root {
+    /* Primitive colours: the only place colour values are declared. */
+    --color-white: #ffffff;
+    --color-black: #000000;
+
+    /* Brand */
+    --color-brand-primary: #f47b20;
+    --color-brand-primary-dark: #c95111;
+    --color-brand-primary-mid: #e46316;
+    /* Legacy "lime" aliases resolve to the orange primary, not a second brand colour. */
+    --color-brand-lime: var(--color-brand-primary);
+    --color-brand-lime-light: var(--color-brand-300);
+    --color-brand-orange: var(--color-brand-primary);
+    --color-brand-orange-dark: var(--color-brand-primary-dark);
+    --color-brand-orange-light: #fff0e5;
+    --color-brand-gold: #f6b73c;
+    --color-accent: #e53935;
+    --color-accent-dark: #b71c1c;
+
+    /* Brand scale: orange, used by primary components and states. */
+    --color-brand-50: #fff7ed;
+    --color-brand-100: #ffedd5;
+    --color-brand-200: #fed7aa;
+    --color-brand-300: #fdba74;
+    --color-brand-400: #fb923c;
+    --color-brand-500: #f47b20;
+    --color-brand-600: #e46316;
+    --color-brand-700: #c95111;
+    --color-brand-800: #9f4013;
+    --color-brand-900: #7f3415;
+    --color-brand-950: #431407;
+
+    /* Supporting green scale. Green utilities must remain green. */
+    --color-support-green-50: #f0fdf4;
+    --color-support-green-100: #dcfce7;
+    --color-support-green-200: #bbf7d0;
+    --color-support-green-300: #86efac;
+    --color-support-green-400: #4ade80;
+    --color-support-green-500: #22c55e;
+    --color-support-green-600: #16a34a;
+    --color-support-green-700: #15803d;
+    --color-support-green-800: #166534;
+    --color-support-green-900: #14532d;
+    --color-lime-400: var(--color-brand-400);
+    --color-lime-500: var(--color-brand-500);
+    --color-orange-50: #fff7ed;
+    --color-orange-100: #ffedd5;
+    --color-orange-200: #fed7aa;
+    --color-orange-300: #fdba74;
+    --color-orange-400: #fb923c;
+    --color-orange-500: #f47b20;
+    --color-orange-600: #e46316;
+    --color-orange-700: #c95111;
+    --color-orange-800: #9f4013;
+    --color-orange-900: #7f3415;
+
+    /* Neutral scale */
+    --color-neutral-50: #f9fafb;
+    --color-neutral-100: #f3f4f6;
+    --color-neutral-200: #e5e7eb;
+    --color-neutral-300: #d1d5db;
+    --color-neutral-400: #9ca3af;
+    --color-neutral-500: #6b7280;
+    --color-neutral-600: #4b5563;
+    --color-neutral-700: #374151;
+    --color-neutral-800: #1f2937;
+    --color-neutral-900: #111827;
+
+    /* Supporting semantic colours */
+    --color-info-50: #eff6ff;
+    --color-info-100: #dbeafe;
+    --color-info-500: #3b82f6;
+    --color-info-600: #2563eb;
+    --color-info-700: #1d4ed8;
+    --color-info-900: #1e3a8a;
+    --color-warning-50: #fffbeb;
+    --color-warning-100: #fef3c7;
+    --color-warning-400: #fbbf24;
+    --color-warning-500: #f59e0b;
+    --color-warning-700: #b45309;
+    --color-accent-50: #fef2f2;
+    --color-accent-100: #fee2e2;
+    --color-accent-200: #fecaca;
+    --color-accent-300: #fca5a5;
+    --color-accent-400: #f87171;
+    --color-accent-500: #ef4444;
+    --color-accent-600: #dc2626;
+    --color-accent-700: #b91c1c;
+    --color-accent-800: #991b1b;
+    --color-accent-900: #7f1d1d;
+    --color-social-facebook: #1877f2;
+    --color-social-x: #1da1f2;
+    --color-social-youtube: #ff0000;
+    --color-social-zalo: #0068ff;
+
+    /* Surface and text */
+    --color-text-strong: var(--color-neutral-900);
+    --color-text: var(--color-neutral-700);
+    --color-text-muted: var(--color-neutral-500);
+    --color-text-subtle: var(--color-neutral-400);
+    --color-surface: var(--color-white);
+    --color-surface-subtle: #f8faf8;
+    --color-surface-muted: var(--color-neutral-100);
+    --color-surface-warm: #fff8f5;
+    --color-surface-cool: #f7faff;
+    --color-surface-dark: #1a1a2e;
+    --color-border: var(--color-neutral-200);
+    --color-border-subtle: #f0f0f0;
+    --color-overlay-dark: color-mix(in srgb, var(--color-brand-primary-dark) 85%, transparent);
+    --color-overlay-black: color-mix(in srgb, var(--color-black) 85%, transparent);
+    --color-on-brand: var(--color-white);
+
+    /* Typography */
+    --font-brand-sans: 'Montserrat', system-ui, -apple-system, sans-serif;
+    --font-sans: var(--font-brand-sans);
+    --font-display: var(--font-brand-sans);
+    --text-heading: clamp(2rem, 4vw, 3rem);
+    --line-height-body: 1.6;
+
+    /* Layout */
+    --space-1: 0.25rem;
+    --space-2: 0.5rem;
+    --space-3: 0.75rem;
+    --space-4: 1rem;
+    --space-6: 1.5rem;
+    --space-8: 2rem;
+    --radius-sm: 0.5rem;
+    --radius-md: 0.75rem;
+    --radius-lg: 1rem;
+    --radius-pill: 9999px;
+    --transition-fast: 160ms ease;
+    --transition-base: 280ms ease;
+
+    /* Flat surfaces: borders provide separation instead of elevation. */
+    --shadow-sm: none;
+    --shadow-card: none;
+    --shadow-hover: none;
+    --shadow-accent: none;
+
+    /* Derived values */
+    --gradient-brand: var(--color-brand-primary);
+    --gradient-brand-vertical: var(--color-brand-primary);
+    --gradient-hero: color-mix(in srgb, var(--color-brand-primary-dark) 65%, transparent);
+
+    /* Compatibility aliases: loại dần khi sửa CSS cũ. */
+    --clr-primary: var(--color-brand-primary);
+    --clr-primary-dark: var(--color-brand-primary-dark);
+    --clr-primary-mid: var(--color-brand-primary-mid);
+    --clr-lime: var(--color-brand-lime);
+    --clr-lime-light: var(--color-brand-lime-light);
+    --clr-accent: var(--color-accent);
+    --clr-accent-dark: var(--color-accent-dark);
+    --clr-dark: var(--color-text-strong);
+    --clr-text: var(--color-text);
+    --clr-muted: var(--color-text-muted);
+    --clr-border: var(--color-border);
+    --clr-bg: var(--color-surface-subtle);
+    --clr-bg-card: var(--color-surface);
+    --grad-brand: var(--gradient-brand);
+    --grad-brand-v: var(--gradient-brand-vertical);
+    --grad-hero: var(--gradient-hero);
+    --color-primary: var(--color-brand-primary);
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+    font-size: 16px;
+}
+
+body {
+    margin: 0;
+    background: var(--color-surface);
+    color: var(--color-text);
+    font-family: var(--font-sans);
+    line-height: var(--line-height-body);
+}
+
+img {
+    display: block;
+    height: auto;
+    max-width: 100%;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+address {
+    font-style: normal;
+}
+
+::selection {
+    background: var(--color-brand-primary);
+    color: var(--color-on-brand);
+}
+
+.section-heading {
+    color: var(--color-text-strong);
+    font-family: var(--font-display);
+    font-size: var(--text-heading);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+    margin-bottom: var(--space-6);
+}
+
+.section-heading .h-light {
+    color: var(--color-brand-primary);
+    font-style: normal;
+    font-weight: 400;
+}
+
+.section-heading.center {
+    text-align: center;
+}
+
+.brand-badge {
+    align-items: center;
+    background: transparent;
+    border: 0;
+    border-radius: 0;
+    color: var(--color-brand-primary);
+    display: inline-flex;
+    font-size: 0.75rem;
+    font-weight: 800;
+    gap: var(--space-2);
+    letter-spacing: 0.15em;
+    margin-bottom: 1.25rem;
+    padding: 0;
+    position: relative;
+    text-transform: uppercase;
+}
+
+.brand-badge::before {
+    background-color: var(--color-brand-primary);
+    content: '';
+    display: block;
+    height: 2px;
+    width: 1.5rem;
+}
+
+.brand-badge.center::before,
+.brand-badge.center::after {
+    display: none;
+}
+
+.tht-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    transition: transform var(--transition-base), box-shadow var(--transition-base);
+}
+
+.tht-card:hover {
+    box-shadow: var(--shadow-hover);
+    transform: translateY(-0.375rem);
+}
+
+.btn-brand,
+.btn-outline-brand {
+    align-items: center;
+    display: inline-flex;
+    font-size: 0.875rem;
+    font-weight: 700;
+    gap: var(--space-2);
+    transition: background var(--transition-fast), color var(--transition-fast), transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.btn-brand {
+    background: var(--color-brand-primary);
+    border-radius: 0;
+    box-shadow: 0 4px 16px rgb(26 107 46 / 25%);
+    color: var(--color-on-brand);
+    padding: 0.65rem 1.5rem;
+}
+
+.btn-brand:hover {
+    background: var(--color-brand-primary-dark);
+    box-shadow: 0 8px 24px rgb(26 107 46 / 35%);
+    transform: translateY(-2px);
+}
+
+.btn-outline-brand {
+    background: transparent;
+    border: 2px solid var(--color-brand-primary);
+    border-radius: 0;
+    color: var(--color-brand-primary);
+    padding: 0.6rem 1.4rem;
+}
+
+.btn-outline-brand:hover {
+    background: var(--color-brand-primary);
+    color: var(--color-on-brand);
+}
+
+/* ── Semantic page components: About, Contact and Quote ─────────────── */
+.page-hero {
+    background: transparent;
+}
+
+.page-hero__overlay {
+    display: none;
+}
+
+.page-hero__accent {
+    display: none;
+}
+
+.page-hero__title {
+    color: var(--color-white);
+}
+
+.page-breadcrumb-strip {
+    background: var(--color-surface);
+    border-color: var(--color-border-subtle);
+}
+
+.page-form-section {
+    background: var(--color-surface-muted);
+}
+
+.page-form-section__cap {
+    background: var(--color-surface-dark);
+}
+
+.page-form-card,
+.page-card {
+    background: var(--color-surface);
+    border-color: var(--color-border-subtle);
+}
+
+.page-form-heading,
+.page-heading {
+    color: var(--color-text-strong);
+}
+
+.page-form-intro,
+.page-copy,
+.form-note {
+    color: var(--color-text-muted);
+}
+
+.form-label {
+    color: var(--color-text);
+}
+
+.form-required,
+.form-error {
+    color: var(--color-accent-500);
+}
+
+.form-control {
+    background: var(--color-surface-muted);
+    border-color: var(--color-border);
+    color: var(--color-text);
+}
+
+.form-control::placeholder {
+    color: var(--color-text-subtle);
+}
+
+.form-control:focus {
+    background: var(--color-surface);
+    border-color: var(--color-brand-primary);
+    outline: 2px solid color-mix(in srgb, var(--color-brand-primary) 28%, transparent);
+    outline-offset: 0;
+}
+
+.alert-success {
+    background: var(--color-support-green-50);
+    border-color: var(--color-support-green-200);
+    color: var(--color-support-green-700);
+}
+
+.panel-brand {
+    background: var(--color-brand-primary-dark);
+    color: var(--color-white);
+}
+
+.panel-brand__copy {
+    color: color-mix(in srgb, var(--color-white) 76%, transparent);
+}
+
+.panel-brand__icon {
+    background: color-mix(in srgb, var(--color-white) 12%, transparent);
+    border-color: color-mix(in srgb, var(--color-white) 18%, transparent);
+    color: var(--color-brand-200);
+}
+
+.panel-brand__link {
+    color: color-mix(in srgb, var(--color-white) 76%, transparent);
+}
+
+.panel-brand__link:hover,
+.panel-brand__hotline:hover {
+    color: var(--color-white);
+}
+
+.panel-brand__divider {
+    border-color: color-mix(in srgb, var(--color-white) 18%, transparent);
+}
+
+.panel-brand__hotline {
+    color: var(--color-white);
+}
+
+.panel-brand__label {
+    border-color: var(--color-brand-300);
+    color: var(--color-brand-200);
+}
+
+.panel-brand__decor--primary {
+    background: color-mix(in srgb, var(--color-brand-primary) 32%, transparent);
+}
+
+.panel-brand__decor--support {
+    background: color-mix(in srgb, var(--color-brand-300) 24%, transparent);
+}
+
+.contact-icon--brand { color: var(--color-brand-primary); }
+.contact-icon--info { color: var(--color-info-500); }
+.contact-icon--warning { color: var(--color-warning-500); }
+
+.social-link {
+    background: color-mix(in srgb, var(--color-white) 12%, transparent);
+    color: color-mix(in srgb, var(--color-white) 68%, transparent);
+}
+
+.social-link--facebook:hover { background: var(--color-social-facebook); }
+.social-link--youtube:hover { background: var(--color-social-youtube); }
+.social-link--zalo:hover { background: var(--color-social-zalo); }
+.social-link:hover { color: var(--color-white); }
+
+.about-image-frame { border-color: var(--color-brand-primary); }
+.about-role,
+.about-brand-text { color: var(--color-brand-primary); }
+.about-quote-mark { color: var(--color-brand-100); }
+
+.about-feature-icon--brand {
+    background: var(--color-brand-50);
+    color: var(--color-brand-primary);
+}
+
+.about-feature-icon--info {
+    background: var(--color-info-50);
+    color: var(--color-info-600);
+}
+
+.section-kicker {
+    background: var(--color-brand-100);
+    color: var(--color-brand-700);
+}
+
+.section-kicker--info {
+    background: var(--color-info-100);
+    color: var(--color-info-700);
+}
+
+.about-value-icon--creative {
+    background: var(--color-warning-50);
+    color: var(--color-warning-500);
+}
+
+.about-value-icon--care {
+    background: var(--color-info-50);
+    color: var(--color-info-500);
+}
+
+.about-value-icon--quality {
+    background: var(--color-brand-50);
+    color: var(--color-brand-primary);
+}
+
+.about-decor--brand { background: var(--color-brand-primary); }
+.about-decor--info { background: var(--color-info-500); }
+.page-map-placeholder { background: var(--color-neutral-200); }
+.brand-solid-overlay { background: color-mix(in srgb, var(--color-brand-primary-dark) 88%, transparent); }
+.projects-list-hero__overlay { background: color-mix(in srgb, var(--color-black) 68%, transparent); }
+.project-detail-overlay { background: color-mix(in srgb, var(--color-black) 62%, transparent); }
+
+.breadcrumb-nav {
+    padding: var(--space-3) 0;
+}
+
+.breadcrumb-list {
+    align-items: center;
+    color: var(--color-text-muted);
+    display: flex;
+    flex-wrap: wrap;
+    font-size: 0.85rem;
+    gap: var(--space-1);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.breadcrumb-link {
+    color: var(--color-text-muted);
+    transition: color var(--transition-fast);
+}
+
+.breadcrumb-link:hover {
+    color: var(--color-accent);
+}
+
+.breadcrumb-sep {
+    color: color-mix(in srgb, var(--color-text-muted) 45%, transparent);
+    font-size: 0.65rem;
+    margin: 0 0.1rem;
+}
+
+.breadcrumb-item.active {
+    color: var(--color-text-strong);
+    font-weight: 500;
+}
+
+.breadcrumb-nav.theme-dark .breadcrumb-list,
+.breadcrumb-nav.theme-dark .breadcrumb-link,
+.breadcrumb-nav.theme-dark .breadcrumb-item.active {
+    color: var(--color-on-brand);
+}
+
+.breadcrumb-nav.theme-dark .breadcrumb-sep {
+    color: rgb(255 255 255 / 40%);
+}

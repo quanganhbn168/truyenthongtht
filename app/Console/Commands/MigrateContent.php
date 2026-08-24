@@ -167,7 +167,12 @@ class MigrateContent extends Command
                         'slug'        => $cat->slug,
                         'parent_id'   => null,
                         'description' => $cat->description ?? null,
+                        'content'     => $this->contentForDetail($cat->content ?? null),
                         'image'       => $cat->image ?? null,
+                        'thumbnail'   => $cat->thumbnail ?? null,
+                        'meta_title'  => $cat->meta_title ?? null,
+                        'meta_description' => $cat->meta_description ?? null,
+                        'keywords'    => $cat->keywords ?? null,
                         'is_active'   => $cat->is_active,
                         'sort_order'  => $cat->sort_order ?? 0,
                         'created_at'  => $cat->created_at,
@@ -198,9 +203,14 @@ class MigrateContent extends Command
                         'slug'        => $cat->slug,
                         'category_id' => $cat->parent_id,
                         'summary'     => $cat->description ?? null,
+                        'content'     => $this->contentForDetail($cat->content ?? null),
                         'image'       => $cat->image ?? null,
+                        'thumbnail'   => $cat->thumbnail ?? null,
+                        'meta_title'  => $cat->meta_title ?? null,
+                        'meta_description' => $cat->meta_description ?? null,
+                        'keywords'    => $cat->keywords ?? null,
                         'price'       => 0,
-                        'view_count'  => 0,
+                        'view_count'  => $cat->view_count ?? 0,
                         'is_active'   => $cat->is_active,
                         'sort_order'  => $cat->sort_order ?? 0,
                         'created_at'  => $cat->created_at,
@@ -275,5 +285,20 @@ class MigrateContent extends Command
             $this->error($e->getTraceAsString());
             return Command::FAILURE;
         }
+    }
+
+    /**
+     * Detail templates already render the record name as the page H1.
+     * Demote the first legacy H1 to avoid duplicate H1 headings after import.
+     */
+    private function contentForDetail(?string $content): ?string
+    {
+        if (! $content) {
+            return $content;
+        }
+
+        $content = preg_replace('/<h1\b[^>]*>/i', '<h2>', $content, 1);
+
+        return preg_replace('/<\/h1>/i', '</h2>', $content, 1);
     }
 }
