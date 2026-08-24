@@ -60,10 +60,11 @@ return [
             'report' => false,
         ],
 
-        // Ghi thẳng vào public/ — không cần storage:link
+        // Lưu trong storage/app/public; public/upload là symlink/junction công khai.
+        // Giữ URL /upload/... để không làm thay đổi dữ liệu media hiện có.
         'public_uploads' => [
             'driver'     => 'local',
-            'root'       => public_path(),
+            'root'       => storage_path('app/public'),
             'url'        => env('APP_URL', 'http://localhost'),
             'visibility' => 'public',
             'throw'      => false,
@@ -84,6 +85,7 @@ return [
 
     'links' => [
         public_path('storage') => storage_path('app/public'),
+        public_path('upload') => storage_path('app/public/upload'),
     ],
 
 ];
