@@ -89,11 +89,11 @@
 @endphp
 <section class="section-light py-16 md:py-24" aria-label="Giới thiệu về {{ $web->site_name }}">
     <div class="container mx-auto px-4 max-w-7xl">
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
             
             {{-- Image Content (Asymmetric Layout) --}}
-            <div data-aos="fade-right" class="lg:col-span-6 relative z-10">
-                 <div class="relative w-full aspect-[4/5] sm:aspect-square lg:aspect-[4/5] max-w-[500px] mx-auto lg:mr-auto">
+            <div data-aos="fade-right" class="relative z-10">
+                 <div class="relative w-full aspect-[4/3] mx-auto">
                      {{-- Offset Frame (Khung lệch) --}}
                      <div class="absolute -inset-4 md:-inset-6 border border-gray-200 z-0 transform translate-x-4 translate-y-4"></div>
                      
@@ -130,7 +130,7 @@
             </div>
             
             {{-- Text Content (Editorial Layout) --}}
-            <div data-aos="fade-left" data-aos-delay="100" class="lg:col-span-6 lg:pl-10 xl:pl-16">
+            <div data-aos="fade-left" data-aos-delay="100" class="lg:pl-10 xl:pl-16">
                 <span class="brand-badge hidden md:inline-flex">Câu chuyện của chúng tôi</span>
                 
                 <h2 class="section-heading mt-2">
