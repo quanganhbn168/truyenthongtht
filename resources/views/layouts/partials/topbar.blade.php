@@ -23,6 +23,12 @@
                 {{ $mainPhone }}
             </a>
             @endif
+            @if($business->main_phone_2)
+            <a href="tel:{{ preg_replace('/[^0-9+]/', '', $business->main_phone_2) }}" class="topbar-info topbar-link topbar-phone">
+                <i class="fa-solid fa-phone" aria-hidden="true"></i>
+                {{ $business->main_phone_2 }}
+            </a>
+            @endif
         </div>
     </div>
 </div>

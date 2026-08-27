@@ -4,9 +4,11 @@
 {{-- ── Premium Hero Header ── --}}
 @php
     $hasBanner = isset($category) && $category && $category->banner;
-    $bannerUrl = $hasBanner ? asset($category->banner) : null;
+    $bannerUrl = $hasBanner
+        ? asset($category->banner)
+        : ($page->projects_banner ? asset('storage/'.$page->projects_banner) : $commonBannerUrl);
 @endphp
-<div class="projects-hero relative overflow-hidden" @if($hasBanner) style="--projects-hero-image: url('{{ $bannerUrl }}')" @endif>
+<div class="projects-hero relative overflow-hidden" style="--projects-hero-image: url('{{ $bannerUrl }}')">
     <!-- Background Decor -->
     <div class="absolute inset-0 z-0">
         <div class="absolute top-0 right-0 -mt-20 -mr-20 w-96 h-96 bg-red-600/20 rounded-full blur-[100px]"></div>

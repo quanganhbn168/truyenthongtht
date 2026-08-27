@@ -20,22 +20,28 @@
                     {{ config('site.description', 'THT Media - Cung cấp giải pháp truyền thông toàn diện, sáng tạo và chuyên nghiệp cho doanh nghiệp.') }}
                 </p>
                 <div class="space-y-3 text-sm">
-                    @if(config('site.address'))
+                    @if($business->main_address)
                     <p class="flex items-start gap-3">
                         <i class="fa-solid fa-location-dot mt-1 text-orange-500 w-4 text-center"></i>
-                        <span class="flex-1">{{ config('site.address') }}</span>
+                        <span class="flex-1">{{ $business->main_address }}</span>
                     </p>
                     @endif
-                    @if(config('site.phone'))
+                    @if($business->main_phone)
                     <p class="flex items-center gap-3">
                         <i class="fa-solid fa-phone text-orange-500 w-4 text-center"></i>
-                        <a href="tel:{{ config('site.phone') }}" class="hover:text-white transition-colors">{{ config('site.phone') }}</a>
+                        <a href="tel:{{ preg_replace('/[^0-9+]/', '', $business->main_phone) }}" class="hover:text-white transition-colors">{{ $business->main_phone }}</a>
                     </p>
                     @endif
-                    @if(config('site.email'))
+                    @if($business->main_phone_2)
+                    <p class="flex items-center gap-3">
+                        <i class="fa-solid fa-phone text-orange-500 w-4 text-center"></i>
+                        <a href="tel:{{ preg_replace('/[^0-9+]/', '', $business->main_phone_2) }}" class="hover:text-white transition-colors">{{ $business->main_phone_2 }}</a>
+                    </p>
+                    @endif
+                    @if($business->main_email)
                     <p class="flex items-center gap-3">
                         <i class="fa-solid fa-envelope text-orange-500 w-4 text-center"></i>
-                        <a href="mailto:{{ config('site.email') }}" class="hover:text-white transition-colors">{{ config('site.email') }}</a>
+                        <a href="mailto:{{ $business->main_email }}" class="hover:text-white transition-colors">{{ $business->main_email }}</a>
                     </p>
                     @endif
                 </div>
@@ -85,18 +91,18 @@
             <div class="col-span-1 sm:col-span-2 lg:col-span-1">
                 <h3 class="text-white font-bold text-base uppercase tracking-wider mb-5">Kết nối với THT</h3>
                 <div class="flex flex-wrap gap-3 mb-8">
-                    @if(config('site.facebook'))
-                    <a href="{{ config('site.facebook') }}" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-gray-400 hover:bg-[var(--color-social-facebook)] hover:text-white transition-colors" aria-label="Facebook">
+                    @if($web->facebook_url)
+                    <a href="{{ $web->facebook_url }}" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-gray-400 hover:bg-[var(--color-social-facebook)] hover:text-white transition-colors" aria-label="Facebook">
                         <i class="fa-brands fa-facebook-f text-lg" aria-hidden="true"></i>
                     </a>
                     @endif
-                    @if(config('site.youtube'))
-                    <a href="{{ config('site.youtube') }}" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-gray-400 hover:bg-[var(--color-social-youtube)] hover:text-white transition-colors" aria-label="YouTube">
+                    @if($web->youtube_url)
+                    <a href="{{ $web->youtube_url }}" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-gray-400 hover:bg-[var(--color-social-youtube)] hover:text-white transition-colors" aria-label="YouTube">
                         <i class="fa-brands fa-youtube text-lg" aria-hidden="true"></i>
                     </a>
                     @endif
-                    @if(config('site.zalo'))
-                    <a href="{{ config('site.zalo') }}" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-gray-400 hover:bg-[var(--color-social-zalo)] hover:text-white transition-colors" aria-label="Zalo">
+                    @if($web->zalo_number)
+                    <a href="https://zalo.me/{{ preg_replace('/[^0-9]/', '', $web->zalo_number) }}" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-gray-400 hover:bg-[var(--color-social-zalo)] hover:text-white transition-colors" aria-label="Zalo">
                         <i class="fa-solid fa-comment-dots text-lg" aria-hidden="true"></i>
                     </a>
                     @endif

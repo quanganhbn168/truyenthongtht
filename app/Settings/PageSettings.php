@@ -10,6 +10,23 @@ class PageSettings extends Settings
     public string $about_banner;           // Ảnh banner hero /gioi-thieu.html
     public string $about_title;            // Tiêu đề hero
     public string $about_description;     // Mô tả ngắn trang giới thiệu
+    public string $about_ceo_image;        // Ảnh người sáng lập
+    public string $about_ceo_name;
+    public string $about_ceo_role;
+    public string $about_ceo_heading;
+    public string $about_ceo_greeting;
+    public string $about_ceo_content;
+    public string $about_ceo_signature;
+    public string $about_values_kicker;
+    public string $about_values_title;
+    public array $about_core_values;
+    public string $about_team_kicker;
+    public string $about_team_title;
+    public string $about_team_content;
+    public array $about_team_stats;
+    public string $about_cta_title;
+    public string $about_cta_description;
+    public string $about_cta_button_label;
 
     // Trang Tin tức
     public string $news_banner;

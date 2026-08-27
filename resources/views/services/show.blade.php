@@ -1,10 +1,20 @@
 @extends('layouts.master')
 
+@php
+    $serviceMainPhone = $business->main_phone ?: config('site.phone', '');
+    $serviceSecondaryPhone = $business->main_phone_2 ?? '';
+    $serviceMainPhoneHref = preg_replace('/[^0-9+]/', '', $serviceMainPhone);
+    $serviceSecondaryPhoneHref = preg_replace('/[^0-9+]/', '', $serviceSecondaryPhone);
+    $serviceZaloNumber = preg_replace('/[^0-9]/', '', $web->zalo_number ?? '');
+    $serviceZaloUrl = $serviceZaloNumber ? 'https://zalo.me/'.$serviceZaloNumber : null;
+    $serviceHeroImage = $service->image ? asset($service->image) : $commonBannerUrl;
+@endphp
+
 @section('content')
 <div class="service-page">
 
 {{-- ── HERO SECTION ── --}}
-<section class="service-hero" style="background-image: url('{{ $service->image ? asset($service->image) : asset('assets/images/placeholder-lg.jpg') }}');">
+<section class="service-hero" style="background-image: url('{{ $serviceHeroImage }}');">
     <div class="service-hero-content container mx-auto px-4 max-w-7xl">
         <div class="max-w-3xl">
             <h1 class="text-3xl md:text-4xl lg:text-5xl font-extrabold leading-tight mb-6 text-white drop-shadow-lg" itemprop="name">
@@ -12,7 +22,7 @@
             </h1>
 
             <div class="flex flex-wrap items-center gap-6">
-                <a href="tel:{{ config('site.phone', '') }}" class="inline-flex items-center bg-orange-600 text-white hover:bg-orange-700 px-8 py-4 rounded-full font-bold text-lg shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-1">
+                <a href="tel:{{ $serviceMainPhoneHref }}" class="inline-flex items-center bg-orange-600 text-white hover:bg-orange-700 px-8 py-4 rounded-full font-bold text-lg shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-1">
                     Nhận Tư Vấn Ngay
                 </a>
                 
@@ -212,12 +222,19 @@
                             <h3 class="font-bold text-xl mb-3">Sẵn sàng bắt đầu?</h3>
                             <p class="text-orange-100 text-sm mb-6 leading-relaxed">Đội ngũ chuyên gia THT Media luôn sẵn lòng tư vấn giải pháp tối ưu nhất cho doanh nghiệp của bạn.</p>
                             
-                            <a href="tel:{{ config('site.phone', '') }}" class="block w-full bg-white text-orange-700 font-bold py-3 px-4 rounded-xl text-center hover:bg-gray-50 transition-colors shadow-lg hover:shadow-xl hover:-translate-y-0.5 transform mb-3">
+                            <a href="tel:{{ $serviceMainPhoneHref }}" class="block w-full bg-orange-600 text-white hover:bg-orange-700 font-bold py-3 px-4 rounded-xl text-center transition-colors shadow-lg hover:shadow-xl hover:-translate-y-0.5 transform mb-3">
                                 Gọi tư vấn ngay
                             </a>
-                            <a href="{{ config('site.zalo', '#') }}" target="_blank" class="block w-full bg-[var(--color-social-zalo)] text-white font-bold py-3 px-4 rounded-xl text-center hover:bg-opacity-90 transition-colors shadow-lg">
-                                Nhắn tin Zalo
-                            </a>
+                            @if($serviceSecondaryPhone)
+                                <a href="tel:{{ $serviceSecondaryPhoneHref }}" class="block w-full border border-white/60 text-white font-bold py-3 px-4 rounded-xl text-center hover:bg-white/10 transition-colors mb-3">
+                                    {{ $serviceSecondaryPhone }}
+                                </a>
+                            @endif
+                            @if($serviceZaloUrl)
+                                <a href="{{ $serviceZaloUrl }}" target="_blank" rel="noopener noreferrer" class="block w-full bg-[var(--color-social-zalo)] text-white font-bold py-3 px-4 rounded-xl text-center hover:bg-opacity-90 transition-colors shadow-lg">
+                                    Nhắn tin Zalo
+                                </a>
+                            @endif
                         </div>
                     </div>
 
@@ -235,12 +252,6 @@
                                 <span>
                                     <strong class="block text-gray-900">Danh mục</strong>
                                     {{ optional($category)->name ?? 'Chưa phân loại' }}
-                                </span>
-                            </li>
-                            <li>
-                                <span>
-                                    <strong class="block text-gray-900">Lượt quan tâm</strong>
-                                    {{ number_format($service->view_count) }} lượt xem
                                 </span>
                             </li>
                         </ul>

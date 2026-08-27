@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Intro;
 use App\Settings\PageSettings;
-use App\Settings\WebsiteSettings;
 use Illuminate\View\View;
 
 class AboutController extends Controller
@@ -22,12 +21,24 @@ class AboutController extends Controller
         $values    = $intros->firstWhere('subtitle', 'Những gì chúng tôi cam kết');
         $whyUs     = $intros->whereIn('subtitle', ['Chúng tôi là ai', 'Tại sao chọn chúng tôi']);
 
+        $page = app(PageSettings::class);
+        $aboutValues = array_values(array_filter(
+            $page->about_core_values ?? [],
+            fn (mixed $value): bool => is_array($value) && filled($value['title'] ?? null),
+        ));
+        $aboutTeamStats = array_values(array_filter(
+            $page->about_team_stats ?? [],
+            fn (mixed $value): bool => is_array($value) && filled($value['value'] ?? null),
+        ));
+
         return view('pages.about', compact(
             'intros',
             'mission',
             'vision',
             'values',
             'whyUs',
+            'aboutValues',
+            'aboutTeamStats',
         ));
     }
 }

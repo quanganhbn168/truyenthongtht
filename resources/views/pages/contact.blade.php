@@ -8,7 +8,7 @@
 {{-- ── Banner Liên Hệ ─────────────────────────────────────────────────── --}}
 <section class="page-hero relative pt-32 pb-20 lg:pt-40 lg:pb-28 overflow-hidden" aria-label="Banner Liên Hệ">
     <div class="absolute inset-0 z-0">
-        <img src="{{ asset('images/og-default.jpg') }}" alt="Liên hệ THT Media" class="w-full h-full object-cover object-center">
+        <img src="{{ $commonBannerUrl }}" alt="Liên hệ THT Media" class="w-full h-full object-cover object-center">
     </div>
     
     <div class="container mx-auto px-4 max-w-5xl relative z-10 text-center" data-aos="fade-up">
@@ -118,7 +118,10 @@
                             </div>
                             <div>
                                 <h4 class="font-semibold mb-1">Đường dây nóng</h4>
-                                <p><a href="tel:{{ str_replace(' ', '', $business->main_phone) }}" class="panel-brand__link transition-colors text-sm font-medium">{{ $business->main_phone }}</a></p>
+                                <p><a href="tel:{{ preg_replace('/[^0-9+]/', '', $business->main_phone) }}" class="panel-brand__link transition-colors text-sm font-medium">{{ $business->main_phone }}</a></p>
+                                @if($business->main_phone_2)
+                                    <p class="mt-1"><a href="tel:{{ preg_replace('/[^0-9+]/', '', $business->main_phone_2) }}" class="panel-brand__link transition-colors text-sm font-medium">{{ $business->main_phone_2 }}</a></p>
+                                @endif
                             </div>
                         </div>
                         @endif

@@ -223,6 +223,8 @@
 }
 
 .header-logo {
+    align-items: center;
+    display: flex;
     flex-shrink: 0;
     height: 100%;
 }
@@ -231,6 +233,7 @@
     display: flex;
     align-items: center;
     height: 100%;
+    padding: 0.25rem 0.5rem;
 }
 
 .logo-text {
@@ -1254,8 +1257,6 @@
 .page-hero {
     position: relative;
     align-items: center;
-    height: calc(100svh - 106px);
-    min-height: 32rem;
     background-size: cover;
     background-position: center;
     display: flex;
@@ -1564,18 +1565,13 @@
 .hero-swiper { position: relative; }
 .hero-swiper .swiper-slide > img,
 .hero-swiper .swiper-slide > video {
-    height: calc(100svh - 106px);
+    aspect-ratio: 16 / 7;
     object-fit: cover;
     width: 100%;
 }
 @media(max-width: 768px) {
     .hero-swiper .swiper-slide > img,
-    .hero-swiper .swiper-slide > video { height: calc(100svh - 60px); }
-
-    .page-hero {
-        height: calc(100svh - 60px);
-        min-height: 28rem;
-    }
+    .hero-swiper .swiper-slide > video { aspect-ratio: 4 / 3; }
 }
 
 .hero-overlay {

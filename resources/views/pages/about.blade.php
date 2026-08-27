@@ -7,7 +7,7 @@
 
 {{-- ── Hero Banner ──────────────────────────────────────────────────────── --}}
 @php
-    $bannerImg = $page->about_banner ? asset('storage/'.$page->about_banner) : asset('images/og-default.jpg');
+    $bannerImg = $page->about_banner ? asset('storage/'.$page->about_banner) : $commonBannerUrl;
     $title     = $page->about_title ?: 'Về THT Media';
 @endphp
 <section class="page-hero relative pt-32 pb-20 lg:pt-40 lg:pb-28 overflow-hidden" aria-label="Banner Giới thiệu">
@@ -35,36 +35,35 @@
             {{-- Ảnh Giám đốc / Founder --}}
             <div class="w-full md:w-5/12 lg:w-4/12 relative" data-aos="fade-right">
                 <div class="relative z-10 rounded-2xl md:rounded-tl-[4rem] md:rounded-br-[4rem] overflow-hidden border-4 border-[var(--color-surface)]">
-                    {{-- Dummy image for CEO - Em có thể thay bằng ảnh thật sau --}}
-                    <img src="{{ asset('images/og-default.jpg') }}" alt="CEO THT Media" class="w-full aspect-[3/4] object-cover filter contrast-125 saturate-50">
+                    <img src="{{ $page->about_ceo_image ? asset('storage/'.$page->about_ceo_image) : asset('images/og-default.jpg') }}" alt="{{ $page->about_ceo_name ?: 'CEO THT Media' }}" class="w-full aspect-[3/4] object-cover filter contrast-125 saturate-50">
                 </div>
                 {{-- Decorative box behind --}}
                 <div class="about-image-frame absolute top-6 -left-6 w-full h-full border-2 rounded-2xl md:rounded-tl-[4rem] md:rounded-br-[4rem] z-0 opacity-50"></div>
                 
                 {{-- Name Tag --}}
                 <div class="page-card absolute -bottom-6 right-4 sm:-right-8 px-6 py-4 rounded-xl z-20 border">
-                    <p class="font-extrabold text-gray-900 text-lg">Nguyễn Văn A</p>
-                    <p class="about-role text-xs font-bold uppercase tracking-widest mt-1">Founder & CEO</p>
+                    <p class="font-extrabold text-gray-900 text-lg">{{ $page->about_ceo_name }}</p>
+                    <p class="about-role text-xs font-bold uppercase tracking-widest mt-1">{{ $page->about_ceo_role }}</p>
                 </div>
             </div>
             
             {{-- Nội dung Thư ngỏ --}}
             <div class="w-full md:w-7/12 lg:w-8/12 mt-8 md:mt-0" data-aos="fade-left">
                 <div class="about-quote-mark text-6xl md:text-8xl leading-none font-serif mb-[-1rem] md:mb-[-2rem] opacity-50 select-none">"</div>
-                <h2 class="text-2xl md:text-3xl lg:text-4xl font-extrabold text-gray-900 mb-6 leading-tight">Thư ngỏ từ người sáng lập</h2>
+                <h2 class="text-2xl md:text-3xl lg:text-4xl font-extrabold text-gray-900 mb-6 leading-tight">{{ $page->about_ceo_heading }}</h2>
                 
                 <div class="text-gray-600 leading-relaxed text-base md:text-lg space-y-5 relative z-10">
-                    <p class="font-medium text-gray-800 text-lg md:text-xl">Kính gửi Quý Khách hàng và Đối tác,</p>
-                    <p>Hành trình của THT Media bắt đầu từ một niềm tin mãnh liệt: Rằng mỗi doanh nghiệp đều mang trong mình một câu chuyện phi thường cần được kể lại. Trong kỷ nguyên số, không thiếu những công cụ truyền thông, nhưng lại quá thiếu những thước phim, những khung hình thật sự chạm đến trái tim khán giả.</p>
-                    <p>Chúng tôi không chỉ cung cấp dịch vụ quay phim hay chụp ảnh; chúng tôi nhận trách nhiệm "đánh thức" linh hồn của thương hiệu bạn. Đối với THT, mỗi dự án dù lớn hay nhỏ đều là một tác phẩm nghệ thuật đòi hỏi sự tận tâm tuyệt đối từ khâu kịch bản cho đến cú máy cuối cùng.</p>
-                    <p>Sự thành công và phát triển vượt bậc của chục trăm đối tác gắn bó cùng THT thời gian qua chính là minh chứng rõ ràng nhất cho lời giải của bài toán "Hiệu quả truyền thông đi đôi với Sáng tạo nghệ thuật".</p>
-                    <p class="font-bold text-gray-900 mt-6 pt-6 border-t border-gray-100">Cảm ơn bạn đã tin tưởng chọn THT Media làm người bạn đồng hành kiến tạo những giá trị đích thực!</p>
+                    @if($page->about_ceo_greeting)
+                        <p class="font-medium text-gray-800 text-lg md:text-xl">{{ $page->about_ceo_greeting }}</p>
+                    @endif
+                    {!! $page->about_ceo_content !!}
                 </div>
                 
-                {{-- Chữ ký (Giả lập) --}}
-                <div class="mt-8 opacity-70">
-                    <p class="about-brand-text text-xl font-semibold tracking-wide">A. Nguyen</p>
-                </div>
+                @if($page->about_ceo_signature)
+                    <div class="mt-8 opacity-70">
+                        <p class="about-brand-text text-xl font-semibold tracking-wide">{{ $page->about_ceo_signature }}</p>
+                    </div>
+                @endif
             </div>
             
         </div>
@@ -80,12 +79,10 @@
                 <div class="about-feature-icon--brand w-16 h-16 rounded-2xl flex items-center justify-center text-3xl mb-6 group-hover:bg-[var(--color-brand-primary)] group-hover:text-[var(--color-white)] transition-colors duration-300">
                     <i class="fa-solid fa-rocket"></i>
                 </div>
-                <h2 class="text-3xl font-extrabold text-gray-900 mb-4">Sứ mệnh</h2>
+                <h2 class="text-3xl font-extrabold text-gray-900 mb-4">{{ $mission?->title ?: 'Sứ mệnh' }}</h2>
                 <div class="text-gray-600 leading-relaxed text-base md:text-lg space-y-4">
-                    @if($mission)
+                    @if($mission?->content)
                         {!! $mission->content !!}
-                    @else
-                        <p>Trở thành đơn vị tiên phong trong việc cung cấp các giải pháp truyền thông số sáng tạo, giúp các doanh nghiệp Việt Nam nâng tầm thương hiệu và tối ưu hóa hiệu quả kinh doanh một cách bền vững trên môi trường số.</p>
                     @endif
                 </div>
             </div>
@@ -95,12 +92,10 @@
                 <div class="about-feature-icon--info w-16 h-16 rounded-2xl flex items-center justify-center text-3xl mb-6 group-hover:bg-[var(--color-info-600)] group-hover:text-[var(--color-white)] transition-colors duration-300">
                     <i class="fa-solid fa-eye"></i>
                 </div>
-                <h2 class="text-3xl font-extrabold text-gray-900 mb-4">Tầm nhìn</h2>
+                <h2 class="text-3xl font-extrabold text-gray-900 mb-4">{{ $vision?->title ?: 'Tầm nhìn' }}</h2>
                 <div class="text-gray-600 leading-relaxed text-base md:text-lg space-y-4">
-                    @if($vision)
+                    @if($vision?->content)
                         {!! $vision->content !!}
-                    @else
-                        <p>Kiến tạo một hệ sinh thái dịch vụ media toàn diện, nơi mọi ý tưởng đột phá đều được hiện thực hóa bằng công nghệ hiện đại và tư duy khác biệt. Không ngừng mở rộng biên giới sáng tạo để vươn tầm quốc tế.</p>
                     @endif
                 </div>
             </div>
@@ -114,28 +109,19 @@
     
     <div class="container mx-auto px-4 max-w-7xl relative z-10">
         <div class="text-center mb-16 md:mb-20" data-aos="fade-up">
-            <span class="section-kicker inline-block px-3 py-1 mb-4 text-xs font-black tracking-widest rounded-lg uppercase">Nền tảng phát triển</span>
-            <h2 class="text-3xl md:text-4xl lg:text-5xl font-extrabold text-gray-900">Giá trị cốt lõi</h2>
+            <span class="section-kicker inline-block px-3 py-1 mb-4 text-xs font-black tracking-widest rounded-lg uppercase">{{ $page->about_values_kicker }}</span>
+            <h2 class="text-3xl md:text-4xl lg:text-5xl font-extrabold text-gray-900">{{ $page->about_values_title }}</h2>
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {{-- Mặc định lấy Data tĩnh nếu không có settings $values --}}
-            @php
-                // Tách list values nếu là nội dung dài có li gạch đầu dòng, ở đây tạm giả lập 3 khối cứng
-                $coreValues = [
-                    ['icon' => 'fa-solid fa-lightbulb', 'tone' => 'about-value-icon--creative', 'title' => 'Sáng tạo đột phá', 'desc' => 'Không ngừng cập nhật xu hướng, phá bỏ giới hạn tư duy cũ để tạo ra những sản phẩm độc bản mang đậm dấu ấn thương hiệu.'],
-                    ['icon' => 'fa-solid fa-handshake', 'tone' => 'about-value-icon--care', 'title' => 'Tận tâm đồng hành', 'desc' => 'Coi dự án của khách hàng như chính đứa con tinh thần của mình. Sát cánh từ khâu lên ý tưởng đến khi đo lường hiệu quả thực tế.'],
-                    ['icon' => 'fa-solid fa-gem', 'tone' => 'about-value-icon--quality', 'title' => 'Chất lượng hàng đầu', 'desc' => 'Tiêu chuẩn khắt khe trong mọi quy trình làm việc. Chỉ bàn giao những sản phẩm đạt chất lượng cao nhất theo đúng cam kết.'],
-                ];
-            @endphp
-
-            @foreach($coreValues as $i => $val)
+            @php($valueTones = ['about-value-icon--creative', 'about-value-icon--care', 'about-value-icon--quality'])
+            @foreach($aboutValues as $i => $val)
             <div data-aos="fade-up" data-aos-delay="{{ $i * 100 }}" class="page-card rounded-3xl p-8 border hover:-translate-y-2 transition-all duration-300">
-                <div class="{{ $val['tone'] }} w-14 h-14 rounded-2xl flex items-center justify-center text-2xl mb-6">
-                    <i class="{{ $val['icon'] }}"></i>
+                <div class="{{ $valueTones[$i % count($valueTones)] }} w-14 h-14 rounded-2xl flex items-center justify-center text-2xl mb-6">
+                    <i class="{{ $val['icon'] ?? 'fa-solid fa-star' }}"></i>
                 </div>
                 <h3 class="text-xl font-bold text-gray-900 mb-3">{{ $val['title'] }}</h3>
-                <p class="text-gray-500 text-sm md:text-base leading-relaxed">{{ $val['desc'] }}</p>
+                <p class="text-gray-500 text-sm md:text-base leading-relaxed">{{ $val['description'] ?? '' }}</p>
             </div>
             @endforeach
         </div>
@@ -148,23 +134,22 @@
         <div class="flex flex-col md:flex-row gap-10 lg:gap-20 items-center">
             
             <div class="w-full md:w-1/2" data-aos="fade-right">
-                <span class="section-kicker section-kicker--info inline-block px-3 py-1 mb-4 text-xs font-black tracking-widest rounded-lg uppercase">Con người THT</span>
-                <h2 class="text-3xl md:text-4xl lg:text-5xl font-extrabold text-gray-900 mb-6 leading-tight">Sức mạnh từ <br><span class="about-brand-text">tập thể vững mạnh</span></h2>
+                <span class="section-kicker section-kicker--info inline-block px-3 py-1 mb-4 text-xs font-black tracking-widest rounded-lg uppercase">{{ $page->about_team_kicker }}</span>
+                <h2 class="text-3xl md:text-4xl lg:text-5xl font-extrabold text-gray-900 mb-6 leading-tight">{!! $page->about_team_title !!}</h2>
                 <div class="text-gray-600 leading-relaxed text-base md:text-lg space-y-4 mb-8">
-                    <p>Đằng sau sự thành công của mỗi chiến dịch là sức lao động bền bỉ, trí tuệ mài giũa và sự phối hợp nhịp nhàng của các phòng ban chuyên môn.</p>
-                    <p>Chúng tôi tập hợp những chuyên gia trẻ tuổi, nhiệt huyết, dám nghĩ dám làm và không bao giờ hài lòng với những gì đang có.</p>
+                    {!! $page->about_team_content !!}
                 </div>
                 
-                <div class="flex items-center gap-6">
-                    <div class="text-center">
-                        <span class="block text-4xl font-extrabold text-gray-900 mb-1">50+</span>
-                        <span class="text-xs font-bold text-gray-500 uppercase tracking-widest">Nhân sự</span>
-                    </div>
-                    <div class="w-px h-12 bg-gray-200"></div>
-                    <div class="text-center">
-                        <span class="block text-4xl font-extrabold text-gray-900 mb-1">98%</span>
-                        <span class="text-xs font-bold text-gray-500 uppercase tracking-widest">Hài lòng</span>
-                    </div>
+                <div class="flex items-center gap-6 flex-wrap">
+                    @foreach($aboutTeamStats as $stat)
+                        <div class="text-center">
+                            <span class="block text-4xl font-extrabold text-gray-900 mb-1">{{ $stat['value'] }}</span>
+                            <span class="text-xs font-bold text-gray-500 uppercase tracking-widest">{{ $stat['label'] ?? '' }}</span>
+                        </div>
+                        @if(!$loop->last)
+                            <div class="w-px h-12 bg-gray-200"></div>
+                        @endif
+                    @endforeach
                 </div>
             </div>
 
@@ -184,9 +169,9 @@
 {{-- ── Kêu gọi hành động (CTA) ─────────────────────────────────── --}}
 <section class="border-t border-[var(--color-border-subtle)] py-16 text-center bg-[var(--color-surface-muted)]" aria-label="Liên hệ">
     <div class="container mx-auto px-4" data-aos="zoom-in">
-        <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-4">Bạn có dự án đột phá cần thực hiện?</h2>
-        <p class="text-gray-500 mb-8 max-w-2xl mx-auto">Hãy để chúng tôi lắng nghe và biến những ý tưởng của bạn thành hiện thực với chi phí tối ưu nhất.</p>
-        <a href="{{ route('contact.index') }}" class="btn-brand">Liên hệ ngay hôm nay <i class="fa-solid fa-paper-plane ml-2"></i></a>
+        <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-4">{{ $page->about_cta_title }}</h2>
+        <p class="text-gray-500 mb-8 max-w-2xl mx-auto">{{ $page->about_cta_description }}</p>
+        <a href="{{ route('contact.index') }}" class="btn-brand">{{ $page->about_cta_button_label }} <i class="fa-solid fa-paper-plane ml-2"></i></a>
     </div>
 </section>
 

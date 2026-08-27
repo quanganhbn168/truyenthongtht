@@ -109,6 +109,23 @@ class Settings extends Page implements HasForms
             'about_banner'          => $page->about_banner ? [$page->about_banner] : [],
             'about_title'           => $page->about_title,
             'about_description'     => $page->about_description,
+            'about_ceo_image'       => $page->about_ceo_image ? [$page->about_ceo_image] : [],
+            'about_ceo_name'        => $page->about_ceo_name,
+            'about_ceo_role'        => $page->about_ceo_role,
+            'about_ceo_heading'     => $page->about_ceo_heading,
+            'about_ceo_greeting'    => $page->about_ceo_greeting,
+            'about_ceo_content'     => $page->about_ceo_content,
+            'about_ceo_signature'   => $page->about_ceo_signature,
+            'about_values_kicker'   => $page->about_values_kicker,
+            'about_values_title'    => $page->about_values_title,
+            'about_core_values'     => $page->about_core_values ?? [],
+            'about_team_kicker'     => $page->about_team_kicker,
+            'about_team_title'      => $page->about_team_title,
+            'about_team_content'    => $page->about_team_content,
+            'about_team_stats'      => $page->about_team_stats ?? [],
+            'about_cta_title'       => $page->about_cta_title,
+            'about_cta_description' => $page->about_cta_description,
+            'about_cta_button_label'=> $page->about_cta_button_label,
             'news_banner'           => $page->news_banner ? [$page->news_banner] : [],
             'news_title'            => $page->news_title,
             'news_description'      => $page->news_description,
@@ -479,11 +496,133 @@ class Settings extends Page implements HasForms
                         ->schema([
                             Section::make('Trang Giới thiệu (/gioi-thieu.html)')
                                 ->icon('heroicon-o-building-office')
+                                ->description('Sứ mệnh và Tầm nhìn chỉnh tại Giao diện > Giới thiệu / USP')
                                 ->schema([
                                     TextInput::make('about_title')->label('Tiêu đề trang')->maxLength(255),
                                     TextInput::make('about_description')->label('Mô tả ngắn')->maxLength(500),
                                     FileUpload::make('about_banner')->label('Banner hero')->image()->disk('public_uploads')->directory('banners')->columnSpanFull(),
                                 ])->columns(2),
+
+                            Section::make('Thư ngỏ từ người sáng lập')
+                                ->icon('heroicon-o-user-circle')
+                                ->description('Nội dung khối đầu tiên của trang Giới thiệu')
+                                ->schema([
+                                    FileUpload::make('about_ceo_image')
+                                        ->label('Ảnh người sáng lập')
+                                        ->image()
+                                        ->disk('public_uploads')
+                                        ->directory('upload/settings')
+                                        ->imagePreviewHeight('220')
+                                        ->columnSpanFull(),
+                                    TextInput::make('about_ceo_name')
+                                        ->label('Tên người sáng lập')
+                                        ->maxLength(255),
+                                    TextInput::make('about_ceo_role')
+                                        ->label('Chức danh')
+                                        ->maxLength(255),
+                                    TextInput::make('about_ceo_heading')
+                                        ->label('Tiêu đề thư ngỏ')
+                                        ->maxLength(255)
+                                        ->columnSpanFull(),
+                                    TextInput::make('about_ceo_greeting')
+                                        ->label('Lời chào')
+                                        ->maxLength(255)
+                                        ->columnSpanFull(),
+                                    RichEditor::make('about_ceo_content')
+                                        ->label('Nội dung thư ngỏ')
+                                        ->columnSpanFull(),
+                                    TextInput::make('about_ceo_signature')
+                                        ->label('Chữ ký hiển thị')
+                                        ->maxLength(255),
+                                ])
+                                ->columns(2),
+
+                            Section::make('Giá trị cốt lõi')
+                                ->icon('heroicon-o-sparkles')
+                                ->description('Các thẻ giá trị hiển thị ở giữa trang')
+                                ->schema([
+                                    TextInput::make('about_values_kicker')
+                                        ->label('Nhãn nhỏ')
+                                        ->maxLength(255),
+                                    TextInput::make('about_values_title')
+                                        ->label('Tiêu đề khu vực')
+                                        ->maxLength(255),
+                                    Repeater::make('about_core_values')
+                                        ->label('Các giá trị')
+                                        ->schema([
+                                            TextInput::make('icon')
+                                                ->label('Icon Font Awesome')
+                                                ->placeholder('fa-solid fa-lightbulb')
+                                                ->maxLength(100),
+                                            TextInput::make('title')
+                                                ->label('Tiêu đề')
+                                                ->required()
+                                                ->maxLength(255),
+                                            Textarea::make('description')
+                                                ->label('Mô tả')
+                                                ->rows(3)
+                                                ->required()
+                                                ->columnSpanFull(),
+                                        ])
+                                        ->columns(2)
+                                        ->reorderable()
+                                        ->collapsible()
+                                        ->addActionLabel('+ Thêm giá trị')
+                                        ->columnSpanFull(),
+                                ])
+                                ->columns(2),
+
+                            Section::make('Đội ngũ')
+                                ->icon('heroicon-o-users')
+                                ->description('Nội dung và các con số ở khối Đội ngũ')
+                                ->schema([
+                                    TextInput::make('about_team_kicker')
+                                        ->label('Nhãn nhỏ')
+                                        ->maxLength(255),
+                                    TextInput::make('about_team_title')
+                                        ->label('Tiêu đề')
+                                        ->helperText('Có thể dùng thẻ <br> và <span> để giữ bố cục nhấn mạnh.')
+                                        ->maxLength(500),
+                                    RichEditor::make('about_team_content')
+                                        ->label('Nội dung')
+                                        ->columnSpanFull(),
+                                    Repeater::make('about_team_stats')
+                                        ->label('Các con số')
+                                        ->schema([
+                                            TextInput::make('value')
+                                                ->label('Con số')
+                                                ->required()
+                                                ->maxLength(30),
+                                            TextInput::make('label')
+                                                ->label('Nhãn')
+                                                ->required()
+                                                ->maxLength(100),
+                                        ])
+                                        ->columns(2)
+                                        ->reorderable()
+                                        ->collapsible()
+                                        ->addActionLabel('+ Thêm con số')
+                                        ->columnSpanFull(),
+                                ])
+                                ->columns(2),
+
+                            Section::make('Kêu gọi hành động cuối trang')
+                                ->icon('heroicon-o-megaphone')
+                                ->schema([
+                                    TextInput::make('about_cta_title')
+                                        ->label('Tiêu đề')
+                                        ->maxLength(255)
+                                        ->columnSpanFull(),
+                                    Textarea::make('about_cta_description')
+                                        ->label('Mô tả')
+                                        ->rows(3)
+                                        ->maxLength(500)
+                                        ->columnSpanFull(),
+                                    TextInput::make('about_cta_button_label')
+                                        ->label('Nhãn nút')
+                                        ->maxLength(100),
+                                ])
+                                ->columns(2),
 
                             Section::make('Trang Tin tức (/tin-tuc)')
                                 ->icon('heroicon-o-newspaper')
@@ -549,6 +688,7 @@ class Settings extends Page implements HasForms
                 ->label('Lưu tất cả cài đặt')
                 ->icon('heroicon-o-check-circle')
                 ->color('primary')
+                ->keyBindings(['command+s', 'ctrl+s'])
                 ->submit('save'),
         ];
     }
@@ -618,6 +758,23 @@ class Settings extends Page implements HasForms
         $page->about_banner         = is_array($data['about_banner'] ?? null) ? (reset($data['about_banner']) ?: '') : ($data['about_banner'] ?? '');
         $page->about_title          = $data['about_title'] ?? '';
         $page->about_description    = $data['about_description'] ?? '';
+        $page->about_ceo_image      = is_array($data['about_ceo_image'] ?? null) ? (reset($data['about_ceo_image']) ?: '') : ($data['about_ceo_image'] ?? '');
+        $page->about_ceo_name       = $data['about_ceo_name'] ?? '';
+        $page->about_ceo_role       = $data['about_ceo_role'] ?? '';
+        $page->about_ceo_heading    = $data['about_ceo_heading'] ?? '';
+        $page->about_ceo_greeting   = $data['about_ceo_greeting'] ?? '';
+        $page->about_ceo_content    = $data['about_ceo_content'] ?? '';
+        $page->about_ceo_signature  = $data['about_ceo_signature'] ?? '';
+        $page->about_values_kicker  = $data['about_values_kicker'] ?? '';
+        $page->about_values_title   = $data['about_values_title'] ?? '';
+        $page->about_core_values    = $data['about_core_values'] ?? [];
+        $page->about_team_kicker    = $data['about_team_kicker'] ?? '';
+        $page->about_team_title     = $data['about_team_title'] ?? '';
+        $page->about_team_content   = $data['about_team_content'] ?? '';
+        $page->about_team_stats     = $data['about_team_stats'] ?? [];
+        $page->about_cta_title      = $data['about_cta_title'] ?? '';
+        $page->about_cta_description = $data['about_cta_description'] ?? '';
+        $page->about_cta_button_label = $data['about_cta_button_label'] ?? '';
         $page->news_banner          = is_array($data['news_banner'] ?? null) ? (reset($data['news_banner']) ?: '') : ($data['news_banner'] ?? '');
         $page->news_title           = $data['news_title'] ?? '';
         $page->news_description     = $data['news_description'] ?? '';
@@ -644,6 +801,7 @@ class Settings extends Page implements HasForms
         if ($page->services_banner) $imgService->process('public_uploads', $page->services_banner);
         if ($page->products_banner) $imgService->process('public_uploads', $page->products_banner);
         if ($page->projects_banner) $imgService->process('public_uploads', $page->projects_banner);
+        if ($page->about_ceo_image) $imgService->process('public_uploads', $page->about_ceo_image);
         if ($web->about_image) $imgService->process('public_uploads', $web->about_image);
         if ($web->stats_background) $imgService->process('public_uploads', $web->stats_background);
         if ($web->testimonials_background) $imgService->process('public_uploads', $web->testimonials_background);

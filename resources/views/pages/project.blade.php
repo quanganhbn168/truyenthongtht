@@ -35,7 +35,7 @@
         @elseif($project->image)
             <img src="{{ asset($project->image) }}" alt="{{ $project->name }}" class="w-full h-full object-cover">
         @else
-            <div class="bg-gray-800 w-full h-full"></div>
+            <img src="{{ $commonBannerUrl }}" alt="{{ $project->name }}" class="w-full h-full object-cover">
         @endif
     </div>
 

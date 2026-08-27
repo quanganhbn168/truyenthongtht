@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Settings\BusinessSettings;
 use App\Settings\PageSettings;
 use App\Settings\WebsiteSettings;
+use App\Services\FrontendBannerService;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
@@ -29,6 +30,7 @@ class GlobalSettingsProvider extends ServiceProvider
             View::share('web', app(WebsiteSettings::class));
             View::share('page', app(PageSettings::class));
             View::share('business', app(BusinessSettings::class));
+            View::share('commonBannerUrl', app(FrontendBannerService::class)->commonUrl());
         }
     }
 }

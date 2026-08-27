@@ -1,6 +1,7 @@
 {{-- Floating Contact Widget (Zalo, Hotline) --}}
 @php
-    $zalo = $web->zalo_number;
+    $zaloNumber = preg_replace('/[^0-9]/', '', $web->zalo_number ?? '');
+    $zalo = $zaloNumber ? 'https://zalo.me/'.$zaloNumber : null;
     // Extract numbers only for calling
     $hotlineClean = preg_replace('/[^0-9]/', '', $business->main_phone);
 @endphp

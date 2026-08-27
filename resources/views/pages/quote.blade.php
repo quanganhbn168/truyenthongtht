@@ -8,7 +8,7 @@
 {{-- ── Banner Báo Giá ─────────────────────────────────────────────────── --}}
 <section class="page-hero relative pt-32 pb-20 lg:pt-40 lg:pb-28 overflow-hidden" aria-label="Banner Báo Giá">
     <div class="absolute inset-0 z-0">
-        <img src="{{ asset('images/og-default.jpg') }}" alt="Báo giá THT Media" class="w-full h-full object-cover object-center">
+        <img src="{{ $commonBannerUrl }}" alt="Báo giá THT Media" class="w-full h-full object-cover object-center">
     </div>
     
     <div class="container mx-auto px-4 max-w-5xl relative z-10 text-center" data-aos="fade-up">
@@ -164,9 +164,14 @@
                     <div class="panel-brand__divider mt-auto pt-8 border-t">
                         <div class="flex flex-col items-start gap-2">
                             <span class="panel-brand__label text-xs font-bold uppercase tracking-widest pl-1 border-l-2 mb-1">Hotline hỗ trợ 24/7</span>
-                            <a href="tel:{{ config('site.phone', '') }}" class="panel-brand__hotline text-3xl font-black transition-colors tracking-tight">
-                                {{ $business->main_phone ?? config('site.phone', '') }}
+                            <a href="tel:{{ preg_replace('/[^0-9+]/', '', $business->main_phone) }}" class="panel-brand__hotline text-3xl font-black transition-colors tracking-tight">
+                                {{ $business->main_phone }}
                             </a>
+                            @if($business->main_phone_2)
+                                <a href="tel:{{ preg_replace('/[^0-9+]/', '', $business->main_phone_2) }}" class="panel-brand__hotline text-xl font-bold transition-colors tracking-tight">
+                                    {{ $business->main_phone_2 }}
+                                </a>
+                            @endif
                         </div>
                     </div>
                 </div>

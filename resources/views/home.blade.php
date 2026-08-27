@@ -14,6 +14,12 @@
         'name'  => 'Giải pháp truyền thông toàn diện',
         'link'  => route('services.index')
     ]]);
+    $statsData = !empty($web->stats) ? $web->stats : [
+        ['number' => 50, 'label' => 'Dự án đã triển khai', 'icon' => 'fa-solid fa-diagram-project'],
+        ['number' => 15, 'label' => 'Dịch vụ cung cấp', 'icon' => 'fa-solid fa-briefcase'],
+        ['number' => 120, 'label' => 'Bài viết & Tin tức', 'icon' => 'fa-solid fa-newspaper'],
+        ['number' => 10, 'label' => 'Năm kinh nghiệm', 'icon' => 'fa-solid fa-award'],
+    ];
 @endphp
 
 <section class="hero-swiper swiper w-full overflow-hidden" aria-label="Banner chính">
@@ -22,7 +28,7 @@
         @if($heroVideoUrl)
             @php $firstSlide = $slideLoop->first(); @endphp
             <div class="swiper-slide relative">
-                <video autoplay loop muted playsinline preload="metadata" crossorigin="anonymous" class="w-full h-[80vh] md:h-[90vh] object-cover">
+                <video autoplay loop muted playsinline preload="metadata" crossorigin="anonymous" class="w-full object-cover">
                 @if(Str::endsWith($heroVideoUrl, '.mp4') || Str::endsWith($heroVideoUrl, '.webm'))
                      <source src="{{ Str::startsWith($heroVideoUrl, 'http') ? $heroVideoUrl : asset('storage/'.$heroVideoUrl) }}" type="video/{{ Str::endsWith($heroVideoUrl, '.webm') ? 'webm' : 'mp4' }}">
                 @else
@@ -51,7 +57,7 @@
                      alt="{{ $slide->name }}"
                      loading="{{ $loop->first ? 'eager' : 'lazy' }}"
                      {!! $loop->first ? 'fetchpriority="high"' : '' !!}
-                     class="w-full h-[80vh] md:h-[90vh] object-cover">
+                     class="w-full object-cover">
                 <div class="hero-overlay absolute inset-0 flex items-center">
                     <div class="container mx-auto px-6 max-w-7xl">
                         <h2 class="text-4xl md:text-6xl lg:text-7xl font-extrabold text-white leading-tight mb-4 max-w-3xl drop-shadow-lg" data-aos="fade-up" data-aos-delay="100">
@@ -105,15 +111,8 @@
                      </div>
                      
                      {{-- Year / Experience Badge over Image --}}
-                     @php
-                         $statsData = !empty($web->stats) ? $web->stats : [
-                             ['number' => 50, 'label' => 'Dự án đã triển khai', 'icon' => 'fa-solid fa-diagram-project'],
-                             ['number' => 15,  'label' => 'Dịch vụ cung cấp',    'icon' => 'fa-solid fa-briefcase'],
-                             ['number' => 120, 'label' => 'Bài viết & Tin tức',   'icon' => 'fa-solid fa-newspaper'],
-                             ['number' => 10,  'label' => 'Năm kinh nghiệm',      'icon' => 'fa-solid fa-award'],
-                         ];
-                         
-                         $firstStat = $statsData[0];
+                      @php
+                          $firstStat = $statsData[0];
                          $firstStatArr = (array) $firstStat;
                          $number = $firstStatArr['number'] ?? $firstStatArr['value'] ?? '10';
                          $label = $firstStatArr['label'] ?? 'Năm kinh nghiệm';
@@ -181,7 +180,9 @@
             @foreach($statsData as $i => $stat)
             @php 
                 $sArr = (array) $stat; 
-                $sNum = $sArr['number'] ?? $sArr['value'] ?? '0';
+                $sRaw = trim((string) ($sArr['number'] ?? $sArr['value'] ?? '0'));
+                $sNum = (int) preg_replace('/[^0-9]/', '', $sRaw);
+                $sSuffix = str_contains($sRaw, '%') ? '%' : '+';
                 $sLabel = $sArr['label'] ?? '';
                 $sIcon = $sArr['icon'] ?? 'fa-solid fa-star';
             @endphp
@@ -189,8 +190,8 @@
                 <div class="stat-icon">
                     <i class="{{ $sIcon }}"></i>
                 </div>
-                <div class="stat-number js-count" data-target="{{ $sNum }}">
-                    {{ number_format((int)$sNum) }}+
+                <div class="stat-number js-count" data-target="{{ $sNum }}" data-suffix="{{ $sSuffix }}">
+                    {{ number_format($sNum, 0, ',', '.') }}{{ $sSuffix }}
                 </div>
                 <p class="stat-label">{{ $sLabel }}</p>
             </div>
@@ -237,7 +238,7 @@
                             @endif
                         </div>
                         <div>
-                            <h3 class="font-bold text-gray-900 text-base mb-1">{{ $intro->title }}  @if(isset($intro->subtitle) && $intro->subtitle)<span class="text-[10px] uppercase font-bold text-orange-600 block sm:inline sm:ml-2 tracking-wider">{{ $intro->subtitle }}</span>@endif</h3>
+                            <h3 class="font-bold text-gray-900 text-base mb-1">{{ $intro->title }}</h3>
                             @if(isset($intro->content) && $intro->content)
                                 <p class="text-[13px] md:text-sm text-gray-500 leading-relaxed">{{ Str::limit(strip_tags($intro->content), 120) }}</p>
                             @endif
@@ -338,8 +339,8 @@
                     <div class="ecosystem-solution__layout">
                         <div class="ecosystem-solution__summary" data-aos="fade-up">
                             <span class="ecosystem-solution__number">{{ $solution['number'] }}</span>
-                            <p class="ecosystem-solution__label">{{ $solution['label'] }}</p>
-                            <h3>{{ $solution['title'] }}</h3>
+                            <h3 class="ecosystem-solution__label">{{ $solution['label'] }}</h3>
+                            <p class="ecosystem-solution__title">{{ $solution['title'] }}</p>
                             <p class="ecosystem-solution__description">{{ $solution['description'] }}</p>
                             <div class="ecosystem-solution__actions">
                                 <a href="{{ route('services.index') }}" class="btn-outline-brand">Khám phá dịch vụ <i class="fa-solid fa-arrow-right text-xs"></i></a>
@@ -749,20 +750,22 @@ document.addEventListener('DOMContentLoaded', function () {
         const counters = document.querySelectorAll('.js-count');
         if (!counters.length) return;
 
-        const format = n => n >= 1000 ? n.toLocaleString('vi-VN') : n;
+        const format = n => n >= 1000 ? n.toLocaleString('vi-VN') : String(n);
 
         const observe = new IntersectionObserver(entries => {
             entries.forEach(entry => {
                 if (!entry.isIntersecting) return;
                 const el = entry.target;
-                const target = +el.dataset.target;
+                const target = Number(el.dataset.target);
+                const suffix = el.dataset.suffix || '+';
+                if (!Number.isFinite(target)) return;
                 const duration = 1200;
                 const step = Math.ceil(duration / 60);
                 const increment = target / (duration / step);
                 let current = 0;
                 const timer = setInterval(() => {
                     current = Math.min(current + increment, target);
-                    el.textContent = format(Math.floor(current)) + '+';
+                    el.textContent = format(Math.floor(current)) + suffix;
                     if (current >= target) clearInterval(timer);
                 }, step);
                 observe.unobserve(el);
