@@ -1251,6 +1251,73 @@
     object-fit: contain;
 }
 
+/* ── Homepage partner logos ── */
+.partner-marquee-wrap {
+    position: relative;
+    width: 100%;
+    min-height: 104px;
+    overflow: hidden;
+}
+
+.partner-marquee-track {
+    display: flex;
+    width: max-content;
+    min-height: 104px;
+    align-items: stretch;
+    animation: partner-marquee-scroll 32s linear infinite;
+    will-change: transform;
+}
+
+.partner-marquee-wrap:hover .partner-marquee-track {
+    animation-play-state: paused;
+}
+
+.partner-marquee-group {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    gap: 2.5rem;
+    padding: 0 1.25rem;
+}
+
+.partner-marquee-item {
+    display: flex;
+    flex: 0 0 150px;
+    align-items: center;
+    justify-content: center;
+    height: 80px;
+    padding: .75rem;
+    opacity: .8;
+    filter: grayscale(20%);
+    transition: opacity .2s, filter .2s, transform .2s;
+}
+
+.partner-marquee-item:hover {
+    opacity: 1;
+    filter: grayscale(0%);
+    transform: scale(1.05);
+}
+
+.partner-marquee-image {
+    display: block;
+    width: auto;
+    max-width: 130px;
+    height: auto;
+    max-height: 60px;
+    object-fit: contain;
+}
+
+@keyframes partner-marquee-scroll {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+}
+
+@media (max-width: 640px) {
+    .partner-marquee-group { gap: 1rem; padding: 0 .5rem; }
+    .partner-marquee-item { flex-basis: 120px; height: 72px; }
+    .partner-marquee-image { max-width: 108px; max-height: 52px; }
+}
+
 /* ========================================================================
    PAGE HERO BANNER
    ======================================================================== */

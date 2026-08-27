@@ -642,25 +642,22 @@
         <h2 class="text-sm font-bold uppercase tracking-widest text-gray-500">{{ $web->partners_title ?: 'Hơn 500+ doanh nghiệp đã đồng hành cùng THT Media' }}</h2>
     </div>
     
-    <div class="relative w-full flex overflow-hidden group">
-        {{-- Gradient masks for smooth fade edges --}}
-        
-        {{-- Marquee Track (Double for infinite loop) --}}
-        <div class="animate-marquee flex whitespace-nowrap items-center min-w-full">
-            @foreach($partners->concat($partners) as $partner)
-            <div class="mx-8 md:mx-12 px-4 grayscale opacity-50 hover:grayscale-0 hover:opacity-100 transition-all duration-300 transform hover:scale-110">
-                <img src="{{ $partner['url'] }}" alt="{{ $partner['name'] }}" loading="lazy" class="h-10 md:h-12 w-auto object-contain">
+    <div class="partner-marquee-wrap">
+        <div class="partner-marquee-track">
+            <div class="partner-marquee-group">
+                @foreach($partners as $partner)
+                    <div class="partner-marquee-item">
+                        <img src="{{ $partner['url'] }}" alt="{{ $partner['name'] }}" loading="lazy" class="partner-marquee-image">
+                    </div>
+                @endforeach
             </div>
-            @endforeach
-        </div>
-        
-        {{-- Duplicate Track for seamless loop --}}
-        <div class="animate-marquee flex whitespace-nowrap items-center min-w-full absolute top-0 left-full">
-            @foreach($partners->concat($partners) as $partner)
-            <div class="mx-8 md:mx-12 px-4 grayscale opacity-50 hover:grayscale-0 hover:opacity-100 transition-all duration-300 transform hover:scale-110">
-                <img src="{{ $partner['url'] }}" alt="{{ $partner['name'] }}" loading="lazy" class="h-10 md:h-12 w-auto object-contain">
+            <div class="partner-marquee-group" aria-hidden="true">
+                @foreach($partners as $partner)
+                    <div class="partner-marquee-item">
+                        <img src="{{ $partner['url'] }}" alt="" loading="lazy" class="partner-marquee-image">
+                    </div>
+                @endforeach
             </div>
-            @endforeach
         </div>
     </div>
 </section>
