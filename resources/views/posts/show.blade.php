@@ -139,42 +139,66 @@
 
                 <x-toc :content="$content" placement="desktop" />
 
-                @if($related->isNotEmpty())
-                    <div class="bg-white rounded-2xl shadow-sm p-6">
-                        <h2 class="text-sm font-bold text-gray-900 pb-3 border-b-2 border-orange-700 mb-4">
-                            Bài viết liên quan
-                        </h2>
-                        <ul class="space-y-4">
-                            @foreach($related as $item)
-                                <li class="border-t border-gray-50 pt-4 first:border-0 first:pt-0">
-                                    <a href="{{ url($item->slug . '.html') }}"
-                                       class="flex gap-3 group text-inherit no-underline">
-                                        @if($item->image)
-                                            <img src="{{ asset($item->image) }}"
-                                                 alt="{{ $item->title }}"
-                                                 loading="lazy"
-                                                 class="w-20 h-14 object-cover rounded-lg shrink-0">
-                                        @endif
-                                        <div class="flex-1 min-w-0">
-                                            <span class="block text-sm font-semibold text-gray-800 leading-snug
-                                                         group-hover:text-orange-700 transition-colors line-clamp-2 mb-1">
-                                                {{ Str::limit($item->title, 55) }}
-                                            </span>
-                                            <span class="text-xs text-gray-400">
-                                                <i class="fa-regular fa-calendar mr-1"></i>
-                                                {{ optional($item->published_at)->format('d/m/Y') }}
-                                            </span>
-                                        </div>
-                                    </a>
-                                </li>
-                            @endforeach
-                        </ul>
-                    </div>
-                @endif
-
             </aside>
 
         </div>
+
+        @if($related->isNotEmpty())
+            <section class="mt-10 border-t border-gray-200 pt-10" aria-labelledby="related-posts-title">
+                <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 mb-6">
+                    <div>
+                        <p class="text-xs font-semibold tracking-[0.18em] uppercase text-orange-700 mb-2">
+                            Cùng danh mục
+                        </p>
+                        <h2 id="related-posts-title" class="text-2xl md:text-3xl font-bold text-gray-900">
+                            Bài viết cùng danh mục
+                        </h2>
+                    </div>
+                    @if($post->category)
+                        <a href="{{ url($post->category->slug . '.html') }}"
+                           class="inline-flex items-center gap-2 text-sm font-semibold text-orange-700 hover:text-orange-800 transition-colors">
+                            Xem tất cả
+                            <i class="fa-solid fa-arrow-right text-xs"></i>
+                        </a>
+                    @endif
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+                    @foreach($related as $item)
+                        <article class="group bg-white rounded-2xl shadow-sm overflow-hidden hover:shadow-md transition-shadow">
+                            <a href="{{ url($item->slug . '.html') }}" class="block no-underline text-inherit">
+                                <div class="aspect-[16/9] bg-gray-100 overflow-hidden">
+                                    @if($item->image)
+                                        <img src="{{ asset($item->image) }}"
+                                             alt="{{ $item->title }}"
+                                             loading="lazy"
+                                             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                                    @else
+                                        <div class="w-full h-full flex items-center justify-center text-orange-300">
+                                            <i class="fa-regular fa-newspaper text-3xl"></i>
+                                        </div>
+                                    @endif
+                                </div>
+                                <div class="p-4">
+                                    <h3 class="font-semibold text-gray-900 leading-snug line-clamp-2 group-hover:text-orange-700 transition-colors">
+                                        {{ $item->title }}
+                                    </h3>
+                                    @if($item->summary)
+                                        <p class="mt-2 text-sm text-gray-500 leading-relaxed line-clamp-2">
+                                            {{ $item->summary }}
+                                        </p>
+                                    @endif
+                                    <time class="block mt-3 text-xs text-gray-400" datetime="{{ optional($item->published_at)->toDateString() }}">
+                                        <i class="fa-regular fa-calendar mr-1"></i>
+                                        {{ optional($item->published_at)->format('d/m/Y') }}
+                                    </time>
+                                </div>
+                            </a>
+                        </article>
+                    @endforeach
+                </div>
+            </section>
+        @endif
     </div>
 </div>
 @endsection

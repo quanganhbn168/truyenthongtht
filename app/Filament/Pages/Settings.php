@@ -101,6 +101,11 @@ class Settings extends Page implements HasForms
             'about_video_url'       => $web->about_video_url,
             'about_image'           => $web->about_image ? [$web->about_image] : [],
             'stats'                 => $web->stats ?? [],
+            'partners_title'        => $web->partners_title,
+            'partners'              => collect($web->partners ?? [])->map(fn (array $partner): array => [
+                'logo' => ! empty($partner['logo']) ? [$partner['logo']] : [],
+                'name' => $partner['name'] ?? '',
+            ])->values()->all(),
             'stats_background'      => $web->stats_background ? [$web->stats_background] : [],
             'testimonials_background'=> $web->testimonials_background ? [$web->testimonials_background] : [],
             'cta_background'        => $web->cta_background ? [$web->cta_background] : [],
@@ -466,6 +471,37 @@ class Settings extends Page implements HasForms
                                         ->helperText('Ảnh sẽ được hiển thị với hiệu ứng Parallax (chuẩn 1920x1080)')
                                         ->columnSpanFull(),
                                 ]),
+
+                            Section::make('Đối tác khách hàng')
+                                ->icon('heroicon-o-building-office-2')
+                                ->description('Logo chạy ngang ở khu vực “Hơn 500+ doanh nghiệp đã đồng hành cùng THT Media” trên trang chủ')
+                                ->schema([
+                                    TextInput::make('partners_title')
+                                        ->label('Tiêu đề khu vực')
+                                        ->maxLength(255)
+                                        ->columnSpanFull(),
+                                    Repeater::make('partners')
+                                        ->label('Danh sách logo đối tác')
+                                        ->schema([
+                                            FileUpload::make('logo')
+                                                ->label('Logo')
+                                                ->image()
+                                                ->disk('public_uploads')
+                                                ->directory('upload/partners')
+                                                ->imagePreviewHeight('90')
+                                                ->required()
+                                                ->columnSpanFull(),
+                                            TextInput::make('name')
+                                                ->label('Tên đối tác (alt ảnh)')
+                                                ->maxLength(255),
+                                        ])
+                                        ->columns(2)
+                                        ->reorderable()
+                                        ->collapsible()
+                                        ->addActionLabel('+ Thêm logo đối tác')
+                                        ->columnSpanFull(),
+                                ])
+                                ->columns(2),
                                 
                             Section::make('Ảnh nền các khu vực khác')
                                 ->icon('heroicon-o-photo')
@@ -747,6 +783,20 @@ class Settings extends Page implements HasForms
         $web->about_video_url        = $data['about_video_url'] ?? '';
         $web->about_image            = is_array($data['about_image'] ?? null) ? (reset($data['about_image']) ?: '') : ($data['about_image'] ?? '');
         $web->stats                  = $data['stats'] ?? [];
+        $web->partners_title         = $data['partners_title'] ?? '';
+        $web->partners               = array_values(array_filter(array_map(
+            static function (array $partner): array {
+                $logo = is_array($partner['logo'] ?? null)
+                    ? (reset($partner['logo']) ?: '')
+                    : ($partner['logo'] ?? '');
+
+                return [
+                    'logo' => $logo,
+                    'name' => $partner['name'] ?? '',
+                ];
+            },
+            $data['partners'] ?? [],
+        ), static fn (array $partner): bool => $partner['logo'] !== ''));
         $web->stats_background       = is_array($data['stats_background'] ?? null) ? (reset($data['stats_background']) ?: '') : ($data['stats_background'] ?? '');
         $web->testimonials_background = is_array($data['testimonials_background'] ?? null) ? (reset($data['testimonials_background']) ?: '') : ($data['testimonials_background'] ?? '');
         $web->cta_background          = is_array($data['cta_background'] ?? null) ? (reset($data['cta_background']) ?: '') : ($data['cta_background'] ?? '');
@@ -803,6 +853,11 @@ class Settings extends Page implements HasForms
         if ($page->projects_banner) $imgService->process('public_uploads', $page->projects_banner);
         if ($page->about_ceo_image) $imgService->process('public_uploads', $page->about_ceo_image);
         if ($web->about_image) $imgService->process('public_uploads', $web->about_image);
+        foreach ($web->partners as $partner) {
+            if (! empty($partner['logo']) && ! str_starts_with($partner['logo'], 'images/')) {
+                $imgService->process('public_uploads', $partner['logo']);
+            }
+        }
         if ($web->stats_background) $imgService->process('public_uploads', $web->stats_background);
         if ($web->testimonials_background) $imgService->process('public_uploads', $web->testimonials_background);
         if ($web->cta_background) $imgService->process('public_uploads', $web->cta_background);

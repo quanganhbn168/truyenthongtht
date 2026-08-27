@@ -43,6 +43,8 @@ class WebsiteSettings extends Settings
     public string $about_image;            // Ảnh miên họa section giới thiệu
 
     public array $stats;                   // Con số ấn tượng — JSON array, quản lý qua Repeater
+    public string $partners_title;        // Tiêu đề khu vực đối tác khách hàng
+    public array $partners;                // Logo đối tác — JSON array, quản lý qua Repeater
     public string $stats_background;       // Ảnh nền parallax cho khu vực Con số ấn tượng
     public string $testimonials_background; // Ảnh nền khu vực Đánh giá khách hàng
     public string $cta_background;         // Ảnh nền khu vực Liên hệ cuối trang

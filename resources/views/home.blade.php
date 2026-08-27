@@ -612,21 +612,34 @@
      8. ĐỐI TÁC KHÁCH HÀNG (MARQUEE)
 ══════════════════════════════════════════ --}}
 @php
-    // Dummy partners logo list - Có thể thay thế bằng dữ liệu từ DB sau
-    $partners = [
-        asset('images/logo.png'), 
-        asset('images/logo.png'),
-        asset('images/logo.png'),
-        asset('images/logo.png'),
-        asset('images/logo.png'),
-        asset('images/logo.png'),
-        asset('images/logo.png'),
-        asset('images/logo.png'),
-    ];
+    $partners = collect($web->partners ?? [])
+        ->filter(fn (mixed $partner): bool => is_array($partner) && filled($partner['logo'] ?? null))
+        ->map(function (array $partner): array {
+            $logo = $partner['logo'];
+            $url = Str::startsWith($logo, ['http://', 'https://', '//'])
+                ? $logo
+                : (Str::startsWith($logo, ['images/', 'assets/'])
+                    ? asset($logo)
+                    : asset('storage/'.$logo));
+
+            return [
+                'url' => $url,
+                'name' => $partner['name'] ?? 'Đối tác THT Media',
+            ];
+        })
+        ->values();
+
+    // Giữ fallback cũ nếu chưa upload logo nào trong quản trị.
+    if ($partners->isEmpty()) {
+        $partners = collect(array_fill(0, 8, [
+            'url' => asset('images/logo.png'),
+            'name' => 'Đối tác THT Media',
+        ]));
+    }
 @endphp
 <section class="py-12 bg-white border-y border-gray-100 overflow-hidden" aria-label="Đối tác khách hàng">
     <div class="container mx-auto px-4 max-w-7xl mb-6 text-center">
-        <h2 class="text-sm font-bold uppercase tracking-widest text-gray-500">Hơn 500+ doanh nghiệp đã đồng hành cùng THT Media</h2>
+        <h2 class="text-sm font-bold uppercase tracking-widest text-gray-500">{{ $web->partners_title ?: 'Hơn 500+ doanh nghiệp đã đồng hành cùng THT Media' }}</h2>
     </div>
     
     <div class="relative w-full flex overflow-hidden group">
@@ -634,18 +647,18 @@
         
         {{-- Marquee Track (Double for infinite loop) --}}
         <div class="animate-marquee flex whitespace-nowrap items-center min-w-full">
-            @foreach(array_merge($partners, $partners) as $logo)
+            @foreach($partners->concat($partners) as $partner)
             <div class="mx-8 md:mx-12 px-4 grayscale opacity-50 hover:grayscale-0 hover:opacity-100 transition-all duration-300 transform hover:scale-110">
-                <img src="{{ $logo }}" alt="Đối tác THT Media" loading="lazy" class="h-10 md:h-12 w-auto object-contain">
+                <img src="{{ $partner['url'] }}" alt="{{ $partner['name'] }}" loading="lazy" class="h-10 md:h-12 w-auto object-contain">
             </div>
             @endforeach
         </div>
         
         {{-- Duplicate Track for seamless loop --}}
         <div class="animate-marquee flex whitespace-nowrap items-center min-w-full absolute top-0 left-full">
-            @foreach(array_merge($partners, $partners) as $logo)
+            @foreach($partners->concat($partners) as $partner)
             <div class="mx-8 md:mx-12 px-4 grayscale opacity-50 hover:grayscale-0 hover:opacity-100 transition-all duration-300 transform hover:scale-110">
-                <img src="{{ $logo }}" alt="Đối tác THT Media" loading="lazy" class="h-10 md:h-12 w-auto object-contain">
+                <img src="{{ $partner['url'] }}" alt="{{ $partner['name'] }}" loading="lazy" class="h-10 md:h-12 w-auto object-contain">
             </div>
             @endforeach
         </div>
