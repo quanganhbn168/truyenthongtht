@@ -567,7 +567,10 @@
     <div class="container mx-auto px-4 max-w-7xl relative z-10">
         <div class="text-center mb-8 md:mb-12" data-aos="fade-up">
             <span class="brand-badge center {{ $hasTestiBg ? 'bg-white/10 text-white backdrop-blur-sm border-white/20' : '' }}">Nhận xét từ khách hàng</span>
-            <h2 class="section-heading center {{ $hasTestiBg ? 'text-white' : '' }}">Khách hàng <span class="h-light {{ $hasTestiBg ? 'text-orange-300' : '' }}">nói gì về chúng tôi?</span></h2>
+            <h2 class="section-heading center {{ $hasTestiBg ? 'text-white' : '' }}">
+                <span class="text-white">Khách hàng</span>
+                <span class="h-light {{ $hasTestiBg ? 'text-orange-300' : '' }}">nói gì về chúng tôi?</span>
+            </h2>
         </div>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             @foreach($testiLoop as $i => $testimonial)
@@ -602,8 +605,6 @@
                 </div>
             </div>
             @endforeach
-        </div>
-    </div>
         </div>
     </div>
 </section>
