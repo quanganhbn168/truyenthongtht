@@ -47,9 +47,7 @@
     ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) !!}</script>
     @stack('schema')
 
-    {{-- Favicon --}}
-    <link rel="icon" type="image/x-icon" href="{{ $faviconUrl }}">
-    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('apple-touch-icon.png') }}">
+    @include('partials.head.favicon')
 
     {{-- Assets --}}
     @vite(['resources/css/app.css', 'resources/js/app.js'])

@@ -7,6 +7,8 @@ use App\Filament\Widgets\ContentStatsOverview;
 use App\Filament\Widgets\LatestContacts;
 use App\Filament\Widgets\LatestPosts;
 use App\Filament\Widgets\LatestQuotes;
+use App\Settings\WebsiteSettings;
+use App\Support\Branding\FaviconService;
 use BezhanSalleh\FilamentShield\FilamentShieldPlugin;
 use Datlechin\FilamentMenuBuilder\FilamentMenuBuilderPlugin;
 use Datlechin\FilamentMenuBuilder\MenuPanel\ModelMenuPanel;
@@ -18,6 +20,7 @@ use Filament\Navigation\NavigationGroup;
 use Filament\Pages\Dashboard;
 use Filament\Panel;
 use Filament\PanelProvider;
+use Filament\View\PanelsRenderHook;
 
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
@@ -37,7 +40,12 @@ class AdminPanelProvider extends PanelProvider
             ->login()
             ->brandName('THT Media')
 
-            ->favicon(asset('favicon.ico'))
+            ->favicon(fn (): ?string => app(FaviconService::class)->primaryUrl(app(WebsiteSettings::class)->site_favicon))
+            ->renderHook(PanelsRenderHook::HEAD_END, function (): string {
+                return view('filament.partials.favicon', [
+                    'faviconLinks' => app(FaviconService::class)->links(app(WebsiteSettings::class)->site_favicon),
+                ])->render();
+            })
             ->viteTheme('resources/css/filament/admin/theme.css')
             ->navigationGroups([
                 NavigationGroup::make('Nội dung'),

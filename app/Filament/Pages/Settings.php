@@ -5,6 +5,7 @@ namespace App\Filament\Pages;
 use App\Settings\BusinessSettings;
 use App\Settings\PageSettings;
 use App\Settings\WebsiteSettings;
+use App\Support\Branding\FaviconService;
 use BackedEnum;
 use Filament\Actions\Action;
 use Filament\Forms\Components\FileUpload;
@@ -610,6 +611,7 @@ class Settings extends Page implements HasForms
         $web->testimonials_background = is_array($data['testimonials_background'] ?? null) ? (reset($data['testimonials_background']) ?: '') : ($data['testimonials_background'] ?? '');
         $web->cta_background          = is_array($data['cta_background'] ?? null) ? (reset($data['cta_background']) ?: '') : ($data['cta_background'] ?? '');
         $web->save();
+        app(FaviconService::class)->sync($web->site_favicon);
 
         // --- Page Settings ---
         $page = app(PageSettings::class);

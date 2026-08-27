@@ -9,6 +9,8 @@ use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\QuoteController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\SlugController;
+use App\Settings\WebsiteSettings;
+use App\Support\Branding\FaviconService;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,6 +18,19 @@ use Illuminate\Support\Facades\Route;
 | Frontend Routes
 |--------------------------------------------------------------------------
 */
+
+Route::get('/favicon.ico', function (WebsiteSettings $website, FaviconService $favicons) {
+    try {
+        $path = $favicons->primaryPath($website->site_favicon);
+    } catch (\RuntimeException) {
+        abort(404);
+    }
+
+    return response()->file($path, [
+        'Content-Type' => $favicons->primaryMimeType($website->site_favicon),
+        'Cache-Control' => 'public, max-age=604800',
+    ]);
+})->name('favicon');
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 

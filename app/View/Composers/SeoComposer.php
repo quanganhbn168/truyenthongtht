@@ -66,10 +66,6 @@ class SeoComposer
         $logoWhitePath = $this->web->site_logo_white ?: null;
         $logoWhiteUrl  = $logoWhitePath ? asset($logoWhitePath) : asset('images/logo-white.png');
 
-        // Favicon: Settings DB → public/favicon.ico
-        $faviconPath = $this->web->site_favicon ?: null;
-        $faviconUrl  = $faviconPath ? asset($faviconPath) : asset('favicon.ico');
-
         $view->with([
             'seoTitle'           => $title,
             'seoTitleFull'       => $titleFull,
@@ -82,7 +78,6 @@ class SeoComposer
             'siteTagline'        => $this->web->site_tagline ?: '',
             'logoUrl'            => $logoUrl,
             'logoWhiteUrl'       => $logoWhiteUrl,
-            'faviconUrl'         => $faviconUrl,
             'mainPhone'          => $this->biz->main_phone ?: config('site.phone', ''),
             'mainEmail'          => $this->biz->main_email ?: config('site.email', ''),
             'mainAddress'        => $this->biz->main_address ?: config('site.address', ''),
