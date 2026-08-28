@@ -44,14 +44,14 @@ class SitemapController extends Controller
     private function staticUrls(): array
     {
         return [
-            route('home'),
-            route('about'),
-            route('contact.index'),
-            route('posts.index'),
-            route('services.index'),
-            route('products.index'),
-            route('projects.index'),
-            route('quote.index'),
+            $this->routeUrl('home'),
+            $this->routeUrl('about'),
+            $this->routeUrl('contact.index'),
+            $this->routeUrl('posts.index'),
+            $this->routeUrl('services.index'),
+            $this->routeUrl('products.index'),
+            $this->routeUrl('projects.index'),
+            $this->routeUrl('quote.index'),
         ];
     }
 
@@ -85,6 +85,20 @@ class SitemapController extends Controller
 
     private function urlForSlug(string $slug): string
     {
-        return url(str_ends_with($slug, '.html') ? $slug : $slug . '.html');
+        return $this->absolutePath(str_ends_with($slug, '.html') ? $slug : $slug.'.html');
+    }
+
+    private function routeUrl(string $name): string
+    {
+        return $this->absolutePath(route($name, [], false));
+    }
+
+    private function absolutePath(string $path): string
+    {
+        $baseUrl = rtrim((string) config('app.url'), '/');
+
+        return $path === '/'
+            ? $baseUrl.'/'
+            : $baseUrl.'/'.ltrim($path, '/');
     }
 }
