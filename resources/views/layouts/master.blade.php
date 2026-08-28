@@ -11,7 +11,7 @@
     @if($seoKeywords)
     <meta name="keywords" content="{{ $seoKeywords }}">
     @endif
-    <meta name="robots" content="{{ $robots }}">
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
     <link rel="canonical" href="{{ $canonical }}">
 
     {{-- Open Graph --}}
