@@ -1630,16 +1630,6 @@
 
 /* ─── Hero ─────────────────────────────────────────────────────────── */
 .hero-swiper { position: relative; }
-.hero-swiper .swiper-slide > img,
-.hero-swiper .swiper-slide > video {
-    aspect-ratio: 16 / 7;
-    object-fit: cover;
-    width: 100%;
-}
-@media(max-width: 768px) {
-    .hero-swiper .swiper-slide > img,
-    .hero-swiper .swiper-slide > video { aspect-ratio: 4 / 3; }
-}
 
 .hero-overlay {
     position: absolute; inset: 0;

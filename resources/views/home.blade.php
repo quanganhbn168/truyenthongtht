@@ -28,7 +28,7 @@
         @if($heroVideoUrl)
             @php $firstSlide = $slideLoop->first(); @endphp
             <div class="swiper-slide relative">
-                <video autoplay loop muted playsinline preload="metadata" crossorigin="anonymous" class="w-full object-cover">
+                <video autoplay loop muted playsinline preload="metadata" crossorigin="anonymous">
                 @if(Str::endsWith($heroVideoUrl, '.mp4') || Str::endsWith($heroVideoUrl, '.webm'))
                      <source src="{{ Str::startsWith($heroVideoUrl, 'http') ? $heroVideoUrl : asset('storage/'.$heroVideoUrl) }}" type="video/{{ Str::endsWith($heroVideoUrl, '.webm') ? 'webm' : 'mp4' }}">
                 @else
@@ -56,8 +56,7 @@
                 <img src="{{ Str::startsWith($slide->image, 'http') || Str::startsWith($slide->image, 'images/') ? asset($slide->image) : asset('storage/'.$slide->image) }}"
                      alt="{{ $slide->name }}"
                      loading="{{ $loop->first ? 'eager' : 'lazy' }}"
-                     {!! $loop->first ? 'fetchpriority="high"' : '' !!}
-                     class="w-full object-cover">
+                     {!! $loop->first ? 'fetchpriority="high"' : '' !!}>
                 <div class="hero-overlay absolute inset-0 flex items-center">
                     <div class="container mx-auto px-6 max-w-7xl">
                         <h2 class="text-4xl md:text-6xl lg:text-7xl font-extrabold text-white leading-tight mb-4 max-w-3xl drop-shadow-lg" data-aos="fade-up" data-aos-delay="100">
@@ -748,6 +747,7 @@ document.addEventListener('DOMContentLoaded', function () {
     if (document.querySelector('.hero-swiper')) {
         new Swiper('.hero-swiper', {
             loop: true,
+            autoHeight: true,
             autoplay: { delay: 5000, disableOnInteraction: false },
             pagination: { el: '.swiper-pagination', clickable: true },
             navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
