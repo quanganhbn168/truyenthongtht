@@ -107,10 +107,6 @@ class SeoComposer
                 'title' => $this->pages->services_title ?: 'Dịch vụ truyền thông',
                 'description' => $this->pages->services_description ?: 'Khám phá các dịch vụ truyền thông, sản xuất video, quay phim, chụp ảnh và marketing của THT Media.',
             ],
-            'products.index' => [
-                'title' => $this->pages->products_title ?: 'Sản phẩm',
-                'description' => $this->pages->products_description ?: 'Khám phá các sản phẩm và giải pháp phù hợp nhu cầu truyền thông của doanh nghiệp.',
-            ],
             'projects.index' => [
                 'title' => $this->pages->projects_title ?: 'Dự án tiêu biểu',
                 'description' => $this->pages->projects_description ?: 'Xem các dự án truyền thông, quay phim, chụp ảnh và marketing tiêu biểu do THT Media thực hiện.',

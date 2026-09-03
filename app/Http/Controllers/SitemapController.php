@@ -4,8 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Post;
 use App\Models\PostCategory;
-use App\Models\Product;
-use App\Models\ProductCategory;
 use App\Models\Project;
 use App\Models\ProjectCategory;
 use App\Models\Service;
@@ -32,8 +30,6 @@ class SitemapController extends Controller
         $this->addModels($sitemap, ProjectCategory::where('is_active', true)->get(), 'weekly', 0.6);
         $this->addModels($sitemap, PostCategory::where('is_active', true)->get(), 'weekly', 0.6);
         $this->addModels($sitemap, ServiceCategory::where('is_active', true)->get(), 'weekly', 0.7);
-        $this->addModels($sitemap, ProductCategory::where('is_active', true)->get(), 'weekly', 0.6);
-        $this->addModels($sitemap, Product::where('is_active', true)->get(), 'monthly', 0.7);
 
         return $sitemap;
     }
@@ -49,7 +45,6 @@ class SitemapController extends Controller
             $this->routeUrl('contact.index'),
             $this->routeUrl('posts.index'),
             $this->routeUrl('services.index'),
-            $this->routeUrl('products.index'),
             $this->routeUrl('projects.index'),
             $this->routeUrl('quote.index'),
         ];

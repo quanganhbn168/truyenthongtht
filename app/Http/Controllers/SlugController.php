@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Product;
+use App\Models\ProductCategory;
 use App\Models\Slug;
 use Illuminate\Http\Request;
 
@@ -14,8 +16,6 @@ class SlugController extends Controller
     private const DISPATCH_MAP = [
         'post'             => [PostController::class,    'show'],
         'post_category'    => [PostController::class,    'category'],
-        'product'          => [ProductController::class, 'show'],
-        'product_category' => [ProductController::class, 'category'],
         'service'          => [ServiceController::class, 'show'],
         'service_category' => [ServiceController::class, 'category'],
         'project'          => [ProjectController::class, 'show'],
@@ -28,6 +28,12 @@ class SlugController extends Controller
         $record = Slug::resolve($slug);
 
         if (! $record || (property_exists($record, 'is_active') && ! $record->is_active)) {
+            abort(404);
+        }
+
+        // Sản phẩm không thuộc hệ sinh thái public THT Media. Giữ model/dữ liệu
+        // trong CMS, nhưng không phát hành listing, category hoặc detail ra ngoài.
+        if ($record instanceof Product || $record instanceof ProductCategory) {
             abort(404);
         }
 

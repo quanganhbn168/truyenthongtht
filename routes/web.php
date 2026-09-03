@@ -4,7 +4,6 @@ use App\Http\Controllers\AboutController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PostController;
-use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\QuoteController;
 use App\Http\Controllers\RobotsController;
@@ -44,8 +43,8 @@ Route::get('/tin-tuc.html',   [PostController::class,    'index'])->name('posts.
 Route::permanentRedirect('/tin-tuc', '/tin-tuc.html');
 Route::get('/dich-vu.html', [ServiceController::class, 'index'])->name('services.index');
 Route::permanentRedirect('/dich-vu', '/dich-vu.html');
-Route::get('/san-pham.html',  [ProductController::class, 'index'])->name('products.index');
-Route::permanentRedirect('/san-pham', '/san-pham.html');
+Route::get('/san-pham', fn () => abort(404));
+Route::get('/san-pham.html', fn () => abort(404));
 Route::get('/du-an.html', [ProjectController::class, 'index'])->name('projects.index');
 Route::permanentRedirect('/du-an', '/du-an.html');
 

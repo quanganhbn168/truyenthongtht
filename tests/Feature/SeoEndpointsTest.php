@@ -35,4 +35,20 @@ class SeoEndpointsTest extends TestCase
             $master,
         );
     }
+
+    public function test_products_are_not_exposed_as_public_routes_or_sitemap_entries(): void
+    {
+        $this->get('/san-pham.html')->assertNotFound();
+        $this->get('/san-pham')->assertNotFound();
+
+        $routes = file_get_contents(base_path('routes/web.php'));
+        $sitemap = file_get_contents(app_path('Http/Controllers/SitemapController.php'));
+
+        $this->assertIsString($routes);
+        $this->assertStringNotContainsString("name('products.index')", $routes);
+        $this->assertIsString($sitemap);
+        $this->assertStringNotContainsString('Product::', $sitemap);
+        $this->assertStringNotContainsString('ProductCategory::', $sitemap);
+        $this->assertStringNotContainsString("routeUrl('products.index')", $sitemap);
+    }
 }

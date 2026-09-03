@@ -130,12 +130,11 @@
             
             {{-- Text Content (Editorial Layout) --}}
             <div data-aos="fade-left" data-aos-delay="100" class="lg:pl-10 xl:pl-16">
-                <span class="brand-badge hidden md:inline-flex">Câu chuyện của chúng tôi</span>
+                <span class="brand-badge hidden md:inline-flex">Về chúng tôi</span>
                 
-                <h2 class="section-heading mt-2">
-                    Đối tác truyền thông <br class="hidden md:block">
-                    <span class="h-light">đáng tin cậy</span> của doanh nghiệp
-                </h2>
+                <h1 class="section-heading mt-2">{{ $companyName }}</h1>
+
+                <p class="mt-4 text-xl font-semibold leading-relaxed text-gray-800 md:text-2xl">Đối tác truyền thông đáng tin cậy của doanh nghiệp</p>
                 
                 <div class="text-base md:text-lg text-gray-500 mb-10 leading-[1.8] font-light">
                     <p>{{ $aboutDesc }}</p>
