@@ -10,6 +10,9 @@ use App\Settings\PageSettings;
 use App\Settings\WebsiteSettings;
 use App\Support\Branding\FaviconService;
 use BackedEnum;
+use ErrorException;
+use RuntimeException;
+use Illuminate\Validation\ValidationException;
 use Filament\Actions\Action;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Repeater;
@@ -722,6 +725,18 @@ class Settings extends Page implements HasForms
     public function save(): void
     {
         $data = $this->settingsFormData();
+        $favicon = is_array($data['site_favicon'] ?? null) ? (reset($data['site_favicon']) ?: '') : ($data['site_favicon'] ?? '');
+        if ($favicon !== app(WebsiteSettings::class)->site_favicon && $favicon !== '') {
+            try {
+                app(FaviconService::class)->sync($favicon);
+            } catch (RuntimeException | ErrorException $exception) {
+                report($exception);
+                throw ValidationException::withMessages([
+                    'data.site_favicon' => 'Chưa lưu được favicon. Kiểm tra file nguồn và quyền ghi thư mục public/favicon-assets, sau đó lưu lại.',
+                ]);
+            }
+        }
+
         app(TrackingScripts::class)->save($data);
 
         $homepage = app(\App\Settings\HomepageSettings::class);
@@ -761,7 +776,6 @@ class Settings extends Page implements HasForms
         if ($web->site_logo) $imgService->process('public_uploads', $web->site_logo);
         if ($web->site_logo_white) $imgService->process('public_uploads', $web->site_logo_white);
         if ($web->og_image) $imgService->process('public_uploads', $web->og_image);
-        if ($web->site_favicon) $imgService->process('public_uploads', $web->site_favicon);
 
         $web->meta_title             = $data['meta_title'] ?? '';
         $web->meta_description       = $data['meta_description'] ?? '';
@@ -794,7 +808,6 @@ class Settings extends Page implements HasForms
         $web->testimonials_background = is_array($data['testimonials_background'] ?? null) ? (reset($data['testimonials_background']) ?: '') : ($data['testimonials_background'] ?? '');
         $web->cta_background          = is_array($data['cta_background'] ?? null) ? (reset($data['cta_background']) ?: '') : ($data['cta_background'] ?? '');
         $web->save();
-        app(FaviconService::class)->sync($web->site_favicon);
 
         // --- Page Settings ---
         $page = app(PageSettings::class);
