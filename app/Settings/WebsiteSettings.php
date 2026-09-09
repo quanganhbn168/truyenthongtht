@@ -32,8 +32,6 @@ class WebsiteSettings extends Settings
     public string $instagram_url;
 
     // Tracking & Script
-    public string $google_analytics_id;    // GA4 Measurement ID (G-XXXXXXX)
-    public string $google_tag_manager_id;  // GTM Container ID (GTM-XXXXXXX)
     public string $google_map_embed;       // Google Maps iframe src (bản đồ chính)
     public string $header_scripts;         // Custom scripts trước </head>
     public string $footer_scripts;         // Custom scripts trước </body>
