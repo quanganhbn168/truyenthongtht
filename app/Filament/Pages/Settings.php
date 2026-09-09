@@ -699,7 +699,7 @@ class Settings extends Page implements HasForms
                 ->livewireSubmitHandler('save')
                 ->footer([
                     Actions::make($this->getFormActions())
-                        ->sticky()->alignment(Alignment::Start)
+                        ->alignment(Alignment::Start)
                         ->fullWidth(false),
                 ]),
         ]);
