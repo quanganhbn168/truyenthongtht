@@ -84,7 +84,7 @@
 ══════════════════════════════════════════ --}}
 @php
     $aboutImg = $web->about_image ? asset('storage/'.$web->about_image) : asset('images/og-default.jpg');
-    $aboutDesc = $web->site_description ?: 'THT Media tự hào là đơn vị cung cấp giải pháp truyền thông toàn diện. Chúng tôi mang đến những sản phẩm chất lượng cao, sáng tạo và tối ưu nhất cho doanh nghiệp của bạn.';
+    $aboutDesc = $homepage->intro_description;
 @endphp
 <section class="section-light py-16 md:py-24" aria-label="Giới thiệu về {{ $web->site_name }}">
     <div class="container mx-auto px-4 max-w-7xl">
@@ -132,7 +132,7 @@
             <div data-aos="fade-left" data-aos-delay="100" class="lg:pl-10 xl:pl-16">
                 <span class="brand-badge hidden md:inline-flex">Về chúng tôi</span>
                 
-                <h1 class="section-heading mt-2">{{ $companyName }}</h1>
+                <h1 class="section-heading mt-2">{{ $homepage->intro_title }}</h1>
 
                 <p class="mt-4 text-xl font-semibold leading-relaxed text-gray-800 md:text-2xl">Đối tác truyền thông đáng tin cậy của doanh nghiệp</p>
                 
@@ -202,11 +202,7 @@
      3. TẠI SAO CHỌN CHÚNG TÔI
 ══════════════════════════════════════════ --}}
 @php
-    $introLoop = $intros->isNotEmpty() ? $intros : collect([
-        (object)['icon' => 'fa-solid fa-layer-group', 'title' => 'Dịch vụ đa dạng', 'subtitle' => 'Giải pháp toàn diện', 'content' => 'Cung cấp hệ sinh thái dịch vụ truyền thông đầy đủ từ lên ý tưởng đến thực thi.', 'link' => '', 'link_text' => ''],
-        (object)['icon' => 'fa-solid fa-people-group', 'title' => 'Đội ngũ chuyên nghiệp', 'subtitle' => 'Nhân sự chất lượng cao', 'content' => 'Tập hợp những chuyên gia giàu kinh nghiệm thực chiến trong ngành media.', 'link' => '', 'link_text' => ''],
-        (object)['icon' => 'fa-solid fa-handshake-angle', 'title' => 'Hỗ trợ tận tâm', 'subtitle' => 'Đồng hành cùng phát triển', 'content' => 'Cam kết hỗ trợ khách hàng xuyên suốt quá trình dự án và hậu mãi chu đáo.', 'link' => '', 'link_text' => ''],
-    ]);
+    $introLoop = $intros;
 @endphp
 <section class="section-light py-12 md:py-16 border-t border-gray-100" aria-label="Tại sao chọn chúng tôi">
     <div class="container mx-auto px-4 max-w-7xl">

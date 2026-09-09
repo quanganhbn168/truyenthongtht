@@ -19,15 +19,15 @@ class IntroResource extends Resource
 {
     protected static ?string $model = Intro::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedStar;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedDocumentText;
 
-    protected static ?string $navigationLabel = 'Giới thiệu / USP';
+    protected static ?string $navigationLabel = 'Bài giới thiệu';
 
-    protected static ?string $modelLabel = 'Mục giới thiệu';
+    protected static ?string $modelLabel = 'bài giới thiệu';
 
-    protected static ?string $pluralModelLabel = 'Giới thiệu / USP';
+    protected static ?string $pluralModelLabel = 'Bài giới thiệu';
 
-    protected static string|UnitEnum|null $navigationGroup = 'Giao diện';
+    protected static string|UnitEnum|null $navigationGroup = 'Nội dung';
 
     protected static ?int $navigationSort = 2;
 
@@ -49,9 +49,9 @@ class IntroResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index'  => ListIntros::route('/'),
+            'index' => ListIntros::route('/'),
             'create' => CreateIntro::route('/create'),
-            'edit'   => EditIntro::route('/{record}/edit'),
+            'edit' => EditIntro::route('/{record}/edit'),
         ];
     }
 }

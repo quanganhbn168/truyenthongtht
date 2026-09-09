@@ -155,7 +155,7 @@
 
             <div class="w-full md:w-1/2 relative" data-aos="fade-left">
                 <div class="aspect-square rounded-[3rem] overflow-hidden relative z-10">
-                    <img src="{{ $web->about_image ? asset('storage/'.$web->about_image) : asset('images/og-default.jpg') }}" alt="THT Media Team" class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700">
+                    <img src="{{ $page->about_team_image ? asset('storage/'.$page->about_team_image) : asset('images/og-default.jpg') }}" alt="THT Media Team" class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700">
                 </div>
                 {{-- Decor --}}
                 <div class="about-decor--brand absolute -top-6 -right-6 w-32 h-32 rounded-full z-0 opacity-20 blur-xl"></div>

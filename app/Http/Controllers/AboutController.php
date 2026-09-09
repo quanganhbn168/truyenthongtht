@@ -11,15 +11,15 @@ class AboutController extends Controller
     public function index(): View
     {
         // Lấy tất cả intros active, sắp xếp theo sort_order
-        $intros = Intro::where('is_active', true)
+        $intros = Intro::where('kind', 'block')->where('is_active', true)
             ->orderBy('sort_order')
             ->get();
 
         // Tách từng loại intro theo subtitle để render đúng vị trí
-        $mission   = $intros->firstWhere('subtitle', 'Vì sao chúng tôi tồn tại');
-        $vision    = $intros->firstWhere('subtitle', 'Chúng tôi hướng đến điều gì');
-        $values    = $intros->firstWhere('subtitle', 'Những gì chúng tôi cam kết');
-        $whyUs     = $intros->whereIn('subtitle', ['Chúng tôi là ai', 'Tại sao chọn chúng tôi']);
+        $mission = $intros->firstWhere('subtitle', 'Vì sao chúng tôi tồn tại');
+        $vision = $intros->firstWhere('subtitle', 'Chúng tôi hướng đến điều gì');
+        $values = $intros->firstWhere('subtitle', 'Những gì chúng tôi cam kết');
+        $whyUs = $intros->whereIn('subtitle', ['Chúng tôi là ai', 'Tại sao chọn chúng tôi']);
 
         $page = app(PageSettings::class);
         $aboutValues = array_values(array_filter(

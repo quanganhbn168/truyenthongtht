@@ -3,11 +3,13 @@
 use App\Http\Controllers\AboutController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\IntroController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\QuoteController;
 use App\Http\Controllers\RobotsController;
 use App\Http\Controllers\ServiceController;
+use App\Http\Controllers\SitemapController;
 use App\Http\Controllers\SlugController;
 use App\Settings\WebsiteSettings;
 use App\Support\Branding\FaviconService;
@@ -19,10 +21,12 @@ use Illuminate\Support\Facades\Route;
 |--------------------------------------------------------------------------
 */
 
+Route::get('/bai-gioi-thieu/{slug}', IntroController::class)->name('intros.show');
+
 Route::get('/favicon.ico', function (WebsiteSettings $website, FaviconService $favicons) {
     try {
         $path = $favicons->primaryPath($website->site_favicon);
-    } catch (\RuntimeException) {
+    } catch (RuntimeException) {
         abort(404);
     }
 
@@ -35,11 +39,11 @@ Route::get('/favicon.ico', function (WebsiteSettings $website, FaviconService $f
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
 // Sitemap
-Route::get('/sitemap.xml', [App\Http\Controllers\SitemapController::class, 'index'])->name('sitemap');
+Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap');
 Route::get('/robots.txt', RobotsController::class)->name('robots');
 
 // Listing pages
-Route::get('/tin-tuc.html',   [PostController::class,    'index'])->name('posts.index');
+Route::get('/tin-tuc.html', [PostController::class,    'index'])->name('posts.index');
 Route::permanentRedirect('/tin-tuc', '/tin-tuc.html');
 Route::get('/dich-vu.html', [ServiceController::class, 'index'])->name('services.index');
 Route::permanentRedirect('/dich-vu', '/dich-vu.html');

@@ -33,17 +33,19 @@ use UnitEnum;
 
 class Settings extends Page implements HasForms
 {
+    use \App\Filament\Concerns\PreservesUnchangedSettings;
+
     use InteractsWithForms;
 
     protected string $view = 'filament.pages.settings';
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedCog8Tooth;
 
-    protected static ?string $navigationLabel = 'Cài đặt';
+    protected static ?string $navigationLabel = 'Cài đặt website';
 
-    protected static ?string $title = 'Cài đặt hệ thống';
+    protected static ?string $title = 'Cài đặt website';
 
-    protected static string|UnitEnum|null $navigationGroup = 'Quản lý';
+    protected static string|UnitEnum|null $navigationGroup = 'Cài đặt website';
 
     protected static ?int $navigationSort = 90;
 
@@ -56,9 +58,9 @@ class Settings extends Page implements HasForms
         $web  = app(WebsiteSettings::class);
         $page = app(PageSettings::class);
 
-        $this->form->fill([
+        $this->fillSettingsForm([
             ...app(TrackingScripts::class)->formData(),
-            // --- Business ---
+        // --- Business ---
             'company_name'          => $biz->company_name,
             'company_short_name'    => $biz->company_short_name,
             'tax_code'              => $biz->tax_code,
@@ -98,6 +100,9 @@ class Settings extends Page implements HasForms
             'google_map_embed'      => $web->google_map_embed,
 
             // --- About & Stats ---
+            'homepage_intro_title' => app(\App\Settings\HomepageSettings::class)->intro_title,
+            'homepage_intro_description' => app(\App\Settings\HomepageSettings::class)->intro_description,
+            'homepage_intro_cards' => app(\App\Settings\HomepageSettings::class)->intro_cards,
             'about_video_url'       => $web->about_video_url,
             'about_image'           => $web->about_image ? [$web->about_image] : [],
             'stats'                 => $web->stats ?? [],
@@ -127,6 +132,7 @@ class Settings extends Page implements HasForms
             'about_team_kicker'     => $page->about_team_kicker,
             'about_team_title'      => $page->about_team_title,
             'about_team_content'    => $page->about_team_content,
+            'about_team_image' => $page->about_team_image ? [$page->about_team_image] : [],
             'about_team_stats'      => $page->about_team_stats ?? [],
             'about_cta_title'       => $page->about_cta_title,
             'about_cta_description' => $page->about_cta_description,
@@ -384,13 +390,22 @@ class Settings extends Page implements HasForms
                         ]),
 
                     // ─── Tab 6: Giới thiệu ──────────────────────────────────────────────
-                    Tab::make('Giới thiệu')
+                    Tab::make('Trang chủ')
                         ->icon('heroicon-o-play-circle')
                         ->schema([
-                            Section::make('Ảnh & Video giới thiệu')
+                            Section::make('Giới thiệu trên trang chủ')->description('Ảnh và video này chỉ dùng trên trang chủ. Trang Giới thiệu có cài đặt riêng.')
                                 ->icon('heroicon-o-film')
                                 ->description('Hiển thị trong section Giới thiệu công ty trang chủ')
                                 ->schema([
+                                    TextInput::make('homepage_intro_title')->label('Tiêu đề giới thiệu trang chủ')->maxLength(255),
+                                    Textarea::make('homepage_intro_description')->label('Nội dung giới thiệu trang chủ')->rows(4)->columnSpanFull(),
+                                    Repeater::make('homepage_intro_cards')->label('Các điểm nổi bật trên trang chủ')->schema([
+                                        TextInput::make('title')->label('Tiêu đề')->required(),
+                                        TextInput::make('icon')->label('Icon'),
+                                        Textarea::make('content')->label('Nội dung')->columnSpanFull(),
+                                        TextInput::make('link')->label('Liên kết'),
+                                        TextInput::make('link_text')->label('Nhãn nút'),
+                                    ])->columns(2)->reorderable()->collapsible()->collapsed()->itemLabel(fn (array $state): string => $state['title'] ?? 'Điểm nổi bật')->columnSpanFull(),
                                     FileUpload::make('about_image')
                                         ->label('Ảnh công ty')
                                         ->image()
@@ -498,7 +513,7 @@ class Settings extends Page implements HasForms
                         ]),
 
                     // ─── Tab 7: Trang tổng hợp ──────────────────────────────────────────
-                    Tab::make('Trang tổng hợp')
+                    Tab::make('Trang Giới thiệu')
                         ->icon('heroicon-o-photo')
                         ->schema([
                             Section::make('Trang Giới thiệu (/gioi-thieu.html)')
@@ -590,6 +605,7 @@ class Settings extends Page implements HasForms
                                         ->label('Tiêu đề')
                                         ->helperText('Có thể dùng thẻ <br> và <span> để giữ bố cục nhấn mạnh.')
                                         ->maxLength(500),
+                                    FileUpload::make('about_team_image')->label('Ảnh đội ngũ trang Giới thiệu')->image()->disk('public_uploads')->directory('about')->columnSpanFull(),
                                     RichEditor::make('about_team_content')
                                         ->label('Nội dung')
                                         ->columnSpanFull(),
@@ -631,6 +647,8 @@ class Settings extends Page implements HasForms
                                 ])
                                 ->columns(2),
 
+                        ]),
+                    Tab::make('Trang tổng hợp')->icon('heroicon-o-document-duplicate')->schema([
                             Section::make('Trang Tin tức (/tin-tuc)')
                                 ->icon('heroicon-o-newspaper')
                                 ->schema([
@@ -681,7 +699,7 @@ class Settings extends Page implements HasForms
                 ->livewireSubmitHandler('save')
                 ->footer([
                     Actions::make($this->getFormActions())
-                        ->alignment(Alignment::Start)
+                        ->sticky()->alignment(Alignment::Start)
                         ->fullWidth(false),
                 ]),
         ]);
@@ -691,8 +709,9 @@ class Settings extends Page implements HasForms
     protected function getFormActions(): array
     {
         return [
+            Action::make('discard')->label('Hủy thay đổi')->color('gray')->action(fn () => app()->call([$this, 'mount'])),
             Action::make('save')
-                ->label('Lưu tất cả cài đặt')
+                ->label('Lưu cài đặt')
                 ->icon('heroicon-o-check-circle')
                 ->color('primary')
                 ->keyBindings(['command+s', 'ctrl+s'])
@@ -702,8 +721,14 @@ class Settings extends Page implements HasForms
 
     public function save(): void
     {
-        $data = $this->form->getState();
+        $data = $this->settingsFormData();
         app(TrackingScripts::class)->save($data);
+
+        $homepage = app(\App\Settings\HomepageSettings::class);
+        $homepage->intro_title = $data['homepage_intro_title'] ?? '';
+        $homepage->intro_description = $data['homepage_intro_description'] ?? '';
+        $homepage->intro_cards = $data['homepage_intro_cards'] ?? [];
+        $homepage->save();
 
         // --- Business ---
         $biz = app(BusinessSettings::class);
@@ -789,6 +814,7 @@ class Settings extends Page implements HasForms
         $page->about_team_kicker    = $data['about_team_kicker'] ?? '';
         $page->about_team_title     = $data['about_team_title'] ?? '';
         $page->about_team_content   = $data['about_team_content'] ?? '';
+        $page->about_team_image = is_array($data['about_team_image'] ?? null) ? (reset($data['about_team_image']) ?: '') : ($data['about_team_image'] ?? '');
         $page->about_team_stats     = $data['about_team_stats'] ?? [];
         $page->about_cta_title      = $data['about_cta_title'] ?? '';
         $page->about_cta_description = $data['about_cta_description'] ?? '';
@@ -829,6 +855,8 @@ class Settings extends Page implements HasForms
         if ($web->stats_background) $imgService->process('public_uploads', $web->stats_background);
         if ($web->testimonials_background) $imgService->process('public_uploads', $web->testimonials_background);
         if ($web->cta_background) $imgService->process('public_uploads', $web->cta_background);
+
+        app()->call([$this, 'mount']);
 
         Notification::make()
             ->title('Đã lưu cài đặt thành công!')

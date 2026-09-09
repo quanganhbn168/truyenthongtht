@@ -18,9 +18,11 @@ class IntrosTable
             ->columns([
                 TextColumn::make('sort_order')->label('STT')->numeric()->sortable()->width(60),
                 ImageColumn::make('image')->label('Ảnh')->disk('public_uploads')->circular(),
-                TextColumn::make('icon')->label('Icon class')->limit(30),
+                TextColumn::make('kind')->label('Loại')->formatStateUsing(fn (string $state): string => $state === 'block' ? 'Khối giới thiệu / USP' : 'Bài giới thiệu')->badge(),
+                TextColumn::make('icon')->label('Icon class')->limit(30)->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('title')->label('Tiêu đề')->searchable()->sortable()->limit(50),
-                TextColumn::make('subtitle')->label('Tiêu đề phụ')->limit(40)->toggleable(),
+                TextColumn::make('published_at')->label('Ngày xuất bản')->dateTime('d/m/Y H:i')->sortable(),
+                TextColumn::make('subtitle')->label('Tiêu đề phụ')->limit(40)->toggleable(isToggledHiddenByDefault: true),
                 IconColumn::make('is_active')->label('Hiển thị')->boolean(),
             ])
             ->defaultSort('sort_order')

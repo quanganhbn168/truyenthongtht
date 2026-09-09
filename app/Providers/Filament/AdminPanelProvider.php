@@ -2,13 +2,19 @@
 
 namespace App\Providers\Filament;
 
-use Awcodes\Curator\CuratorPlugin;
+use App\Filament\Resources\Menus\MenuResource;
 use App\Filament\Widgets\ContentStatsOverview;
 use App\Filament\Widgets\LatestContacts;
 use App\Filament\Widgets\LatestPosts;
 use App\Filament\Widgets\LatestQuotes;
+use App\Models\ManagedMenu;
+use App\Models\ManagedMenuItem;
+use App\Models\Post;
+use App\Models\PostCategory;
+use App\Models\Service;
 use App\Settings\WebsiteSettings;
 use App\Support\Branding\FaviconService;
+use Awcodes\Curator\CuratorPlugin;
 use BezhanSalleh\FilamentShield\FilamentShieldPlugin;
 use Datlechin\FilamentMenuBuilder\FilamentMenuBuilderPlugin;
 use Datlechin\FilamentMenuBuilder\MenuPanel\ModelMenuPanel;
@@ -21,7 +27,6 @@ use Filament\Pages\Dashboard;
 use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\View\PanelsRenderHook;
-
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
@@ -91,6 +96,9 @@ class AdminPanelProvider extends PanelProvider
                     ->showBadge(false)
                     ->registerNavigation(true),
                 FilamentMenuBuilderPlugin::make()
+                    ->usingResource(MenuResource::class)
+                    ->usingMenuModel(ManagedMenu::class)
+                    ->usingMenuItemModel(ManagedMenuItem::class)
                     ->navigationLabel('Menu Builder')
                     ->navigationGroup('Giao diện')
                     ->navigationIcon('heroicon-o-bars-3')
@@ -98,15 +106,15 @@ class AdminPanelProvider extends PanelProvider
                     ->navigationCountBadge(true)
                     ->enableIndentActions(true)
                     ->addLocations([
-                        'header'  => 'Menu chính (Header)',
-                        'footer'  => 'Menu footer',
-                        'mobile'  => 'Mobile',
+                        'header' => 'Menu chính (Header)',
+                        'footer' => 'Menu footer',
+                        'mobile' => 'Mobile',
                         'sidebar' => 'Sidebar',
                     ])
                     ->addMenuPanels([
-                        ModelMenuPanel::make()->model(\App\Models\PostCategory::class),
-                        ModelMenuPanel::make()->model(\App\Models\Service::class),
-                        ModelMenuPanel::make()->model(\App\Models\Post::class),
+                        ModelMenuPanel::make()->model(PostCategory::class),
+                        ModelMenuPanel::make()->model(Service::class),
+                        ModelMenuPanel::make()->model(Post::class),
                     ]),
             ])
             ->authMiddleware([

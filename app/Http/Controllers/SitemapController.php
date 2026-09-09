@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Intro;
 use App\Models\Post;
 use App\Models\PostCategory;
 use App\Models\Project;
@@ -30,6 +31,10 @@ class SitemapController extends Controller
         $this->addModels($sitemap, ProjectCategory::where('is_active', true)->get(), 'weekly', 0.6);
         $this->addModels($sitemap, PostCategory::where('is_active', true)->get(), 'weekly', 0.6);
         $this->addModels($sitemap, ServiceCategory::where('is_active', true)->get(), 'weekly', 0.7);
+
+        foreach (Intro::query()->published()->get() as $intro) {
+            $sitemap->add(Url::create($intro->url)->setLastModificationDate($intro->updated_at)->setPriority(0.6));
+        }
 
         return $sitemap;
     }
