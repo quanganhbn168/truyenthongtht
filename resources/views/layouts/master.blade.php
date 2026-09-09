@@ -2,6 +2,7 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" prefix="og: https://ogp.me/ns#">
 <head>
     <meta charset="utf-8">
+    @include('partials.tracking.head_start')
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
@@ -54,8 +55,10 @@
 
     @stack('head')
     @stack('styles')
+    @include('partials.tracking.head')
 </head>
 <body class="{{ $bodyClass ?? '' }}">
+    @include('partials.tracking.body')
 
     <div id="site-chrome"
          x-data="{ scrolled: false }"
@@ -75,5 +78,6 @@
     @include('partials.float-widget')
 
     @stack('scripts')
+    @include('partials.tracking.footer')
 </body>
 </html>

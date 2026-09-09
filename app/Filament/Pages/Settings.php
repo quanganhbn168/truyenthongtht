@@ -2,6 +2,9 @@
 
 namespace App\Filament\Pages;
 
+use App\Filament\Forms\TrackingSchema;
+use App\Support\Tracking\TrackingScripts;
+
 use App\Settings\BusinessSettings;
 use App\Settings\PageSettings;
 use App\Settings\WebsiteSettings;
@@ -54,6 +57,7 @@ class Settings extends Page implements HasForms
         $page = app(PageSettings::class);
 
         $this->form->fill([
+            ...app(TrackingScripts::class)->formData(),
             // --- Business ---
             'company_name'          => $biz->company_name,
             'company_short_name'    => $biz->company_short_name,
@@ -91,11 +95,7 @@ class Settings extends Page implements HasForms
             'instagram_url'         => $web->instagram_url,
 
             // --- Tracking ---
-            'google_analytics_id'   => $web->google_analytics_id,
-            'google_tag_manager_id' => $web->google_tag_manager_id,
             'google_map_embed'      => $web->google_map_embed,
-            'header_scripts'        => $web->header_scripts,
-            'footer_scripts'        => $web->footer_scripts,
 
             // --- About & Stats ---
             'about_video_url'       => $web->about_video_url,
@@ -368,21 +368,7 @@ class Settings extends Page implements HasForms
                     Tab::make('Tracking')
                         ->icon('heroicon-o-chart-bar-square')
                         ->schema([
-                            Section::make('Google Analytics & Tag Manager')
-                                ->icon('heroicon-o-cursor-arrow-rays')
-                                ->schema([
-                                    TextInput::make('google_analytics_id')
-                                        ->label('Google Analytics ID')
-                                        ->placeholder('G-XXXXXXXXXX')
-                                        ->maxLength(50)
-                                        ->helperText('GA4 Measurement ID'),
-                                    TextInput::make('google_tag_manager_id')
-                                        ->label('Google Tag Manager ID')
-                                        ->placeholder('GTM-XXXXXXX')
-                                        ->maxLength(50)
-                                        ->helperText('GTM Container ID'),
-                                ])
-                                ->columns(2),
+                            ...TrackingSchema::make(),
 
                             Section::make('Google Maps')
                                 ->icon('heroicon-o-map-pin')
@@ -395,21 +381,6 @@ class Settings extends Page implements HasForms
                                         ->columnSpanFull(),
                                 ]),
 
-                            Section::make('Custom Scripts')
-                                ->icon('heroicon-o-code-bracket')
-                                ->description('Thêm script/code tùy chỉnh (Google Tag, Facebook Pixel, v.v.)')
-                                ->schema([
-                                    Textarea::make('header_scripts')
-                                        ->label('Script trước </head>')
-                                        ->rows(5)
-                                        ->columnSpanFull()
-                                        ->placeholder("<!-- VD: Facebook Pixel, Hotjar... -->\n<script>...</script>"),
-                                    Textarea::make('footer_scripts')
-                                        ->label('Script trước </body>')
-                                        ->rows(5)
-                                        ->columnSpanFull()
-                                        ->placeholder("<!-- VD: Live chat widget... -->\n<script>...</script>"),
-                                ]),
                         ]),
 
                     // ─── Tab 6: Giới thiệu ──────────────────────────────────────────────
@@ -732,6 +703,7 @@ class Settings extends Page implements HasForms
     public function save(): void
     {
         $data = $this->form->getState();
+        app(TrackingScripts::class)->save($data);
 
         // --- Business ---
         $biz = app(BusinessSettings::class);
@@ -775,11 +747,7 @@ class Settings extends Page implements HasForms
         $web->zalo_number            = $data['zalo_number'] ?? '';
         $web->linkedin_url           = $data['linkedin_url'] ?? '';
         $web->instagram_url          = $data['instagram_url'] ?? '';
-        $web->google_analytics_id    = $data['google_analytics_id'] ?? '';
-        $web->google_tag_manager_id  = $data['google_tag_manager_id'] ?? '';
         $web->google_map_embed       = $data['google_map_embed'] ?? '';
-        $web->header_scripts         = $data['header_scripts'] ?? '';
-        $web->footer_scripts         = $data['footer_scripts'] ?? '';
         $web->about_video_url        = $data['about_video_url'] ?? '';
         $web->about_image            = is_array($data['about_image'] ?? null) ? (reset($data['about_image']) ?: '') : ($data['about_image'] ?? '');
         $web->stats                  = $data['stats'] ?? [];
