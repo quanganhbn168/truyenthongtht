@@ -62,6 +62,7 @@
 
                 <div class="post-article__body px-6 md:px-10 py-8 prose prose-lg max-w-none" itemprop="articleBody">
                     {!! $content !!}
+                    <x-post-contact />
                 </div>
 
                 @if($post->tags)
