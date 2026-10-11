@@ -1,3 +1,24 @@
+@php
+    $contactPhones = collect($business->phones ?? [])
+        ->filter(fn ($phone) => is_array($phone) && filled($phone['number'] ?? null))
+        ->values();
+
+    if ($contactPhones->isEmpty()) {
+        $contactPhones = collect([
+            ['number' => $business->main_phone],
+            ['number' => $business->main_phone_2],
+        ])->filter(fn ($phone) => filled($phone['number'] ?? null))->values();
+    }
+
+    if ($contactPhones->isEmpty()) {
+        $contactPhones = collect($branches ?? [])
+            ->filter(fn ($branch) => filled($branch->phone ?? null))
+            ->map(fn ($branch) => ['number' => $branch->phone])
+            ->values();
+    }
+
+    $contactBranches = collect($branches ?? []);
+@endphp
 <footer id="site-footer" class="bg-gray-900 text-gray-300 pt-16 pb-8 border-t-4 border-orange-600 relative overflow-hidden" role="contentinfo">
     {{-- Background elements --}}
     <div class="absolute top-0 right-0 w-64 h-64 bg-orange-500/5 rounded-full blur-[80px] pointer-events-none"></div>
@@ -20,24 +41,30 @@
                     {{ config('site.description', 'THT Media - Cung cấp giải pháp truyền thông toàn diện, sáng tạo và chuyên nghiệp cho doanh nghiệp.') }}
                 </p>
                 <div class="space-y-3 text-sm">
-                    @if($business->main_address)
+                    @if($contactBranches->isNotEmpty())
+                    @foreach($contactBranches as $branch)
+                    <p class="flex items-start gap-3">
+                        <i class="fa-solid fa-location-dot mt-1 text-orange-500 w-4 text-center"></i>
+                        <span class="flex-1">
+                            {{ $branch->name ?: 'Địa chỉ' }}: {{ $branch->address }}
+                            @if($branch->phone)
+                                <br><a class="hover:text-white" href="tel:{{ preg_replace('/[^0-9+]/', '', $branch->phone) }}">{{ $branch->phone }}</a>
+                            @endif
+                        </span>
+                    </p>
+                    @endforeach
+                    @elseif($business->main_address)
                     <p class="flex items-start gap-3">
                         <i class="fa-solid fa-location-dot mt-1 text-orange-500 w-4 text-center"></i>
                         <span class="flex-1">{{ $business->main_address }}</span>
                     </p>
                     @endif
-                    @if($business->main_phone)
+                    @foreach($contactPhones as $phone)
                     <p class="flex items-center gap-3">
                         <i class="fa-solid fa-phone text-orange-500 w-4 text-center"></i>
-                        <a href="tel:{{ preg_replace('/[^0-9+]/', '', $business->main_phone) }}" class="hover:text-white transition-colors">{{ $business->main_phone }}</a>
+                        <a href="tel:{{ preg_replace('/[^0-9+]/', '', $phone['number']) }}" class="hover:text-white transition-colors">{{ $phone['number'] }}</a>
                     </p>
-                    @endif
-                    @if($business->main_phone_2)
-                    <p class="flex items-center gap-3">
-                        <i class="fa-solid fa-phone text-orange-500 w-4 text-center"></i>
-                        <a href="tel:{{ preg_replace('/[^0-9+]/', '', $business->main_phone_2) }}" class="hover:text-white transition-colors">{{ $business->main_phone_2 }}</a>
-                    </p>
-                    @endif
+                    @endforeach
                     @if($business->main_email)
                     <p class="flex items-center gap-3">
                         <i class="fa-solid fa-envelope text-orange-500 w-4 text-center"></i>

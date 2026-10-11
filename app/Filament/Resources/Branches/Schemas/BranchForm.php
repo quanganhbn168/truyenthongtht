@@ -4,6 +4,7 @@ namespace App\Filament\Resources\Branches\Schemas;
 
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 
@@ -64,6 +65,13 @@ class BranchForm
                         ->rows(2)
                         ->maxLength(1000)
                         ->columnSpanFull(),
+
+                    Toggle::make('is_main')
+                        ->label('Chi nhánh chính')
+                        ->helperText('Dùng làm địa chỉ ưu tiên trên website.'),
+                    Toggle::make('is_active')
+                        ->label('Hiển thị trên website')
+                        ->default(true),
                 ]),
         ]);
     }

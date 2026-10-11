@@ -1,5 +1,27 @@
 @extends('layouts.master')
 
+@php
+    $contactPhones = collect($business->phones ?? [])
+        ->filter(fn ($phone) => is_array($phone) && filled($phone['number'] ?? null))
+        ->values();
+
+    if ($contactPhones->isEmpty()) {
+        $contactPhones = collect([
+            ['number' => $business->main_phone],
+            ['number' => $business->main_phone_2],
+        ])->filter(fn ($phone) => filled($phone['number'] ?? null))->values();
+    }
+
+    if ($contactPhones->isEmpty()) {
+        $contactPhones = collect($branches ?? [])
+            ->filter(fn ($branch) => filled($branch->phone ?? null))
+            ->map(fn ($branch) => ['number' => $branch->phone])
+            ->values();
+    }
+
+    $contactBranches = collect($branches ?? []);
+@endphp
+
 @section('title', 'Liên hệ - ' . config('app.name'))
 @section('description', 'Liên hệ với THT Media để được tư vấn các giải pháp truyền thông, quay dựng phim doanh nghiệp, chụp ảnh sự kiện và booking chuyên nghiệp.')
 
@@ -99,7 +121,22 @@
                     <h3 class="text-2xl font-bold mb-8">Thông tin liên hệ</h3>
                     
                     <div class="space-y-8">
-                        @if($business->main_address)
+                        @if($contactBranches->isNotEmpty())
+                            @foreach($contactBranches as $branch)
+                        <div class="flex items-start gap-4">
+                            <div class="panel-brand__icon contact-icon--brand w-12 h-12 rounded-full border flex items-center justify-center text-lg shrink-0">
+                                <i class="fa-solid fa-location-dot"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold mb-1">{{ $branch->name ?: 'Địa chỉ' }}</h4>
+                                <p class="panel-brand__copy text-sm leading-relaxed">{{ $branch->address }}</p>
+                                @if($branch->phone)
+                                    <p class="mt-1"><a href="tel:{{ preg_replace('/[^0-9+]/', '', $branch->phone) }}" class="panel-brand__link transition-colors text-sm font-medium">{{ $branch->phone }}</a></p>
+                                @endif
+                            </div>
+                        </div>
+                            @endforeach
+                        @elseif($business->main_address)
                         <div class="flex items-start gap-4">
                             <div class="panel-brand__icon contact-icon--brand w-12 h-12 rounded-full border flex items-center justify-center text-lg shrink-0">
                                 <i class="fa-solid fa-location-dot"></i>
@@ -111,17 +148,16 @@
                         </div>
                         @endif
 
-                        @if($business->main_phone)
+                        @if($contactPhones->isNotEmpty())
                         <div class="flex items-start gap-4">
                             <div class="panel-brand__icon contact-icon--info w-12 h-12 rounded-full border flex items-center justify-center text-lg shrink-0">
                                 <i class="fa-solid fa-phone"></i>
                             </div>
                             <div>
                                 <h4 class="font-semibold mb-1">Đường dây nóng</h4>
-                                <p><a href="tel:{{ preg_replace('/[^0-9+]/', '', $business->main_phone) }}" class="panel-brand__link transition-colors text-sm font-medium">{{ $business->main_phone }}</a></p>
-                                @if($business->main_phone_2)
-                                    <p class="mt-1"><a href="tel:{{ preg_replace('/[^0-9+]/', '', $business->main_phone_2) }}" class="panel-brand__link transition-colors text-sm font-medium">{{ $business->main_phone_2 }}</a></p>
-                                @endif
+                                @foreach($contactPhones as $phone)
+                                    <p class="{{ $loop->first ? '' : 'mt-1' }}"><a href="tel:{{ preg_replace('/[^0-9+]/', '', $phone['number']) }}" class="panel-brand__link transition-colors text-sm font-medium">{{ $phone['number'] }}</a></p>
+                                @endforeach
                             </div>
                         </div>
                         @endif

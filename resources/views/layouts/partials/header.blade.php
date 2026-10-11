@@ -32,13 +32,10 @@
             <ul class="nav-list" role="list">
                 @foreach($headerMenu->menuItems as $item)
                 @php
-                    // Mega menu is intentionally reserved for the top-level Services item.
-                    // Other menu entries keep their normal link/dropdown behaviour even if
-                    // an editor later adds a "mega" CSS class in the menu builder.
-                    $isServicesMenu = in_array(trim((string) $item->url, '/'), ['dich-vu', 'dich-vu.html'], true)
-                        || \Illuminate\Support\Str::lower(trim((string) $item->title)) === 'dịch vụ';
-                    $hasMega    = $isServicesMenu && $item->children->isNotEmpty();
-                    $hasDropdown= !$hasMega && $item->children->isNotEmpty();
+                    // The menu keeps the existing database hierarchy, but the public
+                    // header intentionally renders every branch as a basic dropdown.
+                    $hasMega    = false;
+                    $hasDropdown= $item->children->isNotEmpty();
                     $itemId     = 'nav-item-' . $item->id;
                     
                     $itemUrl = '#';

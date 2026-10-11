@@ -95,6 +95,7 @@ class ServiceForm
                             ->schema([
                                 DatePicker::make('published_at')->label('Ngày đăng')->default(now()),
                                 Toggle::make('is_active')->label('Hiển thị')->default(true),
+                                Toggle::make('is_home')->label('Hiển thị trang chủ')->default(false),
                                 TextInput::make('sort_order')->label('Thứ tự')->numeric()->default(0),
                             ])->columns(3),
                         Tab::make('SEO')

@@ -1,4 +1,23 @@
 {{-- Topbar: Tagline + social/contact quick links --}}
+@php
+    $contactPhones = collect($business->phones ?? [])
+        ->filter(fn ($phone) => is_array($phone) && filled($phone['number'] ?? null))
+        ->values();
+
+    if ($contactPhones->isEmpty()) {
+        $contactPhones = collect([
+            ['number' => $business->main_phone],
+            ['number' => $business->main_phone_2],
+        ])->filter(fn ($phone) => filled($phone['number'] ?? null))->values();
+    }
+
+    if ($contactPhones->isEmpty()) {
+        $contactPhones = collect($branches ?? [])
+            ->filter(fn ($branch) => filled($branch->phone ?? null))
+            ->map(fn ($branch) => ['number' => $branch->phone])
+            ->values();
+    }
+@endphp
 <div id="topbar" aria-label="Thông tin nhanh">
     <div class="topbar-inner">
         <span class="topbar-tagline">
@@ -17,18 +36,12 @@
                 {{ $mainEmail }}
             </a>
             @endif
-            @if($mainPhone)
-            <a href="tel:{{ $mainPhone }}" class="topbar-info topbar-link topbar-phone">
+            @foreach($contactPhones as $phone)
+            <a href="tel:{{ preg_replace('/[^0-9+]/', '', $phone['number']) }}" class="topbar-info topbar-link topbar-phone">
                 <i class="fa-solid fa-phone" aria-hidden="true"></i>
-                {{ $mainPhone }}
+                {{ $phone['number'] }}
             </a>
-            @endif
-            @if($business->main_phone_2)
-            <a href="tel:{{ preg_replace('/[^0-9+]/', '', $business->main_phone_2) }}" class="topbar-info topbar-link topbar-phone">
-                <i class="fa-solid fa-phone" aria-hidden="true"></i>
-                {{ $business->main_phone_2 }}
-            </a>
-            @endif
+            @endforeach
         </div>
     </div>
 </div>

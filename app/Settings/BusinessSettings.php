@@ -21,6 +21,8 @@ class BusinessSettings extends Settings
     public string $main_address;           // Địa chỉ trụ sở chính
     public string $working_hours;          // Giờ làm việc (VD: T2-T6: 8:00-17:30)
 
+    public array $phones = [];
+
     public static function group(): string
     {
         return 'business';

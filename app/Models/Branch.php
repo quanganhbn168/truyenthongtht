@@ -16,6 +16,7 @@ class Branch extends Model
         'note',
         'sort_order',
         'is_active',
+        'is_main',
     ];
 
     protected $casts = [
@@ -24,6 +25,6 @@ class Branch extends Model
 
     public function scopeActive($query)
     {
-        return $query->where('is_active', true)->orderBy('sort_order');
+        return $query->where('is_active', true)->orderByDesc('is_main')->orderBy('sort_order');
     }
 }

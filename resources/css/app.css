@@ -1922,3 +1922,33 @@
     outline: 2px solid var(--color-brand-primary);
     outline-offset: 2px;
 }
+
+/* Basic header navigation: preserve menu data while keeping the public chrome
+   close to the compact, two-line reference layout. */
+@media (min-width: 769px) {
+    .header-inner {
+        height: auto;
+        min-height: 70px;
+    }
+
+    #main-nav {
+        min-width: 0;
+    }
+
+    .nav-list {
+        flex-wrap: wrap;
+        row-gap: 0.15rem;
+    }
+
+    .nav-link {
+        font-size: 0.84rem;
+        font-weight: 600;
+        text-transform: uppercase;
+    }
+
+    .dropdown-menu {
+        top: 100%;
+        border-top: 2px solid var(--clr-primary);
+        border-radius: 0 0 8px 8px;
+    }
+}

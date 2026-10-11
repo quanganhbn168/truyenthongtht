@@ -9,6 +9,7 @@ use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Filters\SelectFilter;
+use Filament\Tables\Filters\TernaryFilter;
 use Filament\Tables\Table;
 
 class ServicesTable
@@ -24,12 +25,14 @@ class ServicesTable
                     ->formatStateUsing(fn ($state) => number_format($state) . '₫')->sortable(),
                 TextColumn::make('view_count')->label('Lượt xem')->numeric()->sortable(),
                 ToggleColumn::make('is_active')->label('Hiển thị'),
+                ToggleColumn::make('is_home')->label('Trang chủ'),
                 TextColumn::make('created_at')->label('Ngày tạo')->dateTime('d/m/Y')
                     ->sortable()->toggleable(isToggledHiddenByDefault: true),
             ])
             ->defaultSort('created_at', 'desc')
             ->filters([
                 SelectFilter::make('category_id')->label('Danh mục')->relationship('category', 'name'),
+                TernaryFilter::make('is_home')->label('Trang chủ'),
             ])
             ->recordActions([EditAction::make()])
             ->toolbarActions([BulkActionGroup::make([DeleteBulkAction::make()])]);

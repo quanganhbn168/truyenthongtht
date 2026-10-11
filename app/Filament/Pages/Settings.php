@@ -75,6 +75,7 @@ class Settings extends Page implements HasForms
             'main_email'            => $biz->main_email,
             'main_address'          => $biz->main_address,
             'working_hours'         => $biz->working_hours,
+            'phones'               => $this->contactPhonesForForm($biz),
 
             // --- Website ---
             'site_name'             => $web->site_name,
@@ -207,18 +208,31 @@ class Settings extends Page implements HasForms
 
                             Section::make('Thông tin liên hệ')
                                 ->icon('heroicon-o-phone')
-                                ->description('Thông tin liên hệ hiển thị trên website')
+                                ->description('Quản lý nhiều số điện thoại; địa chỉ từng cơ sở được quản lý tại mục Quản lý > Chi nhánh')
                                 ->schema([
-                                    TextInput::make('main_phone')
-                                        ->label('Hotline chính')
-                                        ->tel()
-                                        ->placeholder('VD: 0982 123 456')
-                                        ->maxLength(20),
-                                    TextInput::make('main_phone_2')
-                                        ->label('Số điện thoại phụ')
-                                        ->tel()
-                                        ->placeholder('VD: 0909 456 789')
-                                        ->maxLength(20),
+                                    Repeater::make('phones')
+                                        ->label('Danh sách số điện thoại')
+                                        ->schema([
+                                            TextInput::make('label')
+                                                ->label('Nhãn')
+                                                ->placeholder('Hotline / Kinh doanh')
+                                                ->maxLength(100),
+                                            TextInput::make('number')
+                                                ->label('Số điện thoại')
+                                                ->tel()
+                                                ->required()
+                                                ->placeholder('0982 123 456')
+                                                ->maxLength(30),
+                                            \Filament\Forms\Components\Toggle::make('is_primary')
+                                                ->label('Số chính')
+                                                ->default(false),
+                                        ])
+                                        ->columns(3)
+                                        ->addActionLabel('Thêm số điện thoại')
+                                        ->reorderable()
+                                        ->collapsible()
+                                        ->itemLabel(fn (array $state): ?string => $state['number'] ?? 'Số điện thoại mới')
+                                        ->columnSpanFull(),
                                     TextInput::make('main_email')
                                         ->label('Email liên hệ chính')
                                         ->email()
@@ -228,14 +242,9 @@ class Settings extends Page implements HasForms
                                         ->label('Giờ làm việc')
                                         ->placeholder('VD: T2 - T7: 8:00 - 17:30')
                                         ->maxLength(100),
-                                    Textarea::make('main_address')
-                                        ->label('Địa chỉ trụ sở chính')
-                                        ->placeholder('VD: 123 Đường ABC, Quận 1, TP. HCM')
-                                        ->rows(2)
-                                        ->maxLength(500)
-                                        ->columnSpanFull(),
                                 ])
                                 ->columns(2),
+
                         ]),
 
                     // ─── Tab 2: Website ──────────────────────────────────
@@ -753,10 +762,11 @@ class Settings extends Page implements HasForms
         $biz->legal_representative = $data['legal_representative'] ?? '';
         $biz->founded_year         = $data['founded_year'] ?? '';
         $biz->business_license     = $data['business_license'] ?? '';
-        $biz->main_phone           = $data['main_phone'] ?? '';
-        $biz->main_phone_2         = $data['main_phone_2'] ?? '';
+        $biz->phones               = $this->normalizeContactPhones($data['phones'] ?? []);
+        $biz->main_phone           = $biz->phones[0]['number'] ?? '';
+        $biz->main_phone_2         = $biz->phones[1]['number'] ?? '';
         $biz->main_email           = $data['main_email'] ?? '';
-        $biz->main_address         = $data['main_address'] ?? '';
+        $biz->main_address         = $data['main_address'] ?? $biz->main_address;
         $biz->working_hours        = $data['working_hours'] ?? '';
         $biz->save();
 
@@ -876,4 +886,51 @@ class Settings extends Page implements HasForms
             ->success()
             ->send();
     }
+
+    private function contactPhonesForForm(BusinessSettings $business): array
+    {
+        $phones = is_array($business->phones ?? null) ? $business->phones : [];
+
+        if ($phones !== []) {
+            return $this->normalizeContactPhones($phones);
+        }
+
+        return array_values(array_filter([
+            filled($business->main_phone) ? ['label' => 'Hotline chính', 'number' => $business->main_phone, 'is_primary' => true] : null,
+            filled($business->main_phone_2) ? ['label' => 'Số điện thoại phụ', 'number' => $business->main_phone_2, 'is_primary' => false] : null,
+        ]));
+    }
+
+    private function normalizeContactPhones(mixed $phones): array
+    {
+        $normalized = array_values(array_filter(array_map(
+            static function (mixed $phone): ?array {
+                if (! is_array($phone)) {
+                    return null;
+                }
+
+                $number = trim((string) ($phone['number'] ?? ''));
+
+                return $number === '' ? null : [
+                    'label' => trim((string) ($phone['label'] ?? '')),
+                    'number' => $number,
+                    'is_primary' => (bool) ($phone['is_primary'] ?? false),
+                ];
+            },
+            is_array($phones) ? $phones : [],
+        )));
+
+        if ($normalized !== []) {
+            $primaryIndex = collect($normalized)->search(fn (array $phone): bool => $phone['is_primary']);
+            $primaryIndex = $primaryIndex === false ? 0 : $primaryIndex;
+
+            foreach ($normalized as $index => &$phone) {
+                $phone['is_primary'] = $index === $primaryIndex;
+            }
+            unset($phone);
+        }
+
+        return $normalized;
+    }
+
 }

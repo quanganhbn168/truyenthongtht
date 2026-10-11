@@ -17,12 +17,13 @@ class Service extends Model implements MenuPanelable
         'pain_points', 'benefits', 'behind_the_scenes', 'process', 'faq',
         'price', 'packages', 'image', 'thumbnail', 'published_at', 'view_count',
         'meta_title', 'meta_description', 'keywords',
-        'sort_order', 'is_active',
+        'sort_order', 'is_active', 'is_home',
     ];
 
     protected $casts = [
         'published_at' => 'date',
         'is_active' => 'boolean',
+        'is_home' => 'boolean',
         'price' => 'decimal:0',
         'process' => 'array',
         'faq' => 'array',
